@@ -1,0 +1,129 @@
+.topmenu {
+    background-color: #4dbf78  !important;
+}
+
+.btn-danger{
+    background-color: #CC0000 !important;
+}
+
+.app-sidebar__heading{
+    color:#4dbf78 !important;
+}
+
+.hamburger-inner, .hamburger-inner::before, .hamburger-inner::after{
+    background-color: #fff !important;
+}
+
+/* #companytype2{
+    display:none;
+}
+#companytype3{
+    display:none;
+} */
+
+
+
+
+
+.remove_pri{
+    color:white !important;
+    /* margin-top:18px; */
+    font-size:14px;
+    transition: transform .2s; /* Animation */
+}
+.remove_pri:hover{
+    color:white !important;
+    transform: scale(1.2); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+
+
+
+/* Control Add TH , Control Add TH , Control Add TH ,Control Add TH , Control Add TH */
+/* Control Add TH , Control Add TH , Control Add TH ,Control Add TH , Control Add TH */
+
+
+.statustext{
+    text-align:right;
+}
+
+@media (max-width: 767.98px){
+    body .card-header {
+        height: auto;
+        display: block;
+        padding: .75rem 0.5rem !important;
+        text-align: left !important;
+    }
+    .statustext{
+        text-align:left;
+    }
+}
+
+.editcolor{
+    color:#FF6600;
+}
+
+.editcolor:hover {
+    color:rgb(165, 66, 0);
+}
+
+a:hover{
+    text-decoration: unset;
+}
+
+.pagination_link{
+    font-size:16px !important;
+}
+
+
+@media (min-width:1440px){
+	
+}
+@media (min-width:1200px) and (max-width:1439px) {
+	
+}
+@media (min-width:992px) and (max-width:1199px){
+    .pagination_link{
+        font-size:12px !important;
+    }
+}
+
+@media (min-width:768px) and (max-width:991px){
+	.pagination_link{
+        font-size:12px !important;
+    }
+}
+
+
+@media (min-width:576px) and (max-width:767px) {
+	.pagination_link{
+        font-size:12px !important;
+    }
+}
+
+@media (max-width:575px) {
+	.pagination_link{
+        font-size:12px !important;
+    }
+}
+
+.crfMainScroll{
+	max-height: 500px;
+    margin-bottom: 10px;
+    overflow:scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+.crfexMainScroll{
+	max-height: 500px;
+    margin-bottom: 10px;
+    overflow:scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+
+
+
+
+
+/* Control Add TH , Control Add TH , Control Add TH ,Control Add TH , Control Add TH */
+/* Control Add TH , Control Add TH , Control Add TH ,Control Add TH , Control Add TH */
