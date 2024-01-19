@@ -646,7 +646,6 @@ function saveDirector2ChangeCredit($crfid)
 
 
 
-
 // สำหรับ ปรับ วงเงิน
 function saveDirector2ChangeMoney($crfid)
 {
@@ -727,9 +726,6 @@ function saveDirector2ChangeMoney($crfid)
         $obj->gci()->db->update("crf_maindata", $arDirector);
     }
 }
-
-
-
 
 // สำหรับแก้ไขข้อมูลลูกค้า
 function saveDirector2editCustomer($crfid)
@@ -837,9 +833,6 @@ function saveDirector2editCustomer($crfid)
         $obj->gci()->db->update("crf_maindata", $arDirector);
     }
 }
-
-
-
 
 
 function accProcess($crfid, $crfcusid)
@@ -1090,10 +1083,6 @@ function saveCustomersCode($crfid, $crfcusid)
     }
     $obj->gci()->email->sendemail_toOwner($obj->gci()->input->post("accStaffFormNo"));
 }
-
-
-
-
 
 
 function exManagerApprove($crfexid)
