@@ -295,7 +295,7 @@ function getuserEmailTo($deptcode, $posi)
     $obj = new emailfn();
     $obj->gci()->db2 = $obj->gci()->load->database('saleecolour', TRUE);
 
-    $query = $obj->gci()->db2->query("SELECT memberemail FROM member WHERE DeptCode = '$deptcode' AND posi in ($posi) AND resigned = 0");
+    $query = $obj->gci()->db2->query("SELECT memberemail , ecode FROM member WHERE DeptCode = '$deptcode' AND posi in ($posi) AND resigned = 0");
     return $query;
 }
 

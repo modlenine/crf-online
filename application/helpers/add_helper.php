@@ -18,6 +18,16 @@ class addfn
 // Sale , CS Approve
 function saveApprove($crfid)
 {
+
+    //update old status
+    //Send to notifycenter
+    $notifyData = array(
+        "notify_formno" => $obj->gci()->input->post("saleMgrFormno"),
+        "notify_status" => "take action already"
+    );
+    $this->notifycenter->cancel_api($notifyData);
+    //Send to notifycenter
+    //update old status
     $obj = new addfn();
     $obj->gci()->load->model('main/email_model', 'email');
 
@@ -52,8 +62,6 @@ function saveApprove($crfid)
         $obj->gci()->db->where("crfcus_id", $obj->gci()->input->post("saleMgrCusid"));
         $obj->gci()->db->update("crf_customers_temp", $arCustomerTemp);
     }
-
-
 
 
     if ($obj->gci()->input->post("cusTypeForEmail") == 1) {

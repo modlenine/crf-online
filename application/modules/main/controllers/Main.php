@@ -1445,6 +1445,55 @@ public function geturl()
 }
 
 
+public function test_notifycenter_function()
+{
+    $this->load->library('notifycenter');
+
+    $this->notifycenter->test1();
+}
+
+
+public function test_api_request()
+{
+    // ข้อมูลที่ต้องการส่ง
+    $data = array('key1' => 'value1', 'key2' => 'value2');
+
+    // แปลงข้อมูลเป็น JSON string
+    $json_data = json_encode($data);
+
+    // กำหนด URL ของ API
+    $url = "http://localhost/intranet/api/request_api";
+
+    // สร้าง cURL resource
+    $curl = curl_init($url);
+
+    // ตั้งค่าสำหรับ cURL
+    curl_setopt($curl, CURLOPT_POST, true);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $json_data);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+        'Content-Type: application/json',
+        'Content-Length: ' . strlen($json_data))
+    );
+
+    // ส่ง API request และรับ response
+    $response = curl_exec($curl);
+
+    // ตรวจสอบว่ามีข้อผิดพลาดหรือไม่
+    if ($response === false) {
+        $error_message = curl_error($curl);
+        // จัดการข้อผิดพลาด
+    } else {
+        // ดำเนินการต่อไปกับ response
+        echo $response;
+    }
+
+    // ปิด cURL resource
+    curl_close($curl);
+
+}
+
+
 
 
 

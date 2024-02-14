@@ -64,66 +64,63 @@ class Email_model extends CI_Model
       $short_url = base_url('qrcode/') . getDataEmail($formno)->crf_id;
       // $short_url = shorturl($longurl);
 
-
       $subject = "[crf] มีรายการ Credit request form ใหม่ รออนุมัติ";
 
       $body = '
         <h2>รายการ Credit Request Form ใหม่ รออนุมัติ</h2>
         <table>
-         <tr>
-            <td><strong>เลขที่คำขอ</strong></td>
-            <td>' . getDataEmail($formno)->crfcus_formno . '</td>
-            <td><strong>วันที่สร้างรายการ</strong></td>
-            <td>' . conDateFromDb(getDataEmail($formno)->crf_datecreate) . '</td>
-         </tr>
+            <tr>
+               <td><strong>เลขที่คำขอ</strong></td>
+               <td>' . getDataEmail($formno)->crfcus_formno . '</td>
+               <td><strong>วันที่สร้างรายการ</strong></td>
+               <td>' . conDateFromDb(getDataEmail($formno)->crf_datecreate) . '</td>
+            </tr>
 
-         <tr>
-            <td><strong>ประเภทลูกค้า</strong></td>
-            <td>' . getDataEmail($formno)->crf_alltype_subname . '</td>
-            <td><strong>สถานะ</strong></td>
-            <td>' . getDataEmail($formno)->crf_status . '</td>
-         </tr>
+            <tr>
+               <td><strong>ประเภทลูกค้า</strong></td>
+               <td>' . getDataEmail($formno)->crf_alltype_subname . '</td>
+               <td><strong>สถานะ</strong></td>
+               <td>' . getDataEmail($formno)->crf_status . '</td>
+            </tr>
 
-         <tr>
-            <td><strong>หัวข้อ</strong></td>
-            <td colspan="3">' . $topicTH . '</td>
-         </tr>
+            <tr>
+               <td><strong>หัวข้อ</strong></td>
+               <td colspan="3">' . $topicTH . '</td>
+            </tr>
 
-         <tr>
-            <td><strong>ชื่อลูกค้า</strong></td>
-            <td>' . getDataEmail($formno)->crfcus_name . '</td>
-            <td><strong>เซลล์ผู้ดูแล</strong></td>
-            <td>' . getDataEmail($formno)->crfcus_salesreps . '</td>
-         </tr>
+            <tr>
+               <td><strong>ชื่อลูกค้า</strong></td>
+               <td>' . getDataEmail($formno)->crfcus_name . '</td>
+               <td><strong>เซลล์ผู้ดูแล</strong></td>
+               <td>' . getDataEmail($formno)->crfcus_salesreps . '</td>
+            </tr>
 
-         <tr>
-            <td><strong>ผู้บันทึกข้อมูล</strong></td>
-            <td>' . getDataEmail($formno)->crf_userpost . '</td>
-            <td><strong>แผนก</strong></td>
-            <td>' . getDataEmail($formno)->crf_userdeptpost . '</td>
-         </tr>
+            <tr>
+               <td><strong>ผู้บันทึกข้อมูล</strong></td>
+               <td>' . getDataEmail($formno)->crf_userpost . '</td>
+               <td><strong>แผนก</strong></td>
+               <td>' . getDataEmail($formno)->crf_userdeptpost . '</td>
+            </tr>
 
-         <tr>
-            <td><strong>รหัสพนักงาน</strong></td>
-            <td>' . getDataEmail($formno)->crf_userecodepost . '</td>
-            <td><strong>วันที่</strong></td>
-            <td>' . conDateTimeFromDb(getDataEmail($formno)->crf_userpostdatetime) . '</td>
-         </tr>
+            <tr>
+               <td><strong>รหัสพนักงาน</strong></td>
+               <td>' . getDataEmail($formno)->crf_userecodepost . '</td>
+               <td><strong>วันที่</strong></td>
+               <td>' . conDateTimeFromDb(getDataEmail($formno)->crf_userpostdatetime) . '</td>
+            </tr>
 
-         <tr>
-            <td><strong>ตรวจสอบรายการ</strong></td>
-            <td colspan="3"><a href="' . base_url('main/viewdata/') . getDataEmail($formno)->crf_id . '">' . getDataEmail($formno)->crfcus_formno . '</a></td>
-         </tr>
+            <tr>
+               <td><strong>ตรวจสอบรายการ</strong></td>
+               <td colspan="3"><a href="' . base_url('main/viewdata/') . getDataEmail($formno)->crf_id . '">' . getDataEmail($formno)->crfcus_formno . '</a></td>
+            </tr>
 
-         <tr>
-            <td><strong>Scan QrCode</strong></td>
-            <td colspan="3"><img src="' . base_url('upload/qrcode/') . $this->createQrcode($short_url,getDataEmail($formno)->crf_id) . '"></td>
-         </tr>
+            <tr>
+               <td><strong>Scan QrCode</strong></td>
+               <td colspan="3"><img src="' . base_url('upload/qrcode/') . $this->createQrcode($short_url,getDataEmail($formno)->crf_id) . '"></td>
+            </tr>
 
          </table>
-         ';
-
-
+      ';
 
       //  Email Zone
       $deptcodeTo = getDataEmail($formno)->crf_userdeptcodepost;
@@ -155,6 +152,49 @@ class Email_model extends CI_Model
 
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
+
+
+
+      //load library for insert data to notifycenter
+      $this->load->library("notifycenter");
+      $this->db_saleecolour = $this->load->database("saleecolour" , TRUE);
+      
+      $sqlfornitifyAction = $this->db_saleecolour->query("SELECT ecode From member WHERE DeptCode = '$deptcodeTo' AND resigned = 0 AND posi = 75 GROUP BY ecode");
+
+      $notifyData = [];
+      foreach($sqlfornitifyAction->result() as $ecodeArray){
+         //code
+         $detail = array(
+            "title" => "[crf] มีรายการ Credit request form ใหม่ รออนุมัติ",
+            "status" => "Open",
+            "link" => base_url('main/viewdata/').getDataEmail($formno)->crf_id
+         );
+
+         $notify_formno = $formno;
+         $notify_programname = "credit request form";
+         $notify_ecode = $ecodeArray->ecode;
+         $notify_details = $detail;
+         $notify_type = "take action";
+         $notify_status = "wait take action";
+         $notify_programstatus = getDataEmail($formno)->crf_status;
+
+         $dataarray = array(
+            "notify_formno" => $notify_formno,
+            "notify_programname" => $notify_programname,
+            "notify_programstatus" => $notify_programstatus,
+            "notify_ecode" => $notify_ecode,
+            "notify_details" => $notify_details,
+            "notify_type" => $notify_type,
+            "notify_status" => $notify_status
+         );
+
+         $notifyData[] = $dataarray;
+   
+         // $this->notifycenter->savedataNotify($notify_formno , $notify_programname , $notify_ecode , $notify_details , $notify_type , $notify_status);
+      }
+
+      $this->notifycenter->request_api($notifyData);
+
    }
    //End Step 1
 
@@ -290,6 +330,14 @@ class Email_model extends CI_Model
 
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
+
+      $ecodeArray = array("M0019","M1508","M0254","M1909","M1905","M2119");
+      $title = "[crf] มีรายการ Credit request form ใหม่รอเพิ่ม BRCODE";
+      $status = getDataEmail($formno)->crf_status;
+      $link = base_url('main/viewdata/').getDataEmail($formno)->crf_id;
+      $programname = "credit request form";
+
+      $this->notifycenter->insertdata_template($ecodeArray , $title , $status , $link , $formno , $programname);
 
    }
 
@@ -558,8 +606,10 @@ class Email_model extends CI_Model
 
 
       $to = array();
+      $ecode = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
+         $ecode[] = $result['ecode'];
       }
 
       //  $to = array(
@@ -576,6 +626,16 @@ class Email_model extends CI_Model
 
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
+
+
+      // Notification center program
+      $ecodeArray = $ecode;
+      $title = "[crf] มีรายการ Credit request form ใหม่รอ Account Manager อนุมัติ";
+      $status = getDataEmail($formno)->crf_status;
+      $link = base_url('main/viewdata/').getDataEmail($formno)->crf_id;
+      $programname = "credit request form";
+
+      $this->notifycenter->insertdata_template($ecodeArray , $title , $status , $link , $formno , $programname);
 
    }
 

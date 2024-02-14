@@ -61,7 +61,6 @@ class Main_model extends CI_Model
 
         if ($this->input->post('crf_type') == 1) {
             // ถ้าเลือกประเภทลูกค้า = ลูกค้าใหม่
-
             if ($this->input->post("crf_person_type") == "natural") {
                 if ($_FILES["crf_file_person"]["name"] != "") {
                     $fileperson = "crf_file_person";
@@ -133,8 +132,6 @@ class Main_model extends CI_Model
                     echo "ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ วิเคราะห์ผลการดำเนินงาน<br>";
                 }
             }
-
-
 
             // แนบไฟล์แผนที่วางบิล
             $resulttablebill = "";
@@ -335,7 +332,6 @@ class Main_model extends CI_Model
             return 1;
         } else {
 
-
             // Get data From customers table to customers_temp table
             if ($this->input->post("crf_cusid") != "") {
                 $this->db->select("*");
@@ -435,9 +431,6 @@ class Main_model extends CI_Model
             }
             // Get data From customers table to customers_temp table
 
-
-
-
             // Condition when get data success
             if ($getdataStatus == 1) {
 
@@ -495,11 +488,6 @@ class Main_model extends CI_Model
                 }
             }
             // Condition when get data success
-
-
-
-
-
 
             if ($this->input->post("crf_sub_oldcus_changeaddress") == 2) {  //กรณีที่เลือกเปลี่ยนที่อยู่
 
@@ -604,10 +592,6 @@ class Main_model extends CI_Model
                 );
                 $this->db->insert("crf_userlog", $aruserlog);
             }
-
-
-
-
 
             // กรณีเลือกแก้ไขข้อมูลลูกค้า
             if ($this->input->post("crf_sub_oldcus_editcustomer") == 5) {
@@ -801,9 +785,6 @@ class Main_model extends CI_Model
             } // กรณีเลือกแก้ไขข้อมูลลูกค้า
 
 
-
-
-
             if ($this->input->post("crf_sub_oldcus_changecredit") == 3) {  //กรณีที่เลือกปรับ Credit Term
 
                 $arsavedata = array(
@@ -857,10 +838,6 @@ class Main_model extends CI_Model
                 );
                 $this->db->insert("crf_userlog", $aruserlog);
             }
-
-
-
-
 
             if ($this->input->post("crf_sub_oldcus_changefinance") == 4) { //กรณีที่เลือกปรับวงเงิน
 
@@ -3650,6 +3627,14 @@ class Main_model extends CI_Model
         );
         $this->db->where("crfcus_formno", $crfformno);
         $this->db->update("crf_customers_temp", $arCustomerTemp);
+
+        //Send to notifycenter
+        $notifyData = array(
+            "notify_formno" => $crfformno,
+            "notify_status" => "cancel"
+        );
+        $this->notifycenter->cancel_api($notifyData);
+        //Send to notifycenter
 
         header("refresh:0; url=" . base_url('main/showlist'));
     }
