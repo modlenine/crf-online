@@ -476,9 +476,9 @@ class Email_model extends CI_Model
          $to[] = $result['memberemail'];
       }
 
-      //  $to = array(
-      //      "chainarong_k@saleecolour.com",
-      //  );
+       $to = array(
+           "tassanee_s@saleecolour.com",
+       );
 
       $ecodecc = getDataEmail($formno)->crf_userecodepost;
       $optioncc = getuserEmailToOwner($ecodecc);
@@ -612,9 +612,9 @@ class Email_model extends CI_Model
          $ecode[] = $result['ecode'];
       }
 
-      //  $to = array(
-      //      "chainarong_k@saleecolour.com",
-      //  );
+       $to = array(
+           "tassanee_s@saleecolour.com",
+       );
 
       $ecodecc = getDataEmail($formno)->crf_userecodepost;
       $optioncc = getuserEmailToOwner($ecodecc);
@@ -3312,9 +3312,9 @@ class Email_model extends CI_Model
          $to[] = $result['memberemail'];
       }
 
-      //  $to = array(
-      //      "chainarong_k@saleecolour.com",
-      //  );
+       $to = array(
+           "tassanee_s@saleecolour.com",
+       );
 
       $ecodecc = getDataEmailEx($formno)->crfexcus_userecode;
       $optioncc = getuserEmailToOwner($ecodecc);
@@ -3437,9 +3437,9 @@ class Email_model extends CI_Model
          $to[] = $result['memberemail'];
       }
 
-      //  $to = array(
-      //      "chainarong_k@saleecolour.com",
-      //  );
+       $to = array(
+           "tassanee_s@saleecolour.com",
+       );
 
       $ecodecc = getDataEmailEx($formno)->crfexcus_userecode;
       $optioncc = getuserEmailToOwner($ecodecc);
