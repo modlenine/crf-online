@@ -19,17 +19,19 @@ class addfn
 function saveApprove($crfid)
 {
 
+    $obj = new addfn();
+    $obj->gci()->load->model('main/email_model', 'email');
     //update old status
     //Send to notifycenter
     $notifyData = array(
         "notify_formno" => $obj->gci()->input->post("saleMgrFormno"),
-        "notify_status" => "take action already"
+        "notify_status" => "take action already",
+        "notify_type" => "take action"
     );
-    $this->notifycenter->cancel_api($notifyData);
+    $obj->gci()->notifycenter->update_api($notifyData);
     //Send to notifycenter
     //update old status
-    $obj = new addfn();
-    $obj->gci()->load->model('main/email_model', 'email');
+
 
     if ($obj->gci()->input->post("mgr_appro") == "อนุมัติ") {
 
@@ -88,6 +90,18 @@ function saveCsBr($crfid)
 {
     $obj = new addfn();
     $obj->gci()->load->model('main/email_model', 'email');
+
+    //update old status
+
+    $saveBrFormno = $obj->gci()->input->post("CsFormno");
+    $saveBrProgramname = "credit request form";
+    $saveBrStatus = "action done";
+
+    $obj->gci()->notifycenter->updatedataAction_template($saveBrFormno , $saveBrProgramname , $saveBrStatus);
+    //Send to notifycenter
+    //update old status
+
+
     $arbr = array(
         "crf_brcode" => $obj->gci()->input->post("crf_brcode"),
         "crf_brcode_userpost" => $obj->gci()->input->post("crf_brcode_userpost"),
@@ -114,6 +128,17 @@ function saveAccMgr($crfid)
 {
     $obj = new addfn();
     $obj->gci()->load->model('main/email_model', 'email');
+
+    //update old status
+    //Send to notifycenter
+    $notifyData = array(
+        "notify_formno" => $obj->gci()->input->post("accMgrFormno"),
+        "notify_status" => "take action already"
+    );
+    $obj->gci()->notifycenter->update_api($notifyData);
+    //Send to notifycenter
+    //update old status
+
 
     $method1 = $obj->gci()->input->post("mgrCheckmethod1");
     $method2 = $obj->gci()->input->post("mgrCheckmethod2");
@@ -283,6 +308,15 @@ function saveDerector1($crfid)
     if ($obj->gci()->input->post("director1_appro") == "อนุมัติ") {
         if (check_directorapprove($crfid)->crf_directorapprove_status2 == "อนุมัติ") {
             $status = "Directors approved";
+            //update old status
+            //Send to notifycenter
+            $notifyData = array(
+                "notify_formno" => $obj->gci()->input->post("direc2FormNo"),
+                "notify_status" => "take action already"
+            );
+            $obj->gci()->notifycenter->update_api($notifyData);
+            //Send to notifycenter
+            //update old status
         } else {
             $status = "Waiting for second director approve";
         }
@@ -341,6 +375,17 @@ function saveDerector2($crfid)
     if ($obj->gci()->input->post("director2_appro") == "อนุมัติ") {
         if (check_directorapprove($crfid)->crf_directorapprove_status1 == "อนุมัติ") {
             $status = "Directors approved";
+
+            //update old status
+            //Send to notifycenter
+            $notifyData = array(
+                "notify_formno" => $obj->gci()->input->post("direc2FormNo"),
+                "notify_status" => "take action already"
+            );
+            $obj->gci()->notifycenter->update_api($notifyData);
+            //Send to notifycenter
+            //update old status
+            
         } else {
             $status = "Waiting for second director approve";
         }
@@ -575,9 +620,20 @@ function saveDirector2ChangeCredit($crfid)
 {
     $obj = new addfn();
 
+    //update old status
+    //Send to notifycenter
+    $notifyData = array(
+        "notify_formno" => $obj->gci()->input->post("direc2FormNo"),
+        "notify_status" => "take action already"
+    );
+    $obj->gci()->notifycenter->update_api($notifyData);
+    //Send to notifycenter
+    //update old status
+
     if ($obj->gci()->input->post("director2_appro") == "อนุมัติ" || $obj->gci()->input->post("director1_appro") == "อนุมัติ") {
 
         if (check_directorapprove($crfid)->crf_directorapprove_status1 == "อนุมัติ" && check_directorapprove($crfid)->crf_directorapprove_status2 == "") {
+
             $arDirector = array(
                 "crf_director_detail2" => $obj->gci()->input->post("crf_director_detail2"),
                 "crf_director_name2" => $obj->gci()->input->post("crf_director_name2"),
@@ -588,6 +644,7 @@ function saveDirector2ChangeCredit($crfid)
             $obj->gci()->db->where("crf_id", $crfid);
             $obj->gci()->db->update("crf_maindata", $arDirector);
         } else if (check_directorapprove($crfid)->crf_directorapprove_status2 == "อนุมัติ" && check_directorapprove($crfid)->crf_directorapprove_status1 == "") {
+
             $arDirector = array(
                 "crf_director_detail1" => $obj->gci()->input->post("crf_director_detail1"),
                 "crf_director_name1" => $obj->gci()->input->post("crf_director_name1"),
@@ -659,9 +716,20 @@ function saveDirector2ChangeMoney($crfid)
 {
     $obj = new addfn();
 
+    //update old status
+    //Send to notifycenter
+    $notifyData = array(
+        "notify_formno" => $obj->gci()->input->post("direc2FormNo"),
+        "notify_status" => "take action already"
+    );
+    $obj->gci()->notifycenter->update_api($notifyData);
+    //Send to notifycenter
+    //update old status
+
     if ($obj->gci()->input->post("director2_appro") == "อนุมัติ" || $obj->gci()->input->post("director1_appro") == "อนุมัติ") {
 
         if (check_directorapprove($crfid)->crf_directorapprove_status1 == "อนุมัติ" && check_directorapprove($crfid)->crf_directorapprove_status2 == "") {
+
             $arDirector = array(
                 "crf_director_detail2" => $obj->gci()->input->post("crf_director_detail2"),
                 "crf_director_name2" => $obj->gci()->input->post("crf_director_name2"),
@@ -672,6 +740,7 @@ function saveDirector2ChangeMoney($crfid)
             $obj->gci()->db->where("crf_id", $crfid);
             $obj->gci()->db->update("crf_maindata", $arDirector);
         } else if (check_directorapprove($crfid)->crf_directorapprove_status2 == "อนุมัติ" && check_directorapprove($crfid)->crf_directorapprove_status1 == "") {
+
             $arDirector = array(
                 "crf_director_detail1" => $obj->gci()->input->post("crf_director_detail1"),
                 "crf_director_name1" => $obj->gci()->input->post("crf_director_name1"),
@@ -740,9 +809,20 @@ function saveDirector2editCustomer($crfid)
 {
     $obj = new addfn();
 
+    //update old status
+    //Send to notifycenter
+    $notifyData = array(
+        "notify_formno" => $obj->gci()->input->post("direc2FormNo"),
+        "notify_status" => "take action already"
+    );
+    $obj->gci()->notifycenter->update_api($notifyData);
+    //Send to notifycenter
+    //update old status
+
     if ($obj->gci()->input->post("director2_appro") == "อนุมัติ" || $obj->gci()->input->post("director1_appro") == "อนุมัติ") {
 
         if (check_directorapprove($crfid)->crf_directorapprove_status1 == "อนุมัติ" && check_directorapprove($crfid)->crf_directorapprove_status2 == "") {
+
             $arDirector = array(
                 "crf_director_detail2" => $obj->gci()->input->post("crf_director_detail2"),
                 "crf_director_name2" => $obj->gci()->input->post("crf_director_name2"),
@@ -753,6 +833,7 @@ function saveDirector2editCustomer($crfid)
             $obj->gci()->db->where("crf_id", $crfid);
             $obj->gci()->db->update("crf_maindata", $arDirector);
         } else if (check_directorapprove($crfid)->crf_directorapprove_status2 == "อนุมัติ" && check_directorapprove($crfid)->crf_directorapprove_status1 == "") {
+
             $arDirector = array(
                 "crf_director_detail1" => $obj->gci()->input->post("crf_director_detail1"),
                 "crf_director_name1" => $obj->gci()->input->post("crf_director_name1"),
@@ -847,6 +928,16 @@ function accProcess($crfid, $crfcusid)
 {
     $obj = new addfn();
     $obj->gci()->load->model('main/email_model', 'email');
+
+    //update old status
+    //Send to notifycenter
+    $notifyData = array(
+        "notify_formno" => $obj->gci()->input->post("accStaffFormNo"),
+        "notify_status" => "take action already"
+    );
+    $obj->gci()->notifycenter->update_api($notifyData);
+    //Send to notifycenter
+    //update old status
 
     $formno = $obj->gci()->input->post("accStaffFormNo");
     $accCheckmethod3 = $obj->gci()->input->post("accCheckmethod3");
@@ -977,6 +1068,17 @@ function saveCustomersCode($crfid, $crfcusid)
 {
     $obj = new addfn();
     $obj->gci()->load->model('main/email_model', 'email');
+
+    //update old status
+    //Send to notifycenter
+    $notifyData = array(
+        "notify_formno" => $obj->gci()->input->post("accStaffFormNo"),
+        "notify_status" => "take action already"
+    );
+    $obj->gci()->notifycenter->update_api($notifyData);
+    //Send to notifycenter
+    //update old status
+
     $arAccStaff = array(
         "crf_savecustomercode" => $obj->gci()->input->post("cusCode"),
         "crf_memo_customercode" => $obj->gci()->input->post("accStaffMemo"),

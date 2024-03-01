@@ -1002,11 +1002,6 @@ if ($result->crf_status == "Open") {
                 <!-- Section สำหรับ Account Manager -->
 
 
-
-
-
-
-
                 <!-- Section สำหรับ Directorคนที่1 -->
                 <form action="<?= base_url('main/director1/') . $result->crf_id ?>" method="post" class="director1" style="display:none;">
                     <h6 class=""><b><u>สำหรับฝ่ายบริหาร1</u></b></h6>
@@ -1053,11 +1048,6 @@ if ($result->crf_status == "Open") {
                 <!-- Section สำหรับ Directorคนที่1 -->
 
 
-
-
-
-
-
                 <!-- Section สำหรับ Directorคนที่2 -->
                 <form action="<?= base_url('main/director2/') . $result->crf_id ?>" method="post" class="director2" style="display:none">
 
@@ -1102,7 +1092,6 @@ if ($result->crf_status == "Open") {
                     <hr>
                 </form>
                 <!-- Section สำหรับ Directorคนที่2 -->
-
 
 
                 <!-- Section สำหรับเจ้าหน้าที่บัญชี -->

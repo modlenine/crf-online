@@ -1217,11 +1217,26 @@ public function history_list()
 
     public function testcode()
     {
-        $subject = "test email";
-        $body = "email";
-        $to = "";
-        $cc = "";
-        emailSaveDataTH($subject, $body, $to, $cc);
+        $ecode = " 'M0019' , 'M1508' , 'M0254' , 'M1909' , 'M1905' , 'M2119' ";
+
+        $option = getuserEmailToCs($ecode);
+  
+  
+        $to = array();
+        $ecode = array();
+        foreach ($option->result_array() as $result) {
+           $to[] = $result['memberemail'];
+           $ecode[] = $result['ecode'];
+        }
+  
+        //  $to = array(
+        //      "chainarong_k@saleecolour.com",
+        //  );
+        $ecode = array_unique($ecode);
+        $to = array_unique($to);
+
+        print_r($ecode);
+        print_r($to);
     }
 
 

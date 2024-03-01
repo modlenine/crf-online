@@ -10,10 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
 
 
-    <script src="<?= base_url("js/jquery.min.js") ?>"></script>
+    <script src="<?= base_url('js/jquery.min.js?v='.filemtime('./js/jquery.min.js')) ?>"></script>
     <!--     <script src="<?= base_url('js/fontawsome.js') ?>"></script> -->
-
-
 
     <link href="<?= base_url() ?>main.css" rel="stylesheet">
     <link href="<?= base_url('css/custom.css') ?>" rel="stylesheet">

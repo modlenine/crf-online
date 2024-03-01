@@ -3113,11 +3113,11 @@ $(document).ready(function () {
         if ($('#formgraccappro').val() == "") {
             $('.formgr_appro , #forcrf_accmgr_detail , #forcrf_accmgr_name , #forcrf_accmgr_datatime').css('display', 'none');
         }
-    }else if(checkStatus == "Manager Approved" && checkDeptCodeL == 1003 && checkUserPosi > 15 && changeSales == 1 || 
-    checkStatus == "Manager Approved" && checkDeptCodeL == 1003 && checkUserPosi > 15 && changeAddress == 2 || 
-    checkStatus == "Manager Approved" && checkDeptCodeL == 1003 && checkUserPosi > 15 && changeCreditTerm == 3 || 
-    checkStatus == "Manager Approved" && checkDeptCodeL == 1003 && checkUserPosi > 15 && changeFinance == 4 || 
-    checkStatus == "Manager Approved" && checkDeptCodeL == 1003 && checkUserPosi > 15 && editCustomer == 5){
+    }else if(checkStatus == "Manager Approved" && checkUserecodeL == "M1767" && changeSales == 1 || 
+    checkStatus == "Manager Approved" && checkUserecodeL == "M1767" && changeAddress == 2 || 
+    checkStatus == "Manager Approved" && checkUserecodeL == "M1767" && changeCreditTerm == 3 || 
+    checkStatus == "Manager Approved" && checkUserecodeL == "M1767" && changeFinance == 4 || 
+    checkStatus == "Manager Approved" && checkUserecodeL == "M1767" && editCustomer == 5){
         $('.acc_manager').css('display', '');
         if ($('#formgraccappro').val() == "") {
             $('.formgr_appro , #forcrf_accmgr_detail , #forcrf_accmgr_name , #forcrf_accmgr_datatime').css('display', 'none');
@@ -4879,7 +4879,6 @@ $(document).ready(function () {
                 $('.csAddBrDection1').css('display', '');
             }
         }
-
 
         if (checkStatus == 'CS Added BR CODE' && checkUserDeptView == 1003 && checkCusPosi > 55 ||
         checkStatus == 'CS Added BR CODE' && checkUserecodeL == "M1767") {

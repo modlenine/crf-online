@@ -284,7 +284,7 @@ function getuserEmailToDirector($posi)
     $obj = new emailfn();
     $obj->gci()->db2 = $obj->gci()->load->database('saleecolour', TRUE);
 
-    $query = $obj->gci()->db2->query("SELECT memberemail FROM member WHERE posi in ($posi) AND resigned = 0 AND ecode NOT IN ('M0195' , 'M0001' , 'M0002')");
+    $query = $obj->gci()->db2->query("SELECT memberemail , ecode FROM member WHERE posi in ($posi) AND resigned = 0 AND ecode NOT IN ('M0195' , 'M0001' , 'M0002')");
     return $query;
 }
 
@@ -305,7 +305,7 @@ function getuserEmailToCs($ecode)
     $obj = new emailfn();
     $obj->gci()->db2 = $obj->gci()->load->database('saleecolour', TRUE);
 
-    $query = $obj->gci()->db2->query("SELECT memberemail FROM member WHERE ecode in ($ecode) AND resigned = 0");
+    $query = $obj->gci()->db2->query("SELECT memberemail , ecode FROM member WHERE ecode in ($ecode) AND resigned = 0");
     return $query;
 }
 
