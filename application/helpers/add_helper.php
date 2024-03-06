@@ -23,12 +23,12 @@ function saveApprove($crfid)
     $obj->gci()->load->model('main/email_model', 'email');
     //update old status
     //Send to notifycenter
-    $notifyData = array(
-        "notify_formno" => $obj->gci()->input->post("saleMgrFormno"),
-        "notify_status" => "take action already",
-        "notify_type" => "take action"
-    );
-    $obj->gci()->notifycenter->update_api($notifyData);
+    $notifyformno = $obj->gci()->input->post("saleMgrFormno");
+    $notifyprogramname = "credit request form";
+    $notifystatus = "action done";
+    $notifytype = "take action";
+
+    $obj->gci()->notifycenter->updatedataAction_template($notifyformno , $notifyprogramname , $notifystatus , $notifytype);
     //Send to notifycenter
     //update old status
 
@@ -92,12 +92,13 @@ function saveCsBr($crfid)
     $obj->gci()->load->model('main/email_model', 'email');
 
     //update old status
+    //Send to notifycenter
+    $notifyformno = $obj->gci()->input->post("CsFormno");
+    $notifyprogramname = "credit request form";
+    $notifystatus = "action done";
+    $notifytype = "take action";
 
-    $saveBrFormno = $obj->gci()->input->post("CsFormno");
-    $saveBrProgramname = "credit request form";
-    $saveBrStatus = "action done";
-
-    $obj->gci()->notifycenter->updatedataAction_template($saveBrFormno , $saveBrProgramname , $saveBrStatus);
+    $obj->gci()->notifycenter->updatedataAction_template($notifyformno , $notifyprogramname , $notifystatus , $notifytype);
     //Send to notifycenter
     //update old status
 
@@ -131,11 +132,12 @@ function saveAccMgr($crfid)
 
     //update old status
     //Send to notifycenter
-    $notifyData = array(
-        "notify_formno" => $obj->gci()->input->post("accMgrFormno"),
-        "notify_status" => "take action already"
-    );
-    $obj->gci()->notifycenter->update_api($notifyData);
+    $notifyformno = $obj->gci()->input->post("accMgrFormno");
+    $notifyprogramname = "credit request form";
+    $notifystatus = "action done";
+    $notifytype = "take action";
+
+    $obj->gci()->notifycenter->updatedataAction_template($notifyformno , $notifyprogramname , $notifystatus , $notifytype);
     //Send to notifycenter
     //update old status
 
@@ -185,10 +187,6 @@ function saveAccMgr($crfid)
             $obj->gci()->db->where("crf_id", $crfid);
             $obj->gci()->db->update("crf_maindata", $arAccMgr);
         }
-
-
-
-
 
 
         if ($obj->gci()->input->post("accMgr_cusTypeForEmail") == 1) {
@@ -308,13 +306,15 @@ function saveDerector1($crfid)
     if ($obj->gci()->input->post("director1_appro") == "อนุมัติ") {
         if (check_directorapprove($crfid)->crf_directorapprove_status2 == "อนุมัติ") {
             $status = "Directors approved";
+
             //update old status
             //Send to notifycenter
-            $notifyData = array(
-                "notify_formno" => $obj->gci()->input->post("direc2FormNo"),
-                "notify_status" => "take action already"
-            );
-            $obj->gci()->notifycenter->update_api($notifyData);
+            $notifyformno = $obj->gci()->input->post("direc2FormNo");
+            $notifyprogramname = "credit request form";
+            $notifystatus = "action done";
+            $notifytype = "take action";
+
+            $obj->gci()->notifycenter->updatedataAction_template($notifyformno , $notifyprogramname , $notifystatus , $notifytype);
             //Send to notifycenter
             //update old status
         } else {
@@ -331,6 +331,18 @@ function saveDerector1($crfid)
         $obj->gci()->db->where("crf_id", $crfid);
         $obj->gci()->db->update("crf_maindata", $arDirector);
     } else {
+
+        //update old status
+        //Send to notifycenter
+        $notifyformno = $obj->gci()->input->post("direc2FormNo");
+        $notifyprogramname = "credit request form";
+        $notifystatus = "action done";
+        $notifytype = "take action";
+
+        $obj->gci()->notifycenter->updatedataAction_template($notifyformno , $notifyprogramname , $notifystatus , $notifytype);
+        //Send to notifycenter
+        //update old status
+
         $status = "Director Not approve";
 
         $arCustomerTemp = array(
@@ -378,11 +390,12 @@ function saveDerector2($crfid)
 
             //update old status
             //Send to notifycenter
-            $notifyData = array(
-                "notify_formno" => $obj->gci()->input->post("direc2FormNo"),
-                "notify_status" => "take action already"
-            );
-            $obj->gci()->notifycenter->update_api($notifyData);
+            $notifyformno = $obj->gci()->input->post("direc2FormNo");
+            $notifyprogramname = "credit request form";
+            $notifystatus = "action done";
+            $notifytype = "take action";
+
+            $obj->gci()->notifycenter->updatedataAction_template($notifyformno , $notifyprogramname , $notifystatus , $notifytype);
             //Send to notifycenter
             //update old status
             
@@ -401,6 +414,18 @@ function saveDerector2($crfid)
         $obj->gci()->db->where("crf_id", $crfid);
         $obj->gci()->db->update("crf_maindata", $arDirector);
     } else {
+
+        //update old status
+        //Send to notifycenter
+        $notifyformno = $obj->gci()->input->post("direc2FormNo");
+        $notifyprogramname = "credit request form";
+        $notifystatus = "action done";
+        $notifytype = "take action";
+
+        $obj->gci()->notifycenter->updatedataAction_template($notifyformno , $notifyprogramname , $notifystatus , $notifytype);
+        //Send to notifycenter
+        //update old status
+
         $status = "Director Not approve";
 
         $arCustomerTemp = array(
@@ -620,16 +645,6 @@ function saveDirector2ChangeCredit($crfid)
 {
     $obj = new addfn();
 
-    //update old status
-    //Send to notifycenter
-    $notifyData = array(
-        "notify_formno" => $obj->gci()->input->post("direc2FormNo"),
-        "notify_status" => "take action already"
-    );
-    $obj->gci()->notifycenter->update_api($notifyData);
-    //Send to notifycenter
-    //update old status
-
     if ($obj->gci()->input->post("director2_appro") == "อนุมัติ" || $obj->gci()->input->post("director1_appro") == "อนุมัติ") {
 
         if (check_directorapprove($crfid)->crf_directorapprove_status1 == "อนุมัติ" && check_directorapprove($crfid)->crf_directorapprove_status2 == "") {
@@ -716,16 +731,6 @@ function saveDirector2ChangeMoney($crfid)
 {
     $obj = new addfn();
 
-    //update old status
-    //Send to notifycenter
-    $notifyData = array(
-        "notify_formno" => $obj->gci()->input->post("direc2FormNo"),
-        "notify_status" => "take action already"
-    );
-    $obj->gci()->notifycenter->update_api($notifyData);
-    //Send to notifycenter
-    //update old status
-
     if ($obj->gci()->input->post("director2_appro") == "อนุมัติ" || $obj->gci()->input->post("director1_appro") == "อนุมัติ") {
 
         if (check_directorapprove($crfid)->crf_directorapprove_status1 == "อนุมัติ" && check_directorapprove($crfid)->crf_directorapprove_status2 == "") {
@@ -808,16 +813,6 @@ function saveDirector2ChangeMoney($crfid)
 function saveDirector2editCustomer($crfid)
 {
     $obj = new addfn();
-
-    //update old status
-    //Send to notifycenter
-    $notifyData = array(
-        "notify_formno" => $obj->gci()->input->post("direc2FormNo"),
-        "notify_status" => "take action already"
-    );
-    $obj->gci()->notifycenter->update_api($notifyData);
-    //Send to notifycenter
-    //update old status
 
     if ($obj->gci()->input->post("director2_appro") == "อนุมัติ" || $obj->gci()->input->post("director1_appro") == "อนุมัติ") {
 
@@ -931,11 +926,12 @@ function accProcess($crfid, $crfcusid)
 
     //update old status
     //Send to notifycenter
-    $notifyData = array(
-        "notify_formno" => $obj->gci()->input->post("accStaffFormNo"),
-        "notify_status" => "take action already"
-    );
-    $obj->gci()->notifycenter->update_api($notifyData);
+    $notifyformno = $obj->gci()->input->post("accStaffFormNo");
+    $notifyprogramname = "credit request form";
+    $notifystatus = "action done";
+    $notifytype = "take action";
+
+    $obj->gci()->notifycenter->updatedataAction_template($notifyformno , $notifyprogramname , $notifystatus , $notifytype);
     //Send to notifycenter
     //update old status
 
@@ -1071,11 +1067,12 @@ function saveCustomersCode($crfid, $crfcusid)
 
     //update old status
     //Send to notifycenter
-    $notifyData = array(
-        "notify_formno" => $obj->gci()->input->post("accStaffFormNo"),
-        "notify_status" => "take action already"
-    );
-    $obj->gci()->notifycenter->update_api($notifyData);
+    $notifyformno = $obj->gci()->input->post("accStaffFormNo");
+    $notifyprogramname = "credit request form";
+    $notifystatus = "action done";
+    $notifytype = "take action";
+
+    $obj->gci()->notifycenter->updatedataAction_template($notifyformno , $notifyprogramname , $notifystatus , $notifytype);
     //Send to notifycenter
     //update old status
 

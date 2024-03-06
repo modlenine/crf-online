@@ -1622,6 +1622,18 @@ class Main_model extends CI_Model
     {
 
         if (check_directorapprove($crfid)->crf_directorapprove_status2 == "อนุมัติ") {
+
+            //update old status
+            //Send to notifycenter
+            $notifyformno = $this->input->post("director1Formno");
+            $notifyprogramname = "credit request form";
+            $notifystatus = "action done";
+            $notifytype = "take action";
+
+            $this->notifycenter->updatedataAction_template($notifyformno , $notifyprogramname , $notifystatus , $notifytype);
+            //Send to notifycenter
+            //update old status
+
             if ($this->input->post("direc1_cusTypeForEmail") == 2) {
                 if (getSuboldCus($crfid)->crf_sub_oldcus_changearea == 1) {
                     saveDirector2ChangSales($crfid);
@@ -1655,6 +1667,17 @@ class Main_model extends CI_Model
     {
 
         if (check_directorapprove($crfid)->crf_directorapprove_status1 == "อนุมัติ") {
+            //update old status
+            //Send to notifycenter
+            $notifyformno = $this->input->post("direc2FormNo");
+            $notifyprogramname = "credit request form";
+            $notifystatus = "action done";
+            $notifytype = "take action";
+
+            $this->notifycenter->updatedataAction_template($notifyformno , $notifyprogramname , $notifystatus , $notifytype);
+            //Send to notifycenter
+            //update old status
+
             if ($this->input->post("direc2_cusTypeForEmail") == 2) {
                 if (getSuboldCus($crfid)->crf_sub_oldcus_changearea == 1) {
                     saveDirector2ChangSales($crfid);

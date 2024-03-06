@@ -162,7 +162,6 @@ class Email_model extends CI_Model
 
       $sqlfornotifyRead = $this->db_saleecolour->query("SELECT ecode From member WHERE ecode = '$ecodecc' AND resigned = 0 GROUP BY ecode");
 
-      $notifyData = [];
       $ecodeActionArr = [];
       $ecodeReadArr = [];
 
@@ -174,7 +173,9 @@ class Email_model extends CI_Model
          $ecodeReadArr[] = $ecodeArrayRead->ecode;
       }
 
-      // $this->notifycenter->request_api($notifyData);
+
+      // $ecodeActionArr = array_unique($ecodeActionArr);
+      // $ecodeReadArr = array_unique($ecodeReadArr);
 
 
       $title = "[crf] มีรายการ Credit request form ใหม่ รออนุมัติ";
@@ -302,17 +303,16 @@ class Email_model extends CI_Model
 
 
       $to = array();
-      $ecode = array();
+      $ecodeAr = array();
+      $ecodeccAr = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
-         $ecode[] = $result['ecode'];
+         $ecodeAr[] = $result['ecode'];
       }
 
       //  $to = array(
       //      "chainarong_k@saleecolour.com",
       //  );
-      $to = array_unique($to);
-      $ecode = array_unique($ecode);
 
       $ecodecc = getDataEmail($formno)->crf_userecodepost;
       $optioncc = getuserEmailToOwner($ecodecc);
@@ -320,18 +320,28 @@ class Email_model extends CI_Model
       $cc = array();
       foreach ($optioncc->result_array() as $resultcc) {
          $cc[] = $resultcc['memberemail'];
+         $ecodeccAr[] = $resultcc['ecode'];
       }
+
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+      $ecodeccAr = array_unique($ecodeccAr);
 
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
 
-      $ecodeArray = $ecode;
+
+      $ecodeActionArr = $ecodeAr;
+      $ecodeReadArr = $ecodeccAr;
+
       $title = "[crf] มีรายการ Credit request form ใหม่รอเพิ่ม BRCODE";
       $status = getDataEmail($formno)->crf_status;
       $link = base_url('main/viewdata/').getDataEmail($formno)->crf_id;
       $programname = "credit request form";
 
-      $this->notifycenter->insertdata_template($ecodeArray , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataaction_template($ecodeActionArr , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
 
    }
 
@@ -466,34 +476,45 @@ class Email_model extends CI_Model
 
 
       $to = array();
-      $ecode = array();
+      $ecodeAr = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
-         $ecode[] = $result['ecode'];
+         $ecodeAr[] = $result['ecode'];
       }
 
       array_push($to , "tassanee_s@saleecolour.com");
-      array_push($ecode , "M1767");
+      array_push($ecodeAr , "M1767");
 
       $ecodecc = getDataEmail($formno)->crf_userecodepost;
       $optioncc = getuserEmailToOwner($ecodecc);
 
       $cc = array();
+      $ecodeccAr = array();
       foreach ($optioncc->result_array() as $resultcc) {
          $cc[] = $resultcc['memberemail'];
+         $ecodeccAr[] = $resultcc['ecode'];
       }
+
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+      $ecodeccAr = array_unique($ecodeccAr);
 
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
 
 
-      $ecodeArray = $ecode;
+      // Notification center program
+      $ecodeActionArr = $ecodeAr;
+      $ecodeReadArr = $ecodeccAr;
+
       $title = "[crf] มีรายการ Credit request form ใหม่รอ Account Manager อนุมัติ";
       $status = getDataEmail($formno)->crf_status;
       $link = base_url('main/viewdata/').getDataEmail($formno)->crf_id;
       $programname = "credit request form";
 
-      $this->notifycenter->insertdata_template($ecodeArray , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataaction_template($ecodeActionArr , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
 
    }
 
@@ -610,39 +631,47 @@ class Email_model extends CI_Model
 
 
       $to = array();
-      $ecode = array();
+      $ecodeAr = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
-         $ecode[] = $result['ecode'];
+         $ecodeAr[] = $result['ecode'];
       }
 
       array_push($to , "tassanee_s@saleecolour.com");
-      array_push($ecode , "M1767");
+      array_push($ecodeAr , "M1767");
 
       $ecodecc = getDataEmail($formno)->crf_userecodepost;
       $optioncc = getuserEmailToOwner($ecodecc);
 
       $cc = array();
+      $ecodeccAr = array();
       foreach ($optioncc->result_array() as $resultcc) {
          $cc[] = $resultcc['memberemail'];
+         $ecodeccAr[] = $resultcc['ecode'];
       }
+
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+      $ecodeccAr = array_unique($ecodeccAr);
 
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
 
 
       // Notification center program
-      $ecodeArray = $ecode;
+      $ecodeActionArr = $ecodeAr;
+      $ecodeReadArr = $ecodeccAr;
+
       $title = "[crf] มีรายการ Credit request form ใหม่รอ Account Manager อนุมัติ";
       $status = getDataEmail($formno)->crf_status;
       $link = base_url('main/viewdata/').getDataEmail($formno)->crf_id;
       $programname = "credit request form";
 
-      $this->notifycenter->insertdata_template($ecodeArray , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataaction_template($ecodeActionArr , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
 
    }
-
-
 
 
 
@@ -790,13 +819,13 @@ class Email_model extends CI_Model
 
 
       $to = array();
-      $ecode = array();
+      $ecodeAr = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
-         $ecode[] = $result['ecode'];
+         $ecodeAr[] = $result['ecode'];
       }
       array_push($to , "saowanit@saleecolour.com");
-      array_push($ecode , "M0025");
+      array_push($ecodeAr , "M0025");
 
       //  $to = array(
       //      "chainarong_k@saleecolour.com",
@@ -806,22 +835,32 @@ class Email_model extends CI_Model
       $optioncc = getuserEmailToOwner($ecodecc);
 
       $cc = array();
+      $ecodeccAr = array();
       foreach ($optioncc->result_array() as $resultcc) {
          $cc[] = $resultcc['memberemail'];
+         $ecodeccAr[] = $resultcc['ecode'];
       }
+
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+      $ecodeccAr = array_unique($ecodeccAr);
 
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
 
 
       // Notification center program
-      $ecodeArray = $ecode;
+      $ecodeActionArr = $ecodeAr;
+      $ecodeReadArr = $ecodeccAr;
+
       $title = "[crf] มีรายการ Credit request form ใหม่รอ Director อนุมัติ";
       $status = getDataEmail($formno)->crf_status;
       $link = base_url('main/viewdata/').getDataEmail($formno)->crf_id;
       $programname = "credit request form";
 
-      $this->notifycenter->insertdata_template($ecodeArray , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataaction_template($ecodeActionArr , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
 
    }
 
@@ -956,34 +995,44 @@ class Email_model extends CI_Model
 
 
       $to = array();
-      $ecode = array();
+      $ecodeAr = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
-         $ecode[] = $result['ecode'];
+         $ecodeAr[] = $result['ecode'];
       }
       
       array_push($to , "saowanit@saleecolour.com");
-      array_push($ecode , "M0025");
+      array_push($ecodeAr , "M0025");
 
       $ecodecc = getDataEmail($formno)->crf_userecodepost;
       $optioncc = getuserEmailToOwner($ecodecc);
 
       $cc = array();
+      $ecodeccAr = array();
       foreach ($optioncc->result_array() as $resultcc) {
          $cc[] = $resultcc['memberemail'];
+         $ecodeccAr[] = $resultcc['ecode'];
       }
+
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+      $ecodeccAr = array_unique($ecodeccAr);
 
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
 
       // Notification center program
-      $ecodeArray = $ecode;
+      $ecodeActionArr = $ecodeAr;
+      $ecodeReadArr = $ecodeccAr;
+
       $title = "[crf] มีรายการ Credit request form ใหม่รอ Director อนุมัติ";
       $status = getDataEmail($formno)->crf_status;
       $link = base_url('main/viewdata/').getDataEmail($formno)->crf_id;
       $programname = "credit request form";
 
-      $this->notifycenter->insertdata_template($ecodeArray , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataaction_template($ecodeActionArr , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
 
    }
 
@@ -1154,10 +1203,13 @@ class Email_model extends CI_Model
 
 
       $to = array();
+      $ecodeAr = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
+         $ecodeAr[] = $result['ecode'];
       }
       array_push($to , "mattana@saleecolour.com" , "saowanit@saleecolour.com");
+      array_push($ecodeAr , "M0015" , "M0025");
 
       //  $to = array(
       //      "chainarong_k@saleecolour.com",
@@ -1167,190 +1219,34 @@ class Email_model extends CI_Model
       $optioncc = getuserEmailToOwner($ecodecc);
 
       $cc = array();
+      $ecodeccAr = array();
       foreach ($optioncc->result_array() as $resultcc) {
          $cc[] = $resultcc['memberemail'];
+         $ecodeccAr[] = $resultcc['ecode'];
       }
+
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+      $ecodeccAr = array_unique($ecodeccAr);
 
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
 
 
-      
+      // Notification center program
+      $ecodeActionArr = $ecodeAr;
+      $ecodeReadArr = $ecodeccAr;
+
+      $title = "[crf] มีรายการ Credit request form ใหม่รอ Director อนุมัติ";
+      $status = getDataEmail($formno)->crf_status;
+      $link = base_url('main/viewdata/').getDataEmail($formno)->crf_id;
+      $programname = "credit request form";
+
+      $this->notifycenter->insertdataaction_template($ecodeActionArr , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
 
    }
-
-
-
-   // function sendemail_toDerector2type2($formno)
-   // {
-
-   //    $topicTH = getDataEmail($formno)->crf_topic;
-   //    if (getDataEmail($formno)->crf_topic1 != '') {
-   //       $topicTH .= " / " . getDataEmail($formno)->crf_topic1;
-   //    }
-   //    if (getDataEmail($formno)->crf_topic2 != '') {
-   //       $topicTH .= " / " . getDataEmail($formno)->crf_topic2;
-   //    }
-   //    if (getDataEmail($formno)->crf_topic3 != '') {
-   //       $topicTH .= " / " . getDataEmail($formno)->crf_topic3;
-   //    }
-   //    if (getDataEmail($formno)->crf_topic4 != '') {
-   //       $topicTH .= " / " . getDataEmail($formno)->crf_topic4;
-   //    }
-   //    if (getDataEmail($formno)->crf_topic5 != '') {
-   //       $topicTH .= " / " . getDataEmail($formno)->crf_topic5;
-   //    }
-
-   //    $short_url = base_url('qrcode/') . getDataEmail($formno)->crf_id;
-   //    // $short_url = shorturl($longurl);
-
-
-   //    $subject = "[crf] มีรายการ Credit request form ใหม่รอ Deputy Managing Director Account อนุมัติ";
-
-   //    $body = '
-   //      <h2>รายการ Credit Request Form ใหม่รอ Deputy Managing Director Account อนุมัติ</h2>
-   //      <table>
-   //       <tr>
-   //          <td><strong>เลขที่คำขอ</strong></td>
-   //          <td>' . getDataEmail($formno)->crfcus_formno . '</td>
-   //          <td><strong>วันที่สร้างรายการ</strong></td>
-   //          <td>' . conDateFromDb(getDataEmail($formno)->crf_datecreate) . '</td>
-   //       </tr>
-
-   //       <tr>
-   //          <td><strong>ประเภทลูกค้า</strong></td>
-   //          <td>' . getDataEmail($formno)->crf_alltype_subname . '</td>
-   //          <td><strong>สถานะ</strong></td>
-   //          <td>' . getDataEmail($formno)->crf_status . '</td>
-   //       </tr>
-
-   //       <tr>
-   //          <td><strong>หัวข้อ</strong></td>
-   //          <td colspan="3">' . $topicTH . '</td>
-   //       </tr>
-
-   //       <tr>
-   //          <td><strong>ชื่อลูกค้า</strong></td>
-   //          <td>' . getDataEmail($formno)->crfcus_name . '</td>
-   //          <td><strong>เซลล์ผู้ดูแล</strong></td>
-   //          <td>' . getDataEmail($formno)->crfcus_salesreps . '</td>
-   //       </tr>
-
-   //       <tr>
-   //          <td><strong>ผู้บันทึกข้อมูล</strong></td>
-   //          <td>' . getDataEmail($formno)->crf_userpost . '</td>
-   //          <td><strong>แผนก</strong></td>
-   //          <td>' . getDataEmail($formno)->crf_userdeptpost . '</td>
-   //       </tr>
-
-   //       <tr>
-   //          <td><strong>รหัสพนักงาน</strong></td>
-   //          <td>' . getDataEmail($formno)->crf_userecodepost . '</td>
-   //          <td><strong>วันที่</strong></td>
-   //          <td>' . conDateTimeFromDb(getDataEmail($formno)->crf_userpostdatetime) . '</td>
-   //       </tr>
-
-   //       <tr>
-   //          <td colspan="4" class="bghead"><b>ผลการอนุมัติของ Manager</b></td>
-   //       </tr>
-
-   //       <tr>
-   //          <td><strong>ผู้อนุมัติ</strong></td>
-   //          <td>' . getDataEmail($formno)->crf_mgrapprove_name . '</td>
-   //          <td><strong>วันที่</strong></td>
-   //          <td>' . conDateTimeFromDb(getDataEmail($formno)->crf_mgrapprove_datetime) . '</td>
-   //       </tr>
-
-   //       <tr>
-   //          <td><strong>ผลการอนุมัติ</strong></td>
-   //          <td>' . getDataEmail($formno)->crf_mgrapprove_status . '</td>
-   //          <td><strong>เหตุผล</strong></td>
-   //          <td>' . getDataEmail($formno)->crf_mgrapprove_detail . '</td>
-   //       </tr>
-
-
-   //       <tr>
-   //          <td colspan="4" class="bghead"><b>ผลการอนุมัติของ Account Manager</b></td>
-   //       </tr>
-
-   //       <tr>
-   //          <td><strong>ผู้อนุมัติ</strong></td>
-   //          <td>' . getDataEmail($formno)->crf_accmgr_name . '</td>
-   //          <td><strong>วันที่</strong></td>
-   //          <td>' . conDateTimeFromDb(getDataEmail($formno)->crf_accmgr_datetime) . '</td>
-   //       </tr>
-
-   //       <tr>
-   //          <td><strong>ผลการอนุมัติ</strong></td>
-   //          <td>' . getDataEmail($formno)->crf_accmgrapprove_status . '</td>
-   //          <td><strong>เหตุผล</strong></td>
-   //          <td>' . getDataEmail($formno)->crf_accmgr_detail . '</td>
-   //       </tr>
-
-   //       <tr>
-   //          <td colspan="4" class="bghead"><b>ผลการอนุมัติของ Deputy Managing Director Sales</b></td>
-   //       </tr>
-
-   //       <tr>
-   //          <td><strong>ผู้อนุมัติ</strong></td>
-   //          <td>' . getDataEmail($formno)->crf_director_name1 . '</td>
-   //          <td><strong>วันที่</strong></td>
-   //          <td>' . conDateTimeFromDb(getDataEmail($formno)->crf_director_datetime1) . '</td>
-   //       </tr>
-
-   //       <tr>
-   //          <td><strong>ผลการอนุมัติ</strong></td>
-   //          <td>' . getDataEmail($formno)->crf_directorapprove_status1 . '</td>
-   //          <td><strong>เหตุผล</strong></td>
-   //          <td>' . getDataEmail($formno)->crf_director_detail1 . '</td>
-   //       </tr>
-
-   //       <tr>
-   //          <td><strong>ตรวจสอบรายการ</strong></td>
-   //          <td colspan="3"><a href="' . base_url('main/viewdata/') . getDataEmail($formno)->crf_id . '">' . getDataEmail($formno)->crfcus_formno . '</a></td>
-   //       </tr>
-
-   //       <tr>
-   //          <td><strong>Scan QrCode</strong></td>
-   //          <td colspan="3"><img src="' . base_url('upload/qrcode/') . $this->createQrcode($short_url,getDataEmail($formno)->crf_id) . '"></td>
-   //       </tr>
-
-   //       </table>
-   //       ';
-
-
-
-   //    //  Email Zone
-
-
-   //    $posiTo = "85";
-   //    $option = getuserEmailToDirector($posiTo);
-
-
-   //    $to = array();
-   //    foreach ($option->result_array() as $result) {
-   //       $to[] = $result['memberemail'];
-   //    }
-
-   //    //  $to = array(
-   //    //      "chainarong_k@saleecolour.com",
-   //    //  );
-
-   //    $ecodecc = getDataEmail($formno)->crf_userecodepost;
-   //    $optioncc = getuserEmailToOwner($ecodecc);
-
-   //    $cc = array();
-   //    foreach ($optioncc->result_array() as $resultcc) {
-   //       $cc[] = $resultcc['memberemail'];
-   //    }
-
-   //    emailSaveDataTH($subject, $body, $to, $cc);
-   //    //  Email Zone
-
-   // }
-
-
-
 
 
    function sendemail_toAccStaff($formno)
@@ -1528,7 +1424,7 @@ class Email_model extends CI_Model
       //  Email Zone
 
       $ecode = " 'M1767' , 'M1260' , 'M2017' , 'M2075' , 'M2141' ";
-      $option = getuserEmailToCs($ecode);
+      $option = getuserEmailToAc($ecode);
 
 
       $to = array();
@@ -1546,21 +1442,33 @@ class Email_model extends CI_Model
       $optioncc = getuserEmailToOwner($ecodecc);
 
       $cc = array();
+      $ecodeccAr = array();
       foreach ($optioncc->result_array() as $resultcc) {
          $cc[] = $resultcc['memberemail'];
+         $ecodeccAr[] = $resultcc['ecode'];
       }
+
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+      $ecodeccAr = array_unique($ecodeccAr);
 
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
 
       // Notification center program
-      $ecodeArray = $ecodeAr;
+      $ecodeActionArr = $ecodeAr;
+      $ecodeReadArr = $ecodeccAr;
+
       $title = "[crf] มีรายการ Credit request form ใหม่รอบันทึก Customer code";
       $status = getDataEmail($formno)->crf_status;
       $link = base_url('main/viewdata/').getDataEmail($formno)->crf_id;
       $programname = "credit request form";
 
-      $this->notifycenter->insertdata_template($ecodeArray , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataaction_template($ecodeActionArr , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
+
+
 
    }
 
@@ -1744,22 +1652,32 @@ class Email_model extends CI_Model
       $optioncc = getuserEmailToOwner($ecodecc);
 
       $cc = array();
+      $ecodeccAr = array();
       foreach ($optioncc->result_array() as $resultcc) {
          $cc[] = $resultcc['memberemail'];
+         $ecodeccAr[] = $resultcc['ecode'];
       }
+
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+      $ecodeccAr = array_unique($ecodeccAr);
 
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
 
 
       // Notification center program
-      $ecodeArray = $ecodeAr;
+      $ecodeActionArr = $ecodeAr;
+      $ecodeReadArr = $ecodeccAr;
+
       $title = "[crf] มีรายการ Credit request form ใหม่ รอฝ่ายบัญชีดำเนินการ";
       $status = getDataEmail($formno)->crf_status;
       $link = base_url('main/viewdata/').getDataEmail($formno)->crf_id;
       $programname = "credit request form";
 
-      $this->notifycenter->insertdata_template($ecodeArray , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataaction_template($ecodeActionArr , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
 
    }
 
@@ -1895,10 +1813,10 @@ class Email_model extends CI_Model
 
 
       $to = array();
-      $ecode = array();
+      $ecodeAr = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
-         $ecode[] = $result['ecode'];
+         $ecodeAr[] = $result['ecode'];
       }
 
       //  $to = array(
@@ -1909,23 +1827,32 @@ class Email_model extends CI_Model
       $optioncc = getuserEmailToOwner($ecodecc);
 
       $cc = array();
+      $ecodeccAr = array();
       foreach ($optioncc->result_array() as $resultcc) {
          $cc[] = $resultcc['memberemail'];
+         $ecodeccAr[] = $resultcc['ecode'];
       }
+
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+      $ecodeccAr = array_unique($ecodeccAr);
 
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
 
 
       // Notification center program
-      $ecodeArray = $ecode;
+      $ecodeActionArr = $ecodeAr;
+      $ecodeReadArr = $ecodeccAr;
+
       $title = "[crf] มีรายการ Credit request form ใหม่ รอฝ่ายบัญชีดำเนินการ";
       $status = getDataEmail($formno)->crf_status;
       $link = base_url('main/viewdata/').getDataEmail($formno)->crf_id;
       $programname = "credit request form";
 
-      $this->notifycenter->insertdata_template($ecodeArray , $title , $status , $link , $formno , $programname);
-      // Notification center program
+      $this->notifycenter->insertdataaction_template($ecodeActionArr , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
 
    }
 
@@ -2134,8 +2061,10 @@ class Email_model extends CI_Model
 
 
       $to = array();
+      $ecodeAr = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
+         $ecodeAr[] = $result['ecode'];
       }
 
       //  $to = array(
@@ -2149,8 +2078,23 @@ class Email_model extends CI_Model
          $cc[] = $result_cc['memberemail'];
       }
 
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
+
+
+      // Notification center program
+      $ecodeReadArr = $ecodeAr;
+
+      $title = "[crf]รายการ Credit request form ที่ร้องขอดำเนินการเสร็จสิ้น";
+      $status = getDataEmail($formno)->crf_status;
+      $link = base_url('main/viewdata/').getDataEmail($formno)->crf_id;
+      $programname = "credit request form";
+
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
 
    }
 
@@ -2337,8 +2281,10 @@ class Email_model extends CI_Model
 
 
       $to = array();
+      $ecodeAr = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
+         $ecodeAr[] = $result['ecode'];
       }
 
       //  $to = array(
@@ -2352,8 +2298,23 @@ class Email_model extends CI_Model
          $cc[] = $result_cc['memberemail'];
       }
 
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
+
+
+      // Notification center program
+      $ecodeReadArr = $ecodeAr;
+
+      $title = "[crf]รายการ Credit request form ที่ร้องขอดำเนินการเสร็จสิ้น";
+      $status = getDataEmail($formno)->crf_status;
+      $link = base_url('main/viewdata/').getDataEmail($formno)->crf_id;
+      $programname = "credit request form";
+
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
 
    }
 
@@ -2507,8 +2468,10 @@ class Email_model extends CI_Model
 
 
       $to = array();
+      $ecodeAr = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
+         $ecodeAr[] = $result['ecode'];
       }
 
       //  $to = array(
@@ -2522,8 +2485,22 @@ class Email_model extends CI_Model
          $cc[] = $result_cc['memberemail'];
       }
 
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
+
+      // Notification center program
+      $ecodeReadArr = $ecodeAr;
+
+      $title = "[crf]รายการ Credit request form ที่ร้องขอดำเนินการเสร็จสิ้น";
+      $status = getDataEmail($formno)->crf_status;
+      $link = base_url('main/viewdata/').getDataEmail($formno)->crf_id;
+      $programname = "credit request form";
+
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
 
    }
 
@@ -2640,8 +2617,10 @@ class Email_model extends CI_Model
 
 
       $to = array();
+      $ecodeAr = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
+         $ecodeAr[] = $result['ecode'];
       }
 
       //  $to = array(
@@ -2655,8 +2634,21 @@ class Email_model extends CI_Model
          $cc[] = $result_cc['memberemail'];
       }
 
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
+
+      $ecodeReadArr = $ecodeAr;
+
+      $title = "[crf]ผู้จัดการฝ่ายไม่อนุมัติ รายการที่ร้องขอ";
+      $status = getDataEmail($formno)->crf_status;
+      $link = base_url('main/viewdata/').getDataEmail($formno)->crf_id;
+      $programname = "credit request form";
+
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
 
    }
    //Manager not approve
@@ -2797,8 +2789,10 @@ class Email_model extends CI_Model
 
 
       $to = array();
+      $ecodeAr = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
+         $ecodeAr[] = $result['ecode'];
       }
 
       //  $to = array(
@@ -2812,8 +2806,19 @@ class Email_model extends CI_Model
          $cc[] = $result_cc['memberemail'];
       }
 
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
+
+      $ecodeReadArr = $ecodeAr;
+      $title = "[crf]ผู้จัดการฝ่ายบัญชี ไม่อนุมัติ รายการที่ร้องขอ";
+      $status = getDataEmail($formno)->crf_status;
+      $link = base_url('main/viewdata/').getDataEmail($formno)->crf_id;
+      $programname = "credit request form";
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
 
    }
    //Account Manager not approve
@@ -2991,8 +2996,10 @@ class Email_model extends CI_Model
 
 
       $to = array();
+      $ecodeAr = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
+         $ecodeAr[] = $result['ecode'];
       }
 
       //  $to = array(
@@ -3006,8 +3013,19 @@ class Email_model extends CI_Model
          $cc[] = $result_cc['memberemail'];
       }
 
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
+
+      $ecodeReadArr = $ecodeAr;
+      $title = "[crf]ผู้บริหารระดับสูง ไม่อนุมัติ รายการที่ร้องขอ";
+      $status = getDataEmail($formno)->crf_status;
+      $link = base_url('main/viewdata/').getDataEmail($formno)->crf_id;
+      $programname = "credit request form";
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
 
    }
    //Director not approve

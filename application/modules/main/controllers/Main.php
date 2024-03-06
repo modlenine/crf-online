@@ -980,12 +980,12 @@ public function history_list()
 
 
             // Get money limit on ax
-            $creditmaxOnAx =  floatval(getCreditMax(getViewData($crf_id)->crfcus_code , getViewData($crf_id)->crfcus_area));
-            if($creditmaxOnAx != $rs->crfcus_moneylimit){
-                $creditmaxOnAx = $creditmaxOnAx;
-            }else{
-                $creditmaxOnAx = $rs->crfcus_moneylimit;
-            }
+            // $creditmaxOnAx =  floatval(getCreditMax(getViewData($crf_id)->crfcus_code , getViewData($crf_id)->crfcus_area));
+            // if($creditmaxOnAx != $rs->crfcus_moneylimit){
+            //     $creditmaxOnAx = $creditmaxOnAx;
+            // }else{
+            //     $creditmaxOnAx = $rs->crfcus_moneylimit;
+            // }
             // check money limit with ax
     
             $data = array(
@@ -1217,26 +1217,7 @@ public function history_list()
 
     public function testcode()
     {
-        $ecode = " 'M0019' , 'M1508' , 'M0254' , 'M1909' , 'M1905' , 'M2119' ";
-
-        $option = getuserEmailToCs($ecode);
-  
-  
-        $to = array();
-        $ecode = array();
-        foreach ($option->result_array() as $result) {
-           $to[] = $result['memberemail'];
-           $ecode[] = $result['ecode'];
-        }
-  
-        //  $to = array(
-        //      "chainarong_k@saleecolour.com",
-        //  );
-        $ecode = array_unique($ecode);
-        $to = array_unique($to);
-
-        print_r($ecode);
-        print_r($to);
+        echo $_SERVER['HTTP_HOST'];
     }
 
 

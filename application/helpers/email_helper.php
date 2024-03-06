@@ -309,6 +309,15 @@ function getuserEmailToCs($ecode)
     return $query;
 }
 
+function getuserEmailToAc($ecode)
+{
+    $obj = new emailfn();
+    $obj->gci()->db2 = $obj->gci()->load->database('saleecolour', TRUE);
+
+    $query = $obj->gci()->db2->query("SELECT memberemail , ecode FROM member WHERE ecode in ($ecode) AND resigned = 0");
+    return $query;
+}
+
 
 function getuserEmailToSl($deptcode, $ecode)
 {
@@ -334,7 +343,7 @@ function getuserEmailToOwner($ecode)
     $obj = new emailfn();
     $obj->gci()->db2 = $obj->gci()->load->database('saleecolour', TRUE);
 
-    $query = $obj->gci()->db2->query("SELECT memberemail FROM member WHERE ecode = '$ecode' AND resigned = 0");
+    $query = $obj->gci()->db2->query("SELECT memberemail , ecode FROM member WHERE ecode = '$ecode' AND resigned = 0");
     return $query;
 }
 

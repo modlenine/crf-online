@@ -91,13 +91,14 @@ class Notifycenter{
         $this->request_api($notifyData);
     }
 
-    public function updatedataAction_template($formno , $programname , $status)
+    public function updatedataAction_template($formno , $programname , $status , $type)
     {
         if($formno != "" && $programname != "" && $status != ""){
             $notifyData = array(
                 "notify_formno" => $formno,
                 "notify_programname" => $programname,
-                "notify_status" => "$status"
+                "notify_status" => $status,
+                "notify_type" => $type
             );
             $this->update_api($notifyData);
         }
@@ -112,6 +113,8 @@ class Notifycenter{
         // กำหนด URL ของ API
         if($_SERVER['HTTP_HOST'] == "localhost"){
             $baseurl = "http://localhost/";
+        }else if($_SERVER['HTTP_HOST'] == "intracent.saleecolour.com"){
+            $baseurl = "http://intracent.saleecolour.com/";
         }else{
             $baseurl = "https://intranet.saleecolour.com/";
         }
@@ -153,6 +156,8 @@ class Notifycenter{
         // กำหนด URL ของ API
         if($_SERVER['HTTP_HOST'] == "localhost"){
             $baseurl = "http://localhost/";
+        }else if($_SERVER['HTTP_HOST'] == "intracent.saleecolour.com"){
+            $baseurl = "http://intracent.saleecolour.com/";
         }else{
             $baseurl = "https://intranet.saleecolour.com/";
         }
@@ -194,6 +199,8 @@ class Notifycenter{
         // กำหนด URL ของ API
         if($_SERVER['HTTP_HOST'] == "localhost"){
             $baseurl = "http://localhost/";
+        }else if($_SERVER['HTTP_HOST'] == "intracent.saleecolour.com"){
+            $baseurl = "http://intracent.saleecolour.com/";
         }else{
             $baseurl = "https://intranet.saleecolour.com/";
         }
@@ -226,6 +233,7 @@ class Notifycenter{
         // ปิด cURL resource
         curl_close($curl);
     }
+
 
 
 }
