@@ -32,7 +32,6 @@ class Main_model extends CI_Model
 
 
 
-
     public function savedata()
     {
         $getFormNo = getFormNo();
@@ -909,7 +908,6 @@ class Main_model extends CI_Model
 
 
 
-
     public function count_all()
     {
         $query = $this->db->get("crf_maindata");
@@ -1130,8 +1128,6 @@ class Main_model extends CI_Model
         $output .= '</table>';
         return $output;
     }
-
-
 
 
 
@@ -1881,8 +1877,6 @@ class Main_model extends CI_Model
         echo $output;
     }
 
-
-
     // Process Use Section
     public function searchCustomerDetailName()
     {
@@ -2013,8 +2007,6 @@ class Main_model extends CI_Model
         echo $output;
     }
 
-
-
     public function searchCustomerDetailEx()
     {
         $cusCode = "";
@@ -2089,10 +2081,6 @@ class Main_model extends CI_Model
     }
 
 
-
-
-
-
     public function searchCustomerDetailExName()
     {
         $cusName = "";
@@ -2165,18 +2153,6 @@ class Main_model extends CI_Model
 
         echo $output;
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     // Process Use Section
@@ -2605,59 +2581,12 @@ class Main_model extends CI_Model
                 }
             }
 
-
-
-
-
-
-
-
-
-            // if ($this->input->post("crfex_curcustopic") == 12) {
-
-            //     $armaindata = array(
-            //         "crfex_formno" => $getFormNo,
-            //         "crfex_customerid" => $this->input->post("getCusid"),
-            //         "crfex_company" => $this->input->post("crfex_company"),
-            //         "crfex_datecreate" => conDateToDb($this->input->post("crfex_datecreate")),
-            //         "crfex_custype" => $this->input->post("crfex_custype"),
-            //         // "crfex_pcreditlimit" => $this->input->post("crfex_creditlimit"),
-            //         // "crfex_pterm" => $this->input->post("crfex_term"),
-            //         // "crfex_pdiscount" => $this->input->post("crfex_discount"),
-            //         "crfex_userpost" => $this->input->post("crfex_usercreate"),
-            //         "crfex_userdept" => $this->input->post("crfex_userdeptcode"),
-            //         "crfex_userdatetime" => conDateTimeToDb($this->input->post("crfex_userdatetime")),
-            //         "crfex_status" => "Open",
-            //         "crfex_report_date" => $report_date,
-            //         "crfex_report_month" => $report_month,
-            //         "crfex_report_year" => $report_year,
-            //         "crfex_topic" => "Change credit & term.",
-            //         "crfex_methodcurcus" => $this->input->post("crfex_curcustopic"),
-            //         "crfexm_salesreps" => $this->input->post("crfex_salesreps"),
-            //         "crfexm_cusnameEN" => $this->input->post("crfex_cusnameEN"),
-            //         "crfexm_cusnameTH" => $this->input->post("crfex_cusnameTH"),
-            //         "crfexm_address" => $this->input->post("crfex_address"),
-            //         "crfexm_tel" => $this->input->post("crfex_tel"),
-            //         "crfexm_fax" => $this->input->post("crfex_fax"),
-            //         "crfexm_email" => $this->input->post("crfex_email"),
-            //         "crfexm_creditlimit" => $this->input->post("crfex_creditlimit2"),
-            //         "crfexm_term" => $this->input->post("crfex_term2"),
-            //         "crfexm_discount" => $this->input->post("crfex_discount2"),
-            //         "crfexm_bg" => $this->input->post("crfex_combg"),
-            //         "crfexm_pcreditlimit" => $this->input->post("crfex_creditlimit"),
-            //         "crfexm_pterm" => $this->input->post("crfex_term"),
-            //         "crfexm_pdiscount" => $this->input->post("crfex_discount")
-            //     );
-            //     $this->db->insert("crfex_maindata", $armaindata);
-            // }
             $this->email_model->sendemail_savedataEx($getFormNo);
             return 1;
         } else {
             return 2;
         }
     }
-
-
 
 
     public function count_allex()
@@ -2742,13 +2671,12 @@ class Main_model extends CI_Model
         </div>
 
       </div>
-    </div>
+        </div>
       ';
         }
         $output .= '</table>';
         return $output;
     }
-
 
 
     public function count_all_Dateex($dateStart, $dateEnd)
@@ -2845,10 +2773,6 @@ class Main_model extends CI_Model
         return $output;
     }
 
-
-
-
-
     public function count_all_FormNoex($formNo)
     {
         $this->db->select("*");
@@ -2940,10 +2864,6 @@ class Main_model extends CI_Model
         $output .= '</table>';
         return $output;
     }
-
-
-
-
 
 
     public function count_all_Companyex($companyname)
@@ -3040,8 +2960,6 @@ class Main_model extends CI_Model
     }
 
 
-
-
     public function exManagerApprove($crfexid)
     {
         exManagerApprove($crfexid);
@@ -3086,6 +3004,18 @@ class Main_model extends CI_Model
 
     public function exAccountAddCusCode($crfexid)
     {
+
+        //update old status
+        //Send to notifycenter
+        $notifyformno = $this->input->post("accFormno");
+        $notifyprogramname = "credit request form";
+        $notifystatus = "action done";
+        $notifytype = "take action";
+
+        $this->notifycenter->updatedataAction_template($notifyformno , $notifyprogramname , $notifystatus , $notifytype);
+        //Send to notifycenter
+        //update old status
+
         if ($this->input->post("check_custype_accstaff") == 1) {
             exAccountAddCusCode($crfexid);
         } else if ($this->input->post("check_custype_accstaff") == 2) {
@@ -3676,6 +3606,14 @@ class Main_model extends CI_Model
         );
         $this->db->where("crfexcus_formno", $crfformno);
         $this->db->update("crfex_customers_temp", $arCustomerTemp);
+
+        //Send to notifycenter
+        $notifyData = array(
+            "notify_formno" => $crfformno,
+            "notify_status" => "cancel"
+        );
+        $this->notifycenter->cancel_api($notifyData);
+        //Send to notifycenter
 
         header("refresh:0; url=" . base_url('main/listex'));
     }

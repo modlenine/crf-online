@@ -1197,6 +1197,17 @@ function exManagerApprove($crfexid)
     $obj = new addfn();
     $obj->gci()->load->model('main/email_model', 'email');
 
+    //update old status
+    //Send to notifycenter
+    $notifyformno = $obj->gci()->input->post("mgr_FormnoEx");
+    $notifyprogramname = "credit request form";
+    $notifystatus = "action done";
+    $notifytype = "take action";
+
+    $obj->gci()->notifycenter->updatedataAction_template($notifyformno , $notifyprogramname , $notifystatus , $notifytype);
+    //Send to notifycenter
+    //update old status
+
     if ($obj->gci()->input->post("ex_mgrApprove") == "Approve") {
         $arManager = array(
             "crfex_mgrapp_status" => $obj->gci()->input->post("ex_mgrApprove"),
@@ -1243,6 +1254,17 @@ function exCsAddBr($crfexid)
     $obj = new addfn();
     $obj->gci()->load->model('main/email_model', 'email');
 
+    //update old status
+    //Send to notifycenter
+    $notifyformno = $obj->gci()->input->post("csFromno");
+    $notifyprogramname = "credit request form";
+    $notifystatus = "action done";
+    $notifytype = "take action";
+
+    $obj->gci()->notifycenter->updatedataAction_template($notifyformno , $notifyprogramname , $notifystatus , $notifytype);
+    //Send to notifycenter
+    //update old status
+
 
     $arCsToCustomerTemp = array(
         "crfexcus_brcode" => $obj->gci()->input->post("ex_csBrCode"),
@@ -1269,6 +1291,16 @@ function exAccMgrApprove($crfexid)
     $obj = new addfn();
     $obj->gci()->load->model('main/email_model', 'email');
 
+    //update old status
+    //Send to notifycenter
+    $notifyformno = $obj->gci()->input->post("accMgrFromno");
+    $notifyprogramname = "credit request form";
+    $notifystatus = "action done";
+    $notifytype = "take action";
+
+    $obj->gci()->notifycenter->updatedataAction_template($notifyformno , $notifyprogramname , $notifystatus , $notifytype);
+    //Send to notifycenter
+    //update old status
 
     if ($obj->gci()->input->post("accMgr_cusType") == 1) {
         if ($obj->gci()->input->post("ex_accMgrApprove") == "Approve") {
@@ -1323,7 +1355,12 @@ function exAccMgrApprove($crfexid)
             $obj->gci()->db->update("crfex_maindata", $arAccMgr);
 
 
-            $obj->gci()->email->sendemail_toDirectorEx2($obj->gci()->input->post("accMgrFromno"));
+            if($obj->gci()->input->post("accMgr_curcustopic2") == ""){
+                $obj->gci()->email->sendemail_toAccStaffEx3($obj->gci()->input->post("accMgrFromno"));
+            }else{
+                $obj->gci()->email->sendemail_toDirectorEx2($obj->gci()->input->post("accMgrFromno"));
+            }
+
         } else if ($obj->gci()->input->post("ex_accMgrApprove") == "Not approve") {
             $arAccMgr = array(
                 "crfex_accmgr_status" => $obj->gci()->input->post("ex_accMgrApprove"),
@@ -1357,6 +1394,18 @@ function exDirectorApprove($crfexid)
 
     if ($obj->gci()->input->post("ex_directorApprove") == "Approve") {
         if (checkdirecStatus($crfexid, 2)->crfex_directorapp_status2 == "Approve") {
+
+            //update old status
+            //Send to notifycenter
+            $notifyformno = $obj->gci()->input->post("checkDirecFormNo");
+            $notifyprogramname = "credit request form";
+            $notifystatus = "action done";
+            $notifytype = "take action";
+
+            $obj->gci()->notifycenter->updatedataAction_template($notifyformno , $notifyprogramname , $notifystatus , $notifytype);
+            //Send to notifycenter
+            //update old status
+
             // Maindata table
             $arDirector = array(
                 "crfex_directorapp_status" => $obj->gci()->input->post("ex_directorApprove"),
@@ -1423,6 +1472,18 @@ function exDirectorApprove2($crfexid)
 
     if ($obj->gci()->input->post("ex_directorApprove2") == "Approve") {
         if (checkdirecStatus($crfexid, 1)->crfex_directorapp_status == "Approve") {
+
+            //update old status
+            //Send to notifycenter
+            $notifyformno = $obj->gci()->input->post("checkDirecFormNo");
+            $notifyprogramname = "credit request form";
+            $notifystatus = "action done";
+            $notifytype = "take action";
+
+            $obj->gci()->notifycenter->updatedataAction_template($notifyformno , $notifyprogramname , $notifystatus , $notifytype);
+            //Send to notifycenter
+            //update old status
+
             // Maindata table
             $arDirector = array(
                 "crfex_directorapp_status2" => $obj->gci()->input->post("ex_directorApprove2"),

@@ -324,7 +324,7 @@ function getuserEmailToSl($deptcode, $ecode)
     $obj = new emailfn();
     $obj->gci()->db2 = $obj->gci()->load->database('saleecolour', TRUE);
 
-    $query = $obj->gci()->db2->query("SELECT memberemail FROM member WHERE DeptCode = '$deptcode' AND ecode IN $ecode AND resigned = 0");
+    $query = $obj->gci()->db2->query("SELECT memberemail , ecode FROM member WHERE DeptCode = '$deptcode' AND ecode IN $ecode AND resigned = 0");
     return $query;
 }
 
@@ -334,7 +334,7 @@ function getuserEmailCc($ecode)
     $obj = new emailfn();
     $obj->gci()->db2 = $obj->gci()->load->database('saleecolour', TRUE);
 
-    $query = $obj->gci()->db2->query("SELECT memberemail FROM member WHERE ecode = '$ecode' AND resigned = 0");
+    $query = $obj->gci()->db2->query("SELECT memberemail , ecode FROM member WHERE ecode = '$ecode' AND resigned = 0");
     return $query;
 }
 
@@ -352,6 +352,6 @@ function getuserEmailccOwner($deptcode)
     $obj = new emailfn();
     $obj->gci()->db2 = $obj->gci()->load->database('saleecolour', TRUE);
 
-    $query = $obj->gci()->db2->query("SELECT memberemail FROM member WHERE DeptCode = '$deptcode' AND resigned = 0");
+    $query = $obj->gci()->db2->query("SELECT memberemail , ecode FROM member WHERE DeptCode = '$deptcode' AND resigned = 0");
     return $query;
 }

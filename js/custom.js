@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     // แก้ไขใหม่ ค่าตั้งต้น
     //  Config permission
     if ($('#checkPageAddTH').val() == "addTH") {
@@ -2403,8 +2402,6 @@ $(document).ready(function () {
 
     //Control Radio crf_type Control หัวข้อ ลูกค้าใหม่ , ลูกค้าเดิม //Control Radio crf_type Control หัวข้อ ลูกค้าใหม่ , ลูกค้าเดิม
     //Control Radio crf_type Control หัวข้อ ลูกค้าใหม่ , ลูกค้าเดิม //Control Radio crf_type Control หัวข้อ ลูกค้าใหม่ , ลูกค้าเดิม
-
-
 
 
     // Remove Alert เมื่อมีการเลือกบริษัท
@@ -4854,7 +4851,7 @@ $(document).ready(function () {
             });
 
         }
-        else if (checkStatus == 'Manager approved' || checkStatus == 'CS Added BR CODE' || checkStatus == 'Account Manager Approved' || checkStatus == 'Director Approved' || checkStatus == 'Completed' || checkStatus == 'Waiting for second director approve' || checkStatus == 'Manager Not Approve' || checkStatus == 'Account Manager Not Approve' || checkStatus == 'Director Not Approve') {
+        else if (checkStatus == 'Manager approved' || checkStatus == 'CS Added BR CODE' || checkStatus == 'Account Manager Approved' || checkStatus == 'Director Approved' || checkStatus == 'Completed' || checkStatus == 'Waiting for second director approve' || checkStatus == 'Manager Not Approve' || checkStatus == 'Account Manager Not Approve' || checkStatus == 'Director Not Approve' || checkStatus == "Wait account staff process") {
             $('.managerSection').css('display', 'none');
             $('.managerSection1').css('display', '');
 
@@ -4880,8 +4877,7 @@ $(document).ready(function () {
             }
         }
 
-        if (checkStatus == 'CS Added BR CODE' && checkUserDeptView == 1003 && checkCusPosi > 55 ||
-        checkStatus == 'CS Added BR CODE' && checkUserecodeL == "M1767") {
+        if (checkStatus == 'CS Added BR CODE' && checkUserDeptView == 1003 && checkCusPosi > 55) {
             $('.accManagerApprove').css('display', '');
             $('#ex_accManagerSubmit').prop('disabled', true);
             $('input:radio[name="ex_accMgrApprove"]').click(function () {
@@ -4891,8 +4887,7 @@ $(document).ready(function () {
                     $('#ex_accManagerSubmit').prop('disabled', true);
                 }
             });
-        } else if (checkStatus == 'Manager approved' && checkUserDeptView == 1003 && checkCusPosi > 55 ||
-        checkStatus == 'Manager approved' && checkUserecodeL == "M1767") {
+        } else if (checkStatus == 'Manager approved' && checkUserDeptView == 1003 && checkCusPosi > 55) {
             $('.accManagerApprove').css('display', '');
             $('#ex_accManagerSubmit').prop('disabled', true);
             $('input:radio[name="ex_accMgrApprove"]').click(function () {
@@ -4904,7 +4899,7 @@ $(document).ready(function () {
             });
 
         }
-        else if (checkStatus == 'Account Manager Approved' || checkStatus == 'Director Approved' || checkStatus == 'Completed' || checkStatus == 'Waiting for second director approve' || checkStatus == 'Account Manager Not Approve' || checkStatus == 'Director Not Approve') {
+        else if (checkStatus == 'Account Manager Approved' || checkStatus == 'Director Approved' || checkStatus == 'Completed' || checkStatus == 'Waiting for second director approve' || checkStatus == 'Account Manager Not Approve' || checkStatus == 'Director Not Approve' || checkStatus == "Wait account staff process") {
             $('.accManagerApprove1').css('display', '');
         }
 

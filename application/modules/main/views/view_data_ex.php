@@ -504,9 +504,6 @@
 
 
 
-
-
-
             <!-- CS get br for account convert to customer code -->
             <form action="{exCsAddBr}" method="POST" name="" class="csAddBrDection" style="display:none;">
                 <hr>
@@ -558,9 +555,6 @@
                 </div>
             </form>
             <!-- CS get br for account convert to customer code -->
-
-
-
 
 
 
@@ -632,12 +626,9 @@
             <form action="{exDirectorApprove}" method="POST" name="" class="directorApprove" style="display:none;">
             <input hidden type="text" name="check_custype_direc" id="check_custype_direc" value="{customertype}">
             <input hidden type="text" name="check_methodcurcus" id="check_methodcurcus" value="{crfex_methodcurcus}">
-
             <input hidden type="text" name="checkDirecFormNo" id="checkDirecFormNo" value="{crfex_formno}">
-
             <input hidden type="text" name="checkDireccurcustopic1" id="checkDireccurcustopic1" value="{crfex_curcustopic1}">
             <input hidden type="text" name="checkDireccurcustopic2" id="checkDireccurcustopic2" value="{crfex_curcustopic2}">
-
             <input hidden type="text" name="checkDirecCusid" id="checkDirecCusid" value="{crfexcus_id}">
 
                 <hr>
@@ -857,7 +848,29 @@
 
     </div>
 
+<script>
+    $(document).ready(function(){
+        let ecodelogin = "<?php echo getUser()->ecode; ?>";
+        let status = "<?php echo $status; ?>";
+        let posi = "<?php echo $posi; ?>";
 
+        // check new permission for M1767
+        if(ecodelogin == "M1767" && status =="CS Added BR CODE"){
+            $('.accManagerApprove').css('display' , '');
+        }else{
+            $('.accManagerApprove').css('display' , 'none');
+        }
+
+
+        // New Permission Director 1 Approve
+
+        if(posi < 75){
+            $('#ex_directorSubmit').css('display' , 'none');
+        }else{
+            $('#ex_directorSubmit').css('display' , '');
+        }
+    });
+</script>
 
 
 </body>

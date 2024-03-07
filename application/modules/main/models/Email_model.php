@@ -3124,8 +3124,10 @@ class Email_model extends CI_Model
 
 
       $to = array();
+      $ecodeAr = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
+         $ecodeAr[] = $result['ecode'];
       }
 
       //  $cc = array(
@@ -3136,16 +3138,33 @@ class Email_model extends CI_Model
       $optioncc = getuserEmailToOwner($ecodecc);
 
       $cc = array();
+      $ecodeccAr = array();
       foreach ($optioncc->result_array() as $resultcc) {
          $cc[] = $resultcc['memberemail'];
+         $ecodeccAr[] = $resultcc['ecode'];
       }
+
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+      $ecodeccAr = array_unique($ecodeccAr);
 
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
+
+      // Notification center program
+      $ecodeActionArr = $ecodeAr;
+      $ecodeReadArr = $ecodeccAr;
+
+      $title = "[crf export] You have credit request form waiting for approve";
+      $status = getDataEmailEx($formno)->crfex_status;
+      $link = base_url('main/viewdataEx/').getDataEmailEx($formno)->crfex_id;
+      $programname = "credit request form";
+
+      $this->notifycenter->insertdataaction_template($ecodeActionArr , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
    }
    //End Step 1
-
-
 
 
    //End Step 2
@@ -3249,8 +3268,10 @@ class Email_model extends CI_Model
 
 
       $to = array();
+      $ecodeAr = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
+         $ecodeAr[] = $result['ecode'];
       }
 
       //  $to = array(
@@ -3261,16 +3282,33 @@ class Email_model extends CI_Model
       $optioncc = getuserEmailToOwner($ecodecc);
 
       $cc = array();
+      $ecodeccAr = array();
       foreach ($optioncc->result_array() as $resultcc) {
          $cc[] = $resultcc['memberemail'];
+         $ecodeccAr[] = $resultcc['ecode'];
       }
+
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+      $ecodeccAr = array_unique($ecodeccAr);
 
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
+
+      // Notification center program
+      $ecodeActionArr = $ecodeAr;
+      $ecodeReadArr = $ecodeccAr;
+
+      $title = "[crf export] You have credit request form waiting for Add BR CODE";
+      $status = getDataEmailEx($formno)->crfex_status;
+      $link = base_url('main/viewdataEx/').getDataEmailEx($formno)->crfex_id;
+      $programname = "credit request form";
+
+      $this->notifycenter->insertdataaction_template($ecodeActionArr , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
    }
    //End Step 2
-
-
 
 
    //End Step 3
@@ -3390,25 +3428,46 @@ class Email_model extends CI_Model
 
 
       $to = array();
+      $ecodeAr = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
+         $ecodeAr[] = $result['ecode'];
       }
 
       array_push($to , "tassanee_s@saleecolour.com");
+      array_push($ecodeAr , "M1767");
 
       $ecodecc = getDataEmailEx($formno)->crfexcus_userecode;
       $optioncc = getuserEmailToOwner($ecodecc);
 
       $cc = array();
+      $ecodeccAr = array();
       foreach ($optioncc->result_array() as $resultcc) {
          $cc[] = $resultcc['memberemail'];
+         $ecodeccAr[] = $resultcc['ecode'];
       }
+
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+      $ecodeccAr = array_unique($ecodeccAr);
 
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
+
+      // Notification center program
+      $ecodeActionArr = $ecodeAr;
+      $ecodeReadArr = $ecodeccAr;
+
+      $title = "[crf export] You have credit request form waiting for approve.";
+      $status = getDataEmailEx($formno)->crfex_status;
+      $link = base_url('main/viewdataEx/').getDataEmailEx($formno)->crfex_id;
+      $programname = "credit request form";
+
+      $this->notifycenter->insertdataaction_template($ecodeActionArr , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
    }
    //End Step 3
-
 
 
    //End Step 3-2
@@ -3430,81 +3489,79 @@ class Email_model extends CI_Model
       $subject = "[crf export] You have credit request form waiting for approve.";
 
       $body = '
-     <h2>You have credit request form waiting for approve.</h2>
-     <table>
-      <tr>
-         <td><strong>Form no.</strong></td>
-         <td>' . getDataEmailEx($formno)->crfexcus_formno . '</td>
-         <td><strong>Date create.</strong></td>
-         <td>' . conDateFromDb(getDataEmailEx($formno)->crfex_datecreate) . '</td>
-      </tr>
+         <h2>You have credit request form waiting for approve.</h2>
+         <table>
+            <tr>
+               <td><strong>Form no.</strong></td>
+               <td>' . getDataEmailEx($formno)->crfexcus_formno . '</td>
+               <td><strong>Date create.</strong></td>
+               <td>' . conDateFromDb(getDataEmailEx($formno)->crfex_datecreate) . '</td>
+            </tr>
 
-      <tr>
-         <td><strong>Customer type.</strong></td>
-         <td>' . getDataEmailEx($formno)->crf_alltype_subnameEN . '</td>
-         <td><strong>Status.</strong></td>
-         <td>' . getDataEmailEx($formno)->crfex_status . '</td>
-      </tr>
+            <tr>
+               <td><strong>Customer type.</strong></td>
+               <td>' . getDataEmailEx($formno)->crf_alltype_subnameEN . '</td>
+               <td><strong>Status.</strong></td>
+               <td>' . getDataEmailEx($formno)->crfex_status . '</td>
+            </tr>
 
-      <tr>
-         <td><strong>Topic</strong></td>
-         <td colspan="3">' . $topicEX . '</td>
-      </tr>
+            <tr>
+               <td><strong>Topic</strong></td>
+               <td colspan="3">' . $topicEX . '</td>
+            </tr>
 
-      <tr>
-         <td><strong>Customer name.</strong></td>
-         <td>' . getDataEmailEx($formno)->crfexcus_nameEN . '</td>
-         <td><strong>Sales reps</strong></td>
-         <td>' . getDataEmailEx($formno)->crfexcus_salesreps . '</td>
-      </tr>
+            <tr>
+               <td><strong>Customer name.</strong></td>
+               <td>' . getDataEmailEx($formno)->crfexcus_nameEN . '</td>
+               <td><strong>Sales reps</strong></td>
+               <td>' . getDataEmailEx($formno)->crfexcus_salesreps . '</td>
+            </tr>
 
-      <tr>
-         <td><strong>User post.</strong></td>
-         <td>' . getDataEmailEx($formno)->crfex_userpost . '</td>
-         <td><strong>User Dept.</strong></td>
-         <td>' . getDataEmailEx($formno)->crfex_userdept . '</td>
-      </tr>
+            <tr>
+               <td><strong>User post.</strong></td>
+               <td>' . getDataEmailEx($formno)->crfex_userpost . '</td>
+               <td><strong>User Dept.</strong></td>
+               <td>' . getDataEmailEx($formno)->crfex_userdept . '</td>
+            </tr>
 
-      <tr>
-         <td><strong>User code.</strong></td>
-         <td>' . getDataEmailEx($formno)->crfexcus_userecode . '</td>
-         <td><strong>Date.</strong></td>
-         <td>' . conDateTimeFromDb(getDataEmailEx($formno)->crfex_userdatetime) . '</td>
-      </tr>
+            <tr>
+               <td><strong>User code.</strong></td>
+               <td>' . getDataEmailEx($formno)->crfexcus_userecode . '</td>
+               <td><strong>Date.</strong></td>
+               <td>' . conDateTimeFromDb(getDataEmailEx($formno)->crfex_userdatetime) . '</td>
+            </tr>
 
-      <tr>
-         <td colspan="4" class="bghead"><b>Manager Approval results.</b></td>
-      </tr>
+            <tr>
+               <td colspan="4" class="bghead"><b>Manager Approval results.</b></td>
+            </tr>
 
-      <tr>
-         <td><strong>Manager name.</strong></td>
-         <td>' . getDataEmailEx($formno)->crfex_mgrapp_username . '</td>
-         <td><strong>Date</strong></td>
-         <td>' . conDateTimeFromDb(getDataEmailEx($formno)->crfex_mgrapp_datetime) . '</td>
-      </tr>
+            <tr>
+               <td><strong>Manager name.</strong></td>
+               <td>' . getDataEmailEx($formno)->crfex_mgrapp_username . '</td>
+               <td><strong>Date</strong></td>
+               <td>' . conDateTimeFromDb(getDataEmailEx($formno)->crfex_mgrapp_datetime) . '</td>
+            </tr>
 
-      <tr>
-         <td><strong>Status</strong></td>
-         <td>' . getDataEmailEx($formno)->crfex_mgrapp_status . '</td>
-         <td><strong>Reason</strong></td>
-         <td>' . getDataEmailEx($formno)->crfex_mgrapp_detail . '</td>
-      </tr>
+            <tr>
+               <td><strong>Status</strong></td>
+               <td>' . getDataEmailEx($formno)->crfex_mgrapp_status . '</td>
+               <td><strong>Reason</strong></td>
+               <td>' . getDataEmailEx($formno)->crfex_mgrapp_detail . '</td>
+            </tr>
 
 
-      <tr>
-         <td><strong>Go to form.</strong></td>
-         <td colspan="3"><a href="' . base_url('main/viewdataEx/') . getDataEmailEx($formno)->crfex_id . '">' . getDataEmailEx($formno)->crfexcus_formno . '</a></td>
-      </tr>
+            <tr>
+               <td><strong>Go to form.</strong></td>
+               <td colspan="3"><a href="' . base_url('main/viewdataEx/') . getDataEmailEx($formno)->crfex_id . '">' . getDataEmailEx($formno)->crfexcus_formno . '</a></td>
+            </tr>
 
-      <tr>
-         <td><strong>Scan QrCode</strong></td>
-         <td colspan="3"><img src="' . base_url('upload/qrcode/') . $this->createQrcode($short_urlex,getDataEmailEx($formno)->crfex_id) . '"></td>
-      </tr>
+            <tr>
+               <td><strong>Scan QrCode</strong></td>
+               <td colspan="3"><img src="' . base_url('upload/qrcode/') . $this->createQrcode($short_urlex,getDataEmailEx($formno)->crfex_id) . '"></td>
+            </tr>
 
-      </table>
+         </table>
       ';
-
-
 
       //  Email Zone
       $posiTo = "75";
@@ -3513,27 +3570,46 @@ class Email_model extends CI_Model
 
 
       $to = array();
+      $ecodeAr = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
+         $ecodeAr[] = $result['ecode'];
       }
 
       array_push($to , "tassanee_s@saleecolour.com");
+      array_push($ecodeAr , "M1767");
 
       $ecodecc = getDataEmailEx($formno)->crfexcus_userecode;
       $optioncc = getuserEmailToOwner($ecodecc);
 
       $cc = array();
+      $ecodeccAr = array();
       foreach ($optioncc->result_array() as $resultcc) {
          $cc[] = $resultcc['memberemail'];
+         $ecodeccAr[] = $resultcc['ecode'];
       }
+
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+      $ecodeccAr = array_unique($ecodeccAr);
 
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
+
+      // Notification center program
+      $ecodeActionArr = $ecodeAr;
+      $ecodeReadArr = $ecodeccAr;
+
+      $title = "[crf export] You have credit request form waiting for approve.";
+      $status = getDataEmailEx($formno)->crfex_status;
+      $link = base_url('main/viewdataEx/').getDataEmailEx($formno)->crfex_id;
+      $programname = "credit request form";
+
+      $this->notifycenter->insertdataaction_template($ecodeActionArr , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
    }
    //End Step 3-2
-
-
-
 
 
    //End Step 4
@@ -3670,29 +3746,45 @@ class Email_model extends CI_Model
 
 
       $to = array();
+      $ecodeAr = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
+         $ecodeAr[] = $result['ecode'];
       }
       array_push($to , "mattana@saleecolour.com" , "saowanit@saleecolour.com");
-
-      //  $to = array(
-      //      "chainarong_k@saleecolour.com",
-      //  );
+      array_push($ecodeAr , "M0015" , "M0025");
 
       $ecodecc = getDataEmailEx($formno)->crfexcus_userecode;
       $optioncc = getuserEmailToOwner($ecodecc);
 
       $cc = array();
+      $ecodeccAr = array();
       foreach ($optioncc->result_array() as $resultcc) {
          $cc[] = $resultcc['memberemail'];
+         $ecodeccAr[] = $resultcc['ecode'];
       }
+
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+      $ecodeccAr = array_unique($ecodeccAr);
 
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
+
+      // Notification center program
+      $ecodeActionArr = $ecodeAr;
+      $ecodeReadArr = $ecodeccAr;
+
+      $title = "[crf export] You have credit request form waiting for approve.";
+      $status = getDataEmailEx($formno)->crfex_status;
+      $link = base_url('main/viewdataEx/').getDataEmailEx($formno)->crfex_id;
+      $programname = "credit request form";
+
+      $this->notifycenter->insertdataaction_template($ecodeActionArr , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
    }
    //End Step 4
-
-
 
 
    //End Step 4-2
@@ -3814,10 +3906,13 @@ class Email_model extends CI_Model
 
 
       $to = array();
+      $ecodeAr = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
+         $ecodeAr[] = $result['ecode'];
       }
       array_push($to , "mattana@saleecolour.com" , "saowanit@saleecolour.com");
+      array_push($ecodeAr , "M0015" , "M0025");
 
       //  $to = array(
       //      "chainarong_k@saleecolour.com",
@@ -3827,25 +3922,38 @@ class Email_model extends CI_Model
       $optioncc = getuserEmailToOwner($ecodecc);
 
       $cc = array();
+      $ecodeccAr = array();
       foreach ($optioncc->result_array() as $resultcc) {
          $cc[] = $resultcc['memberemail'];
+         $ecodeccAr[] = $resultcc['ecode'];
       }
+
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+      $ecodeccAr = array_unique($ecodeccAr);
 
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
+
+      // Notification center program
+      $ecodeActionArr = $ecodeAr;
+      $ecodeReadArr = $ecodeccAr;
+
+      $title = "[crf export] You have credit request form waiting for approve.";
+      $status = getDataEmailEx($formno)->crfex_status;
+      $link = base_url('main/viewdataEx/').getDataEmailEx($formno)->crfex_id;
+      $programname = "credit request form";
+
+      $this->notifycenter->insertdataaction_template($ecodeActionArr , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
    }
    //End Step 4-2
-
-
-
-
-
 
 
    //End Step 5
    function sendemail_toAccStaffEx($formno)
    {
-
       $topicEX = getDataEmailEx($formno)->crfex_topic;
       if (getDataEmailEx($formno)->crfex_curcustopic1 != '') {
          $topicEX .= " / " . getDataEmailEx($formno)->crfex_curcustopic1;
@@ -4015,28 +4123,43 @@ class Email_model extends CI_Model
 
 
       $to = array();
+      $ecodeAr = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
+         $ecodeAr[] = $result['ecode'];
       }
-
-      //  $to = array(
-      //      "chainarong_k@saleecolour.com",
-      //  );
 
       $ecodecc = getDataEmailEx($formno)->crfexcus_userecode;
       $optioncc = getuserEmailToOwner($ecodecc);
 
       $cc = array();
+      $ecodeccAr = array();
       foreach ($optioncc->result_array() as $resultcc) {
          $cc[] = $resultcc['memberemail'];
+         $ecodeccAr[] = $resultcc['ecode'];
       }
+
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+      $ecodeccAr = array_unique($ecodeccAr);
 
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
+
+      // Notification center program
+      $ecodeActionArr = $ecodeAr;
+      $ecodeReadArr = $ecodeccAr;
+
+      $title = "[crf export] You have credit request form waiting for add customer code.";
+      $status = getDataEmailEx($formno)->crfex_status;
+      $link = base_url('main/viewdataEx/').getDataEmailEx($formno)->crfex_id;
+      $programname = "credit request form";
+
+      $this->notifycenter->insertdataaction_template($ecodeActionArr , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
    }
    //End Step 5
-
-
 
 
    //End Step 5-2
@@ -4198,24 +4321,41 @@ class Email_model extends CI_Model
 
 
       $to = array();
+      $ecodeAr = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
+         $ecodeAr[] = $result['ecode'];
       }
-
-      //  $to = array(
-      //      "chainarong_k@saleecolour.com",
-      //  );
 
       $ecodecc = getDataEmailEx($formno)->crfexcus_userecode;
       $optioncc = getuserEmailToOwner($ecodecc);
 
       $cc = array();
+      $ecodeccAr = array();
       foreach ($optioncc->result_array() as $resultcc) {
          $cc[] = $resultcc['memberemail'];
+         $ecodeccAr[] = $resultcc['ecode'];
       }
+
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+      $ecodeccAr = array_unique($ecodeccAr);
 
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
+
+      // Notification center program
+      $ecodeActionArr = $ecodeAr;
+      $ecodeReadArr = $ecodeccAr;
+
+      $title = "[crf export] You have pending credit request form.";
+      $status = getDataEmailEx($formno)->crfex_status;
+      $link = base_url('main/viewdataEx/').getDataEmailEx($formno)->crfex_id;
+      $programname = "credit request form";
+
+      $this->notifycenter->insertdataaction_template($ecodeActionArr , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
    }
    //End Step 5-2
 
@@ -4344,28 +4484,44 @@ class Email_model extends CI_Model
  
  
        $to = array();
+       $ecodeAr = array();
        foreach ($option->result_array() as $result) {
           $to[] = $result['memberemail'];
+          $ecodeAr[] = $result['ecode'];
        }
  
-       //  $to = array(
-       //      "chainarong_k@saleecolour.com",
-       //  );
  
        $ecodecc = getDataEmailEx($formno)->crfexcus_userecode;
        $optioncc = getuserEmailToOwner($ecodecc);
  
        $cc = array();
+       $ecodeccAr = array();
        foreach ($optioncc->result_array() as $resultcc) {
           $cc[] = $resultcc['memberemail'];
+          $ecodeccAr[] = $resultcc['ecode'];
        }
+
+       $to = array_unique($to);
+       $cc = array_unique($cc);
+       $ecodeAr = array_unique($ecodeAr);
+       $ecodeccAr = array_unique($ecodeccAr);
  
        emailSaveDataTH($subject, $body, $to, $cc);
        //  Email Zone
+
+             // Notification center program
+      $ecodeActionArr = $ecodeAr;
+      $ecodeReadArr = $ecodeccAr;
+
+      $title = "[crf export] You have pending credit request form.";
+      $status = getDataEmailEx($formno)->crfex_status;
+      $link = base_url('main/viewdataEx/').getDataEmailEx($formno)->crfex_id;
+      $programname = "credit request form";
+
+      $this->notifycenter->insertdataaction_template($ecodeActionArr , $title , $status , $link , $formno , $programname);
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
     }
     //End Step 5-2
-
-
 
 
    //End Step 6
@@ -4555,13 +4711,12 @@ class Email_model extends CI_Model
 
 
       $to = array();
+      $ecodeAr = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
+         $ecodeAr[] = $result['ecode'];
       }
 
-      //  $to = array(
-      //      "chainarong_k@saleecolour.com",
-      //  );
 
       $deptcode = getDataEmailEx($formno)->crfexcus_userdeptcode;
       $option_cc = getuserEmailccOwner($deptcode);
@@ -4570,12 +4725,24 @@ class Email_model extends CI_Model
          $cc[] = $result_cc['memberemail'];
       }
 
+      $to = array_unique($to);
+      $cc = array_unique($cc);
+      $ecodeAr = array_unique($ecodeAr);
+
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
+
+      // Notification center program
+      $ecodeReadArr = $ecodeAr;
+
+      $title = "[crf export] Your credit request form is completed.";
+      $status = getDataEmailEx($formno)->crfex_status;
+      $link = base_url('main/viewdataEx/').getDataEmailEx($formno)->crfex_id;
+      $programname = "credit request form";
+
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
    }
    //End Step 6
-
-
 
 
    //End Step 6-2
@@ -4717,13 +4884,11 @@ class Email_model extends CI_Model
 
 
       $to = array();
+      $ecodeAr = array();
       foreach ($option->result_array() as $result) {
          $to[] = $result['memberemail'];
+         $ecodeAr[] = $result['ecode'];
       }
-
-      //  $to = array(
-      //      "chainarong_k@saleecolour.com",
-      //  );
 
       $deptcode = getDataEmailEx($formno)->crfexcus_userdeptcode;
       $option_cc = getuserEmailccOwner($deptcode);
@@ -4734,12 +4899,21 @@ class Email_model extends CI_Model
 
       emailSaveDataTH($subject, $body, $to, $cc);
       //  Email Zone
+
+      // Notification center program
+      $ecodeReadArr = $ecodeAr;
+
+      $title = "[crf export] Your credit request form is completed.";
+      $status = getDataEmailEx($formno)->crfex_status;
+      $link = base_url('main/viewdataEx/').getDataEmailEx($formno)->crfex_id;
+      $programname = "credit request form";
+
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
    }
    //End Step 6-2
 
 
-
-    //End Step 6
+//End Step 6
     function sendemail_toOwnerEx3($formno)
     {
  
@@ -4911,13 +5085,12 @@ class Email_model extends CI_Model
  
  
        $to = array();
+       $ecodeAr = array();
        foreach ($option->result_array() as $result) {
           $to[] = $result['memberemail'];
+          $ecodeAr[] = $result['ecode'];
        }
  
-       //  $to = array(
-       //      "chainarong_k@saleecolour.com",
-       //  );
  
        $deptcode = getDataEmailEx($formno)->crfexcus_userdeptcode;
        $option_cc = getuserEmailccOwner($deptcode);
@@ -4928,280 +5101,317 @@ class Email_model extends CI_Model
  
        emailSaveDataTH($subject, $body, $to, $cc);
        //  Email Zone
+
+      // Notification center program
+      $ecodeReadArr = $ecodeAr;
+
+      $title = "[crf export] Your credit request form is completed.";
+      $status = getDataEmailEx($formno)->crfex_status;
+      $link = base_url('main/viewdataEx/').getDataEmailEx($formno)->crfex_id;
+      $programname = "credit request form";
+
+      $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
     }
-    //End Step 6
+//End Step 6
 
 
+//Manager not approve
+function sendemail_ManagerNotApprove($formno)
+{
 
-
-   //Manager not approve
-   function sendemail_ManagerNotApprove($formno)
-   {
-
-      $topicEX = getDataEmailEx($formno)->crfex_topic;
-      if (getDataEmailEx($formno)->crfex_curcustopic1 != '') {
-         $topicEX .= " / " . getDataEmailEx($formno)->crfex_curcustopic1;
-      }
-      if (getDataEmailEx($formno)->crfex_curcustopic2 != '') {
-         $topicEX .= " / " . getDataEmailEx($formno)->crfex_curcustopic2;
-      }
-
-      $short_urlex = base_url('qrcodeex/') . getDataEmailEx($formno)->crfex_id;
-      // $short_urlex = shorturl($longurlex);
-
-
-      $subject = "[crf export] Manager is not approve this form.";
-
-      $body = '
-                    <h2>Manager is not approve this form.</h2>
-                    <table>
-                     <tr>
-                        <td><strong>Form no.</strong></td>
-                        <td>' . getDataEmailEx($formno)->crfexcus_formno . '</td>
-                        <td><strong>Date create.</strong></td>
-                        <td>' . conDateFromDb(getDataEmailEx($formno)->crfex_datecreate) . '</td>
-                     </tr>
-            
-                     <tr>
-                        <td><strong>Customer type.</strong></td>
-                        <td>' . getDataEmailEx($formno)->crf_alltype_subnameEN . '</td>
-                        <td><strong>Status.</strong></td>
-                        <td>' . getDataEmailEx($formno)->crfex_status . '</td>
-                     </tr>
-            
-                     <tr>
-                        <td><strong>Topic</strong></td>
-                        <td colspan="3">' . $topicEX . '</td>
-                     </tr>
-            
-                     <tr>
-                        <td><strong>Customer name.</strong></td>
-                        <td>' . getDataEmailEx($formno)->crfexcus_nameEN . '</td>
-                        <td><strong>Sales reps</strong></td>
-                        <td>' . getDataEmailEx($formno)->crfexcus_salesreps . '</td>
-                     </tr>
-            
-                     <tr>
-                        <td><strong>User post.</strong></td>
-                        <td>' . getDataEmailEx($formno)->crfex_userpost . '</td>
-                        <td><strong>User Dept.</strong></td>
-                        <td>' . getDataEmailEx($formno)->crfex_userdept . '</td>
-                     </tr>
-            
-                     <tr>
-                        <td><strong>User code.</strong></td>
-                        <td>' . getDataEmailEx($formno)->crfexcus_userecode . '</td>
-                        <td><strong>Date.</strong></td>
-                        <td>' . conDateTimeFromDb(getDataEmailEx($formno)->crfex_userdatetime) . '</td>
-                     </tr>
-            
-                     <tr>
-                        <td colspan="4" class="bghead"><b>Manager Approval results.</b></td>
-                     </tr>
-            
-                     <tr>
-                        <td><strong>Manager name.</strong></td>
-                        <td>' . getDataEmailEx($formno)->crfex_mgrapp_username . '</td>
-                        <td><strong>Date</strong></td>
-                        <td>' . conDateTimeFromDb(getDataEmailEx($formno)->crfex_mgrapp_datetime) . '</td>
-                     </tr>
-            
-                     <tr>
-                        <td><strong>Status</strong></td>
-                        <td>' . getDataEmailEx($formno)->crfex_mgrapp_status . '</td>
-                        <td><strong>Reason</strong></td>
-                        <td>' . getDataEmailEx($formno)->crfex_mgrapp_detail . '</td>
-                     </tr>
-            
-                    
-                     <tr>
-                        <td><strong>Go to form.</strong></td>
-                        <td colspan="3"><a href="' . base_url('main/viewdataEx/') . getDataEmailEx($formno)->crfex_id . '">' . getDataEmailEx($formno)->crfexcus_formno . '</a></td>
-                     </tr>
-            
-                     <tr>
-                        <td><strong>Scan QrCode</strong></td>
-                        <td colspan="3"><img src="' . base_url('upload/qrcode/') . $this->createQrcode($short_urlex,getDataEmailEx($formno)->crfex_id) . '"></td>
-                     </tr>
-            
-                     </table>
-                     ';
-
-
-
-      //  Email Zone
-
-      $ecode = getDataEmailEx($formno)->crfexcus_userecode;
-      $option = getuserEmailToOwner($ecode);
-
-
-      $to = array();
-      foreach ($option->result_array() as $result) {
-         $to[] = $result['memberemail'];
-      }
-
-      //  $to = array(
-      //      "chainarong_k@saleecolour.com",
-      //  );
-
-      $deptcode = getDataEmailEx($formno)->crfexcus_userdeptcode;
-      $option_cc = getuserEmailccOwner($deptcode);
-      $cc = array();
-      foreach ($option_cc->result_array() as $result_cc) {
-         $cc[] = $result_cc['memberemail'];
-      }
-
-      emailSaveDataTH($subject, $body, $to, $cc);
-      //  Email Zone
+   $topicEX = getDataEmailEx($formno)->crfex_topic;
+   if (getDataEmailEx($formno)->crfex_curcustopic1 != '') {
+      $topicEX .= " / " . getDataEmailEx($formno)->crfex_curcustopic1;
    }
-   //Manager not approve
+   if (getDataEmailEx($formno)->crfex_curcustopic2 != '') {
+      $topicEX .= " / " . getDataEmailEx($formno)->crfex_curcustopic2;
+   }
+
+   $short_urlex = base_url('qrcodeex/') . getDataEmailEx($formno)->crfex_id;
+   // $short_urlex = shorturl($longurlex);
+
+
+   $subject = "[crf export] Manager is not approve this form.";
+
+   $body = '
+                  <h2>Manager is not approve this form.</h2>
+                  <table>
+                  <tr>
+                     <td><strong>Form no.</strong></td>
+                     <td>' . getDataEmailEx($formno)->crfexcus_formno . '</td>
+                     <td><strong>Date create.</strong></td>
+                     <td>' . conDateFromDb(getDataEmailEx($formno)->crfex_datecreate) . '</td>
+                  </tr>
+         
+                  <tr>
+                     <td><strong>Customer type.</strong></td>
+                     <td>' . getDataEmailEx($formno)->crf_alltype_subnameEN . '</td>
+                     <td><strong>Status.</strong></td>
+                     <td>' . getDataEmailEx($formno)->crfex_status . '</td>
+                  </tr>
+         
+                  <tr>
+                     <td><strong>Topic</strong></td>
+                     <td colspan="3">' . $topicEX . '</td>
+                  </tr>
+         
+                  <tr>
+                     <td><strong>Customer name.</strong></td>
+                     <td>' . getDataEmailEx($formno)->crfexcus_nameEN . '</td>
+                     <td><strong>Sales reps</strong></td>
+                     <td>' . getDataEmailEx($formno)->crfexcus_salesreps . '</td>
+                  </tr>
+         
+                  <tr>
+                     <td><strong>User post.</strong></td>
+                     <td>' . getDataEmailEx($formno)->crfex_userpost . '</td>
+                     <td><strong>User Dept.</strong></td>
+                     <td>' . getDataEmailEx($formno)->crfex_userdept . '</td>
+                  </tr>
+         
+                  <tr>
+                     <td><strong>User code.</strong></td>
+                     <td>' . getDataEmailEx($formno)->crfexcus_userecode . '</td>
+                     <td><strong>Date.</strong></td>
+                     <td>' . conDateTimeFromDb(getDataEmailEx($formno)->crfex_userdatetime) . '</td>
+                  </tr>
+         
+                  <tr>
+                     <td colspan="4" class="bghead"><b>Manager Approval results.</b></td>
+                  </tr>
+         
+                  <tr>
+                     <td><strong>Manager name.</strong></td>
+                     <td>' . getDataEmailEx($formno)->crfex_mgrapp_username . '</td>
+                     <td><strong>Date</strong></td>
+                     <td>' . conDateTimeFromDb(getDataEmailEx($formno)->crfex_mgrapp_datetime) . '</td>
+                  </tr>
+         
+                  <tr>
+                     <td><strong>Status</strong></td>
+                     <td>' . getDataEmailEx($formno)->crfex_mgrapp_status . '</td>
+                     <td><strong>Reason</strong></td>
+                     <td>' . getDataEmailEx($formno)->crfex_mgrapp_detail . '</td>
+                  </tr>
+         
+                  
+                  <tr>
+                     <td><strong>Go to form.</strong></td>
+                     <td colspan="3"><a href="' . base_url('main/viewdataEx/') . getDataEmailEx($formno)->crfex_id . '">' . getDataEmailEx($formno)->crfexcus_formno . '</a></td>
+                  </tr>
+         
+                  <tr>
+                     <td><strong>Scan QrCode</strong></td>
+                     <td colspan="3"><img src="' . base_url('upload/qrcode/') . $this->createQrcode($short_urlex,getDataEmailEx($formno)->crfex_id) . '"></td>
+                  </tr>
+         
+                  </table>
+                  ';
+
+
+
+   //  Email Zone
+
+   $ecode = getDataEmailEx($formno)->crfexcus_userecode;
+   $option = getuserEmailToOwner($ecode);
+
+
+   $to = array();
+   $ecodeAr = array();
+   foreach ($option->result_array() as $result) {
+      $to[] = $result['memberemail'];
+      $ecodeAr[] = $result['ecode'];
+   }
+
+   //  $to = array(
+   //      "chainarong_k@saleecolour.com",
+   //  );
+
+   $deptcode = getDataEmailEx($formno)->crfexcus_userdeptcode;
+   $option_cc = getuserEmailccOwner($deptcode);
+   $cc = array();
+   foreach ($option_cc->result_array() as $result_cc) {
+      $cc[] = $result_cc['memberemail'];
+   }
+
+   $to = array_unique($to);
+   $cc = array_unique($cc);
+   $ecodeAr = array_unique($ecodeAr);
+
+   emailSaveDataTH($subject, $body, $to, $cc);
+   //  Email Zone
+
+   // Notification center program
+   $ecodeReadArr = $ecodeAr;
+
+   $title = "[crf export] Manager is not approve this form.";
+   $status = getDataEmailEx($formno)->crfex_status;
+   $link = base_url('main/viewdataEx/').getDataEmailEx($formno)->crfex_id;
+   $programname = "credit request form";
+
+   $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
+}
+//Manager not approve
 
 
 
 //Account manager not approve
-   function sendemail_AccMgrNotApprove($formno)
-   {
+function sendemail_AccMgrNotApprove($formno)
+{
 
-      $topicEX = getDataEmailEx($formno)->crfex_topic;
-      if (getDataEmailEx($formno)->crfex_curcustopic1 != '') {
-         $topicEX .= " / " . getDataEmailEx($formno)->crfex_curcustopic1;
-      }
-      if (getDataEmailEx($formno)->crfex_curcustopic2 != '') {
-         $topicEX .= " / " . getDataEmailEx($formno)->crfex_curcustopic2;
-      }
-
-      $short_urlex = base_url('qrcodeex/') . getDataEmailEx($formno)->crfex_id;
-      // $short_urlex = shorturl($longurlex);
-
-
-      $subject = "[crf export] Account manager not approve this form.";
-
-      $body = '
-                  <h2>Account manager not approve this form.</h2>
-                  <table>
-                   <tr>
-                      <td><strong>Form no.</strong></td>
-                      <td>' . getDataEmailEx($formno)->crfexcus_formno . '</td>
-                      <td><strong>Date create.</strong></td>
-                      <td>' . conDateFromDb(getDataEmailEx($formno)->crfex_datecreate) . '</td>
-                   </tr>
-          
-                   <tr>
-                      <td><strong>Customer type.</strong></td>
-                      <td>' . getDataEmailEx($formno)->crf_alltype_subnameEN . '</td>
-                      <td><strong>Status.</strong></td>
-                      <td>' . getDataEmailEx($formno)->crfex_status . '</td>
-                   </tr>
-          
-                   <tr>
-                      <td><strong>Topic</strong></td>
-                      <td colspan="3">' . $topicEX . '</td>
-                   </tr>
-          
-                   <tr>
-                      <td><strong>Customer name.</strong></td>
-                      <td>' . getDataEmailEx($formno)->crfexcus_nameEN . '</td>
-                      <td><strong>Sales reps</strong></td>
-                      <td>' . getDataEmailEx($formno)->crfexcus_salesreps . '</td>
-                   </tr>
-          
-                   <tr>
-                      <td><strong>User post.</strong></td>
-                      <td>' . getDataEmailEx($formno)->crfex_userpost . '</td>
-                      <td><strong>User Dept.</strong></td>
-                      <td>' . getDataEmailEx($formno)->crfex_userdept . '</td>
-                   </tr>
-          
-                   <tr>
-                      <td><strong>User code.</strong></td>
-                      <td>' . getDataEmailEx($formno)->crfexcus_userecode . '</td>
-                      <td><strong>Date.</strong></td>
-                      <td>' . conDateTimeFromDb(getDataEmailEx($formno)->crfex_userdatetime) . '</td>
-                   </tr>
-          
-                   <tr>
-                      <td colspan="4" class="bghead"><b>Manager Approval results.</b></td>
-                   </tr>
-          
-                   <tr>
-                      <td><strong>Manager name.</strong></td>
-                      <td>' . getDataEmailEx($formno)->crfex_mgrapp_username . '</td>
-                      <td><strong>Date</strong></td>
-                      <td>' . conDateTimeFromDb(getDataEmailEx($formno)->crfex_mgrapp_datetime) . '</td>
-                   </tr>
-          
-                   <tr>
-                      <td><strong>Status</strong></td>
-                      <td>' . getDataEmailEx($formno)->crfex_mgrapp_status . '</td>
-                      <td><strong>Reason</strong></td>
-                      <td>' . getDataEmailEx($formno)->crfex_mgrapp_detail . '</td>
-                   </tr>
-
-                   
-          
-         
-                   <tr>
-                      <td colspan="4" class="bghead"><b>Account Manager Approval results.</b></td>
-                   </tr>
-          
-                   <tr>
-                      <td><strong>Account Manager sign.</strong></td>
-                      <td>' . getDataEmailEx($formno)->crfex_accmgr_username . '</td>
-                      <td><strong>Date</strong></td>
-                      <td>' . conDateTimeFromDb(getDataEmailEx($formno)->crfex_accmgr_datetime) . '</td>
-                   </tr>
-          
-                   <tr>
-                      <td><strong>Status</strong></td>
-                      <td>' . getDataEmailEx($formno)->crfex_accmgr_status . '</td>
-                      <td><strong>Reason</strong></td>
-                      <td>' . getDataEmailEx($formno)->crfex_accmgr_detail . '</td>
-                   </tr>
-     
-                   
-          
-                  
-                   <tr>
-                      <td><strong>Go to form.</strong></td>
-                      <td colspan="3"><a href="' . base_url('main/viewdataEx/') . getDataEmailEx($formno)->crfex_id . '">' . getDataEmailEx($formno)->crfexcus_formno . '</a></td>
-                   </tr>
-          
-                   <tr>
-                      <td><strong>Scan QrCode</strong></td>
-                      <td colspan="3"><img src="' . base_url('upload/qrcode/') . $this->createQrcode($short_urlex,getDataEmailEx($formno)->crfex_id) . '"></td>
-                   </tr>
-          
-                   </table>
-                   ';
-
-
-
-      //  Email Zone
-
-      $ecode = getDataEmailEx($formno)->crfexcus_userecode;
-      $option = getuserEmailToOwner($ecode);
-
-
-      $to = array();
-      foreach ($option->result_array() as $result) {
-         $to[] = $result['memberemail'];
-      }
-
-      //  $to = array(
-      //      "chainarong_k@saleecolour.com",
-      //  );
-
-      $deptcode = getDataEmailEx($formno)->crfexcus_userdeptcode;
-      $option_cc = getuserEmailccOwner($deptcode);
-      $cc = array();
-      foreach ($option_cc->result_array() as $result_cc) {
-         $cc[] = $result_cc['memberemail'];
-      }
-
-      emailSaveDataTH($subject, $body, $to, $cc);
-      //  Email Zone
+   $topicEX = getDataEmailEx($formno)->crfex_topic;
+   if (getDataEmailEx($formno)->crfex_curcustopic1 != '') {
+      $topicEX .= " / " . getDataEmailEx($formno)->crfex_curcustopic1;
    }
-   //Account manager not approve
+   if (getDataEmailEx($formno)->crfex_curcustopic2 != '') {
+      $topicEX .= " / " . getDataEmailEx($formno)->crfex_curcustopic2;
+   }
+
+   $short_urlex = base_url('qrcodeex/') . getDataEmailEx($formno)->crfex_id;
+   // $short_urlex = shorturl($longurlex);
+
+
+   $subject = "[crf export] Account manager not approve this form.";
+
+   $body = '
+               <h2>Account manager not approve this form.</h2>
+               <table>
+                  <tr>
+                     <td><strong>Form no.</strong></td>
+                     <td>' . getDataEmailEx($formno)->crfexcus_formno . '</td>
+                     <td><strong>Date create.</strong></td>
+                     <td>' . conDateFromDb(getDataEmailEx($formno)->crfex_datecreate) . '</td>
+                  </tr>
+         
+                  <tr>
+                     <td><strong>Customer type.</strong></td>
+                     <td>' . getDataEmailEx($formno)->crf_alltype_subnameEN . '</td>
+                     <td><strong>Status.</strong></td>
+                     <td>' . getDataEmailEx($formno)->crfex_status . '</td>
+                  </tr>
+         
+                  <tr>
+                     <td><strong>Topic</strong></td>
+                     <td colspan="3">' . $topicEX . '</td>
+                  </tr>
+         
+                  <tr>
+                     <td><strong>Customer name.</strong></td>
+                     <td>' . getDataEmailEx($formno)->crfexcus_nameEN . '</td>
+                     <td><strong>Sales reps</strong></td>
+                     <td>' . getDataEmailEx($formno)->crfexcus_salesreps . '</td>
+                  </tr>
+         
+                  <tr>
+                     <td><strong>User post.</strong></td>
+                     <td>' . getDataEmailEx($formno)->crfex_userpost . '</td>
+                     <td><strong>User Dept.</strong></td>
+                     <td>' . getDataEmailEx($formno)->crfex_userdept . '</td>
+                  </tr>
+         
+                  <tr>
+                     <td><strong>User code.</strong></td>
+                     <td>' . getDataEmailEx($formno)->crfexcus_userecode . '</td>
+                     <td><strong>Date.</strong></td>
+                     <td>' . conDateTimeFromDb(getDataEmailEx($formno)->crfex_userdatetime) . '</td>
+                  </tr>
+         
+                  <tr>
+                     <td colspan="4" class="bghead"><b>Manager Approval results.</b></td>
+                  </tr>
+         
+                  <tr>
+                     <td><strong>Manager name.</strong></td>
+                     <td>' . getDataEmailEx($formno)->crfex_mgrapp_username . '</td>
+                     <td><strong>Date</strong></td>
+                     <td>' . conDateTimeFromDb(getDataEmailEx($formno)->crfex_mgrapp_datetime) . '</td>
+                  </tr>
+         
+                  <tr>
+                     <td><strong>Status</strong></td>
+                     <td>' . getDataEmailEx($formno)->crfex_mgrapp_status . '</td>
+                     <td><strong>Reason</strong></td>
+                     <td>' . getDataEmailEx($formno)->crfex_mgrapp_detail . '</td>
+                  </tr>
+
+                  
+         
+      
+                  <tr>
+                     <td colspan="4" class="bghead"><b>Account Manager Approval results.</b></td>
+                  </tr>
+         
+                  <tr>
+                     <td><strong>Account Manager sign.</strong></td>
+                     <td>' . getDataEmailEx($formno)->crfex_accmgr_username . '</td>
+                     <td><strong>Date</strong></td>
+                     <td>' . conDateTimeFromDb(getDataEmailEx($formno)->crfex_accmgr_datetime) . '</td>
+                  </tr>
+         
+                  <tr>
+                     <td><strong>Status</strong></td>
+                     <td>' . getDataEmailEx($formno)->crfex_accmgr_status . '</td>
+                     <td><strong>Reason</strong></td>
+                     <td>' . getDataEmailEx($formno)->crfex_accmgr_detail . '</td>
+                  </tr>
+   
+                  
+         
+               
+                  <tr>
+                     <td><strong>Go to form.</strong></td>
+                     <td colspan="3"><a href="' . base_url('main/viewdataEx/') . getDataEmailEx($formno)->crfex_id . '">' . getDataEmailEx($formno)->crfexcus_formno . '</a></td>
+                  </tr>
+         
+                  <tr>
+                     <td><strong>Scan QrCode</strong></td>
+                     <td colspan="3"><img src="' . base_url('upload/qrcode/') . $this->createQrcode($short_urlex,getDataEmailEx($formno)->crfex_id) . '"></td>
+                  </tr>
+         
+                  </table>
+                  ';
+
+
+
+   //  Email Zone
+
+   $ecode = getDataEmailEx($formno)->crfexcus_userecode;
+   $option = getuserEmailToOwner($ecode);
+
+
+   $to = array();
+   $ecodeAr = array();
+   foreach ($option->result_array() as $result) {
+      $to[] = $result['memberemail'];
+      $ecodeAr[] = $result['ecode'];
+   }
+
+
+   $deptcode = getDataEmailEx($formno)->crfexcus_userdeptcode;
+   $option_cc = getuserEmailccOwner($deptcode);
+   $cc = array();
+   foreach ($option_cc->result_array() as $result_cc) {
+      $cc[] = $result_cc['memberemail'];
+   }
+
+   $to = array_unique($to);
+   $cc = array_unique($cc);
+   $ecodeAr = array_unique($ecodeAr);
+
+   emailSaveDataTH($subject, $body, $to, $cc);
+   //  Email Zone
+
+   // Notification center program
+   $ecodeReadArr = $ecodeAr;
+
+   $title = "[crf export] Account manager not approve this form.";
+   $status = getDataEmailEx($formno)->crfex_status;
+   $link = base_url('main/viewdataEx/').getDataEmailEx($formno)->crfex_id;
+   $programname = "credit request form";
+
+   $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
+}
+//Account manager not approve
 
 
 
@@ -5363,13 +5573,12 @@ function sendemail_DirectorNotApprove($formno)
 
 
    $to = array();
+   $ecodeAr = array();
    foreach ($option->result_array() as $result) {
       $to[] = $result['memberemail'];
+      $ecodeAr[] = $result['ecode'];
    }
 
-   //  $to = array(
-   //      "chainarong_k@saleecolour.com",
-   //  );
 
    $deptcode = getDataEmailEx($formno)->crfexcus_userdeptcode;
    $option_cc = getuserEmailccOwner($deptcode);
@@ -5380,12 +5589,18 @@ function sendemail_DirectorNotApprove($formno)
 
    emailSaveDataTH($subject, $body, $to, $cc);
    //  Email Zone
+
+   // Notification center program
+   $ecodeReadArr = $ecodeAr;
+
+   $title = "[crf export] Director not approve this form.";
+   $status = getDataEmailEx($formno)->crfex_status;
+   $link = base_url('main/viewdataEx/').getDataEmailEx($formno)->crfex_id;
+   $programname = "credit request form";
+
+   $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
 }
 //Director not approve
-
-
-
-
 
 
 
@@ -5408,5 +5623,8 @@ function sendemail_DirectorNotApprove($formno)
          echo "Save data failed";
       }
    }
+
+
+
 }
 // End Email model
