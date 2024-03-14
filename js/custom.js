@@ -4877,7 +4877,9 @@ $(document).ready(function () {
             }
         }
 
-        if (checkStatus == 'CS Added BR CODE' && checkUserDeptView == 1003 && checkCusPosi > 55) {
+        if (checkStatus == 'CS Added BR CODE' && checkUserDeptView == 1003 && checkCusPosi > 55 ||
+        checkStatus == 'CS Added BR CODE' && checkUserEcodeEx == "M1767" ||
+        checkStatus == 'CS Added BR CODE' && checkUserEcodeEx == "M1260") {
             $('.accManagerApprove').css('display', '');
             $('#ex_accManagerSubmit').prop('disabled', true);
             $('input:radio[name="ex_accMgrApprove"]').click(function () {
@@ -4898,6 +4900,17 @@ $(document).ready(function () {
                 }
             });
 
+        }else if(checkStatus == 'Manager approved' && checkUserEcodeEx == "M1767" ||
+        checkStatus == 'Manager approved' && checkUserEcodeEx == "M1260"){
+            $('.accManagerApprove').css('display', '');
+            $('#ex_accManagerSubmit').prop('disabled', true);
+            $('input:radio[name="ex_accMgrApprove"]').click(function () {
+                if ($(this).val() != '') {
+                    $('#ex_accManagerSubmit').prop('disabled', false);
+                } else {
+                    $('#ex_accManagerSubmit').prop('disabled', true);
+                }
+            });
         }
         else if (checkStatus == 'Account Manager Approved' || checkStatus == 'Director Approved' || checkStatus == 'Completed' || checkStatus == 'Waiting for second director approve' || checkStatus == 'Account Manager Not Approve' || checkStatus == 'Director Not Approve' || checkStatus == "Wait account staff process") {
             $('.accManagerApprove1').css('display', '');

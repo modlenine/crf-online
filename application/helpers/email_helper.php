@@ -177,31 +177,6 @@ function shorturl($long_url)
 
 
 
-// function createQrcode($linkQrcode)
-// {
-//     $obj = new emailfn();
-//     $obj->gci()->load->library("Ciqrcode");
-
-//     $SERVERFILEPATH = $_SERVER['DOCUMENT_ROOT'].'upload/qrcode/';
-//     $urlQrcode = $linkQrcode;
-//     $filename1 = 'qrcode'.rand(2,200).".png";
-//     $folder = $SERVERFILEPATH;
-
-//     $filename = $folder.$filename1;
-
-//    QRcode::png(
-//         $urlQrcode,
-//         $filename
-//         // $outfile = false,
-//         // $level = QR_ECLEVEL_H,
-//         // $size = 6,
-//         // $margin =2
-//     );
-
-//     echo "<img src='http://192.190.10.27/crf/upload/qrcode/".$filename1."'>";
-
-// }
-
 
 function emailSaveDataTH($subject, $body, $to, $cc)
 {
@@ -272,9 +247,9 @@ function emailSaveDataTH($subject, $body, $to, $cc)
     ' . $body;
     // $mail->send();
 
-    if($_SERVER['HTTP_HOST'] != "localhost"){
-        $mail->send();
-    }
+    // if($_SERVER['HTTP_HOST'] != "localhost"){
+    //     $mail->send();
+    // }
 
 }
 

@@ -39,6 +39,7 @@ class Notifycenter{
            $dataarray = array(
               "notify_formno" => $notify_formno,
               "notify_programname" => $notify_programname,
+              "notify_title" => $title ,
               "notify_programstatus" => $notify_programstatus,
               "notify_ecode" => $notify_ecode,
               "notify_details" => $notify_details,
@@ -76,6 +77,7 @@ class Notifycenter{
            $dataarray = array(
               "notify_formno" => $notify_formno,
               "notify_programname" => $notify_programname,
+              "notify_title" => $title ,
               "notify_programstatus" => $notify_programstatus,
               "notify_ecode" => $notify_ecode,
               "notify_details" => $notify_details,

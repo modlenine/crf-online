@@ -3582,12 +3582,24 @@ class Main_model extends CI_Model
         $this->db->update("crf_customers_temp", $arCustomerTemp);
 
         //Send to notifycenter
-        $notifyData = array(
-            "notify_formno" => $crfformno,
-            "notify_status" => "cancel"
-        );
-        $this->notifycenter->cancel_api($notifyData);
+        // $notifyData = array(
+        //     "notify_formno" => $crfformno,
+        //     "notify_status" => "cancel"
+        // );
+        // $this->notifycenter->cancel_api($notifyData);
         //Send to notifycenter
+
+
+        //update old status
+        //Send to notifycenter
+        $notifyformno = $crfformno;
+        $notifyprogramname = "credit request form";
+        $notifystatus = "action done";
+        $notifytype = "take action";
+
+        $this->notifycenter->updatedataAction_template($notifyformno , $notifyprogramname , $notifystatus , $notifytype);
+        //Send to notifycenter
+        //update old status
 
         header("refresh:0; url=" . base_url('main/showlist'));
     }

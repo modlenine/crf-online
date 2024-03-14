@@ -29,12 +29,12 @@ class Main extends MX_Controller
     }
 
 
-public function history_list()
-{
-    getHead();
-    $this->load->view("versionlist");
-    getFooter();
-}
+    public function history_list()
+    {
+        getHead();
+        $this->load->view("versionlist");
+        getFooter();
+    }
     
     public function addTH()
     {
@@ -209,9 +209,6 @@ public function history_list()
     }
 
 
-
-
-
     public function paginationByCompany()
     {
         //  $this->load->model("ajax_pagination_model");
@@ -256,10 +253,7 @@ public function history_list()
         echo json_encode($output);
     }
 
-
-
-
-        public function paginationByStatusUser()
+    public function paginationByStatusUser()
     {
         //  $this->load->model("ajax_pagination_model");
         //  $this->load->library("pagination");
@@ -306,9 +300,7 @@ public function history_list()
     }
 
 
-
-
-        public function paginationByStatusAcc()
+    public function paginationByStatusAcc()
     {
         //  $this->load->model("ajax_pagination_model");
         //  $this->load->library("pagination");
@@ -353,10 +345,6 @@ public function history_list()
     }
 
 
-
-
-
-
     public function viewdata($crf_id)
     {
         calllogin();
@@ -389,8 +377,6 @@ public function history_list()
             $this->main->csbr($crfid);
         }
     }
-
-
 
 
     public function accMgr($crfid)
