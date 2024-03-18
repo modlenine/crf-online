@@ -12,7 +12,7 @@
                            <div class="app-footer__inner">
                                <div class="app-footer-left">
                                    <!-- Code -->
-                                   <a href="<?=base_url('main/history_list')?>">Version 1.21.03.8</a>
+                                   <a href="<?=base_url('main/history_list')?>">Version 1.24.03.9</a>
                                </div>
                                <div class="app-footer-right">
                                    <!-- Code -->

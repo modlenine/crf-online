@@ -10,6 +10,23 @@
 <body>
     <div class="container">
 
+        <div class="row form-group">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Version 1.24.03.9
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">รายการแก้ไข 18-03-2024</h5>
+                        <ul>
+                            <li>เพิ่มบริษัท Subterra</li>
+                            <li>เพิ่มการส่งข้อมูลเข้าโปรแกรม Notification</li>
+                            <li>ปรับแก้การแนบไฟล์กรณีที่ขอปรับเพิ่มวงเงินหรือปรับเพิ่มเครดิตไม่ต้องบังคับให้แนบไฟล์</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
         <div class="row form-group">
