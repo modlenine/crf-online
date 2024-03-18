@@ -5,16 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>หน้าเพิ่มรายการในประเทศ</title>
-    <!-- <script type="text/javascript">
-            function noBack(){
-                window.history.forward()
-            }
-             
-            noBack();
-            window.onload = noBack;
-            window.onpageshow = function(evt) { if (evt.persisted) noBack() }
-            window.onunload = function() { void (0) }
-        </script> -->
 </head>
 
 <body>
@@ -65,6 +55,13 @@
                         <div class="custom-radio custom-control">
                             <input type="radio" id="crf_company_tb" name="crf_company" class="custom-control-input" value="tb">
                             <label class="custom-control-label" for="crf_company_tb">The Bubbles Co.,Ltd.</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 form-group">
+                        <div class="custom-radio custom-control">
+                            <input type="radio" id="crf_company_st" name="crf_company" class="custom-control-input" value="st">
+                            <label class="custom-control-label" for="crf_company_st">Subterra Co.,Ltd.</label>
                         </div>
                     </div>
                 </div>

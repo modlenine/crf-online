@@ -61,6 +61,12 @@
                             <label for="crf_company_tb" class="custom-control-label">The Bubbles Co.,Ltd.</label>
                         </div>
                     </div>
+                    <div class="col-md-4 form-group">
+                        <div class="custom-radio custom-control">
+                            <input id="crf_company_st" class="custom-control-input" type="radio" name="crfex_company" value="st">
+                            <label for="crf_company_st" class="custom-control-label">Subterra Co.,Ltd.</label>
+                        </div>
+                    </div>
                 </div>
 
 

@@ -70,6 +70,12 @@ if ($result->crf_status == "Open") {
                         <label for="my-input" class="custom-control-label">The Bubbles Co.,Ltd.</label>
                     </div>
                 </div>
+                <div class="col-md-4 form-group">
+                    <div class="custom-radio custom-control">
+                        <input id="view_crf_company_st" class="custom-control-input" type="radio" name="view_crf_company" value="st" onclick="return false;">
+                        <label for="my-input" class="custom-control-label">Subterra Co.,Ltd.</label>
+                    </div>
+                </div>
             </div>
 
 

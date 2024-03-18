@@ -5,16 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Page</title>
-    <!-- <script type="text/javascript">
-            function noBack(){
-                window.history.forward()
-            }
-             
-            noBack();
-            window.onload = noBack;
-            window.onpageshow = function(evt) { if (evt.persisted) noBack() }
-            window.onunload = function() { void (0) }
-        </script> -->
 </head>
 
 <body>
@@ -44,25 +34,31 @@
                     <div class="col-md-4 form-group">
                         <div class="custom-radio custom-control">
                             <input id="edit_company_sln" class="custom-control-input" type="radio" name="crf_company" value="sln">
-                            <label for="my-input" class="custom-control-label">Salee Colour Public Company Limited.</label>
+                            <label for="edit_company_sln" class="custom-control-label">Salee Colour Public Company Limited.</label>
                         </div>
                     </div>
                     <div class="col-md-4 form-group">
                         <div class="custom-radio custom-control">
                             <input id="edit_company_poly" class="custom-control-input" type="radio" name="crf_company" value="poly">
-                            <label for="my-input" class="custom-control-label">Poly Meritasia Co.,Ltd.</label>
+                            <label for="edit_company_poly" class="custom-control-label">Poly Meritasia Co.,Ltd.</label>
                         </div>
                     </div>
                     <div class="col-md-4 form-group">
                         <div class="custom-radio custom-control">
                             <input id="edit_company_ca" class="custom-control-input" type="radio" name="crf_company" value="ca">
-                            <label for="my-input" class="custom-control-label">Composite Asia Co.,Ltd</label>
+                            <label for="edit_company_ca" class="custom-control-label">Composite Asia Co.,Ltd</label>
                         </div>
                     </div>
                     <div class="col-md-4 form-group">
                         <div class="custom-radio custom-control">
                             <input id="edit_company_tb" class="custom-control-input" type="radio" name="crf_company" value="tb">
-                            <label for="my-input" class="custom-control-label">The Bubbles Co.,Ltd.</label>
+                            <label for="edit_company_tb" class="custom-control-label">The Bubbles Co.,Ltd.</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <div class="custom-radio custom-control">
+                            <input id="edit_company_st" class="custom-control-input" type="radio" name="crf_company" value="st">
+                            <label for="edit_company_st" class="custom-control-label">Subterra Co.,Ltd.</label>
                         </div>
                     </div>
                 </div>
@@ -592,32 +588,6 @@
                     </div>
                 </div>
                 <div id="alert_creditterm"></div>
-
-                <!-- <div class="row change_credit" style="display:none">
-                    <div class="col-md-6 form-group change_credit">
-                        <input type="checkbox" name="crf_change_creditterm" id="crf_change_creditterm" value="1">
-                        <label for="">ปรับ Credit term</label>
-                    </div>
-                </div> -->
-
-                <!-- <div class="row form-group change_credit_detail" style="display:none">
-                    <div class="col-md-6 form-group change_credit_detail">
-                        <label for="">เงื่อนไข</label>
-                        <select name="crf_condition_credit" id="crf_condition_credit" class="form-control">
-                            <option value="">กรุณาเลือกรายการ</option>
-                            <option value="เพิ่ม">เพิ่ม</option>
-                            <option value="ลด">ลด</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-6 form-group change_credit_detail" style="display:none">
-                        <label for="">โปรดเลือกรายการ</label>
-                        <div id="showNewCredit"></div>
-                        <select name="showcredit2" id="showcredit2" class="form-control showcredit2">
-                            <option value="">กรุณาเลือกรายการ</option>
-                        </select>
-                    </div>
-                </div> -->
                 <br>
 
 

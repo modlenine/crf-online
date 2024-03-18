@@ -64,6 +64,12 @@
                             <label class="custom-control-label" for="addcus_company_tb">The Bubbles Co.,Ltd.</label>
                         </div>
                     </div>
+                    <div class="col-md-4 form-group">
+                        <div class="custom-radio custom-control">
+                            <input type="radio" id="addcus_company_st" name="addcus_company" class="custom-control-input" value="st" required>
+                            <label class="custom-control-label" for="addcus_company_st">Subterra Co.,Ltd.</label>
+                        </div>
+                    </div>
                 </div>
                 <div id="alert_addcus_company"></div>
 

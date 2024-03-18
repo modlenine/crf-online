@@ -377,80 +377,9 @@ $(document).ready(function () {
                 // ชื่อลูกค้า :
                 $('#crf_customername').prop('disabled', false);
 
-                // // ที่อยู่สำหรับการเปิดใบกำกับภาษี :
-                // $('#crf_addressname').prop('readonly', true);
-
-                // // ผู้ติดต่อ
-                // $('#crf_namecontact').prop('readonly', true);
-
-                // // เบอร์โทร
-                // $('#crf_telcontact').prop('readonly', true);
-
-                // // เบอร์แฟกซ์
-                // $('#crf_faxcontact').prop('readonly', true);
-
-                // // อีเมล
-                // $('#crf_emailcontact').prop('readonly', true);
-
-                // // ทุนจดทะเบียน
-                // $('#crf_regiscost').prop('readonly', true);
-
-                // // คาดการณ์ปริมาณการขาย
-                // $('#crf_forecast').prop('readonly', true);
-
-                // //วันที่ก่อตั้ง
-                // $('#crf_cuscompanycreate').prop('readonly', true);
-
                 //วงเงิน
                 $('.finance_request_detail').css('display', '');
                 $('#crf_finance_req_number').prop('readonly', true);
-
-
-                // // Default upload file
-                // $('.crf_file1 , .crf_file2 , .crf_file3 , .crf_file4 , .crf_file5 , .crf_file6').css('display', 'none');
-
-                // // Control radio button
-                // $('input:radio[name="crf_addresstype"],[name="crf_companytype"],[name="crf_typeofbussi"],[name="crf_condition_bill"],[name="crf_condition_money"],[name="crf_finance"]').prop('disabled', true);
-
-                // // Control Credit Term
-                // $('#crf_creditterm').prop('disabled', true);
-
-
-                // //เลขที่ผู้เสียภาษี
-                // $('#crf_customertaxid').prop('readonly', true);
-
-                // //สาขา
-                // $('#crf_customerbranch').prop('readonly', true);
-
-                // //แผนที่ลิ้ง
-                // $('#crf_mapurl').prop('readonly', true);
-
-                // //แผนที่ ไฟล์
-                // $('#crf_mapfile').prop('readonly', true);
-
-                // // วันที่ก่อตั้ง
-                // $('#crf_cuscompanycreate').prop('readonly', true);
-
-                // // ผลิตภัณฑ์ของลูกค้า
-                // $('#crf_customer_product').prop('readonly', true);
-
-                // // Creditterm
-                // $('#crf_creditterm').prop('disabled', false);
-
-
-                // $('#crf_companytype3_1_1 , #crf_companytype3_1_2 , #crf_companytype3_2_1 , #crf_companytype3_2_2 , #crf_companytype2').prop('readonly', true);
-
-                // // File All
-                // $('#crf_file1 , #crf_file2 , #crf_file3 , #crf_file4 , #crf_file5 , #crf_file6').prop('disabled', false);
-
-                // $('#fromoldcus1 , #fromoldcus2').css('display', '');
-                // $('#foredit1 , #foredit2').css('display', 'none');
-
-
-
-
-
-
 
 
 
@@ -588,43 +517,6 @@ $(document).ready(function () {
                         });
 
 
-
-                        // $('input:radio[name="crf_person_type"]').click(function () {
-
-                        //     if ($(this).val() == "natural") {
-                        //         $('#for_natural').css('display', '');
-                        //         $('#for_juristic').css('display', 'none');
-                        //         // ไฟล์1
-                        //         $('#crf_file_person').prop('disabled', false);
-
-
-                        //     } else if ($(this).val() == "juristic") {
-                        //         $('#for_natural').css('display', 'none');
-                        //         $('#for_juristic').css('display', '');
-                        //         // ไฟล์1
-                        //         $('#crf_file_person').prop('disabled', true);
-                        //         // ไฟล์1
-                        //         $('#crf_file1').prop('disabled', false);
-
-                        //         // ไฟล์1
-                        //         $('#crf_file2').prop('disabled', false);
-
-                        //         // ไฟล์1
-                        //         $('#crf_file3').prop('disabled', false);
-
-                        //         // ไฟล์1
-                        //         $('#crf_file4').prop('disabled', false);
-
-                        //         // ไฟล์1
-                        //         $('#crf_file5').prop('disabled', false);
-
-                        //         // ไฟล์1
-                        //         $('#crf_file6').prop('disabled', false);
-                        //     }
-
-                        // });
-
-
                         if ($('input:radio[name="crf_person_type"]:checked').val() == "natural") {
                             $('#for_natural').css('display', '');
                             $('#for_juristic').css('display', 'none');
@@ -748,6 +640,7 @@ $(document).ready(function () {
                         } else {
                             $('#user_submit').prop('disabled', false);
                         }
+                        $('#crf_file1').prop('disabled' , true);
                     } else {
                         $('.change_credit').css('display', 'none');
                         $('input[name=crf_change_creditterm]').prop('checked', false);
@@ -782,6 +675,7 @@ $(document).ready(function () {
 
                         $('#value_crf_finance').val('ปรับวงเงิน');
 
+                        $('#crf_file1').prop('disabled' , true);
 
                         $('#crf_finance_change_number').keyup(function () {
                             var oldmoney = parseInt($('#crf_finance_req_number_calc').val());
@@ -2675,6 +2569,8 @@ $(document).ready(function () {
         $('input:radio[id="view_crf_company_ca"]').prop('checked', true);
     }else if($('#forcrf_company_view').val() == "tb"){
         $('input:radio[id="view_crf_company_tb"]').prop('checked', true);
+    }else if($('#forcrf_company_view').val() == "st"){
+        $('input:radio[id="view_crf_company_st"]').prop('checked', true);
     }
 
 
@@ -4656,6 +4552,9 @@ $(document).ready(function () {
                     if(data_crfexcus_area == 'tb'){
                         $('#crf_company_tb').prop('checked', true);
                     }
+                    if(data_crfexcus_area == 'st'){
+                        $('#crf_company_st').prop('checked', true);
+                    }
 
                     $('#crfex_creditlimit2').val(function (index, value) {
                         return value
@@ -4777,6 +4676,8 @@ $(document).ready(function () {
             $('#crf_company_ca_view').prop('checked', true);
         }else if($('#check_crf_company').val() == 'tb'){
             $('#crf_company_tb_view').prop('checked', true);
+        }else if($('#check_crf_company').val() == 'st'){
+            $('#crf_company_st_view').prop('checked', true);
         }
         // End check company
 
@@ -5122,6 +5023,11 @@ $(document).ready(function () {
         } else {
             $('#crf_company_tb').prop('checked', false);
         }
+        if ($('#checkEdit_crfex_company').val() == "st") {
+            $('#crf_company_st').prop('checked', true);
+        } else {
+            $('#crf_company_st').prop('checked', false);
+        }
         // Check Company name
 
 
@@ -5411,6 +5317,8 @@ $(document).ready(function () {
         $('#edit_company_ca').prop('checked', true);
     }else if($('#check_editcom').val() == 'tb'){
         $('#edit_company_tb').prop('checked', true);
+    }else if($('#check_editcom').val() == 'st'){
+        $('#edit_company_st').prop('checked', true);
     }
 
 
