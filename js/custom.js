@@ -3160,6 +3160,14 @@ $(document).ready(function () {
                 $('#acc_staff').prop('disabled', false);
                 $('#alertCheckTH').html('');
             }
+        }else if($('#forcrf_company_view').val() == "st"){
+            if (checkSTDC($(this).val()) != true) {
+                $('#acc_staff').prop('disabled', true);
+                $('#alertCheckTH').html('<div class="alert alert-danger" role="alert">กรุณากรอก STDC ให้ถูกต้องค่ะ (ตัวอย่าง STDC-0000)</div>');
+            } else {
+                $('#acc_staff').prop('disabled', false);
+                $('#alertCheckTH').html('');
+            }
         }else{
             if (checkTH($(this).val()) != true) {
                 $('#acc_staff').prop('disabled', true);
@@ -3198,6 +3206,14 @@ $(document).ready(function () {
                 $('#acc_staff').prop('disabled', false);
                 $('#alertCheckTH').html('');
             }
+        }else if($('#forcrf_company_view').val() == "st"){
+            if (checkSTDC($(this).val()) != true) {
+                $('#acc_staff').prop('disabled', true);
+                $('#alertCheckTH').html('<div class="alert alert-danger" role="alert">กรุณากรอก STDC ให้ถูกต้องค่ะ (ตัวอย่าง STDC-0000)</div>');
+            } else {
+                $('#acc_staff').prop('disabled', false);
+                $('#alertCheckTH').html('');
+            }
         }else{
             if (checkTH($(this).val()) != true) {
                 $('#acc_staff').prop('disabled', true);
@@ -3232,6 +3248,14 @@ $(document).ready(function () {
             if (checkTBDC($(this).val()) != true) {
                 $('#acc_staff').prop('disabled', true);
                 $('#alertCheckTH').html('<div class="alert alert-danger" role="alert">กรุณากรอก TBDC ให้ถูกต้องค่ะ (ตัวอย่าง TBDC-0000)</div>');
+            } else {
+                $('#acc_staff').prop('disabled', false);
+                $('#alertCheckTH').html('');
+            }
+        }else if($('#forcrf_company_view').val() == "st"){
+            if (checkSTDC($(this).val()) != true) {
+                $('#acc_staff').prop('disabled', true);
+                $('#alertCheckTH').html('<div class="alert alert-danger" role="alert">กรุณากรอก STDC ให้ถูกต้องค่ะ (ตัวอย่าง STDC-0000)</div>');
             } else {
                 $('#acc_staff').prop('disabled', false);
                 $('#alertCheckTH').html('');

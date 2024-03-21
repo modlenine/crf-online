@@ -986,6 +986,11 @@ function checkTBDC(tbdcinput){
     return checkTBDC;
 }
 
+function checkSTDC(tbdcinput){
+    var checkTBDC = /(^[STDC]{4}-{1}[0-9]{4}$)/.test(tbdcinput);
+    return checkTBDC;
+}
+
 
 
 

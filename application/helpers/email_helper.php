@@ -247,9 +247,9 @@ function emailSaveDataTH($subject, $body, $to, $cc)
     ' . $body;
     // $mail->send();
 
-    // if($_SERVER['HTTP_HOST'] != "localhost"){
-    //     $mail->send();
-    // }
+    if($_SERVER['HTTP_HOST'] != "localhost"){
+        $mail->send();
+    }
 
 }
 
