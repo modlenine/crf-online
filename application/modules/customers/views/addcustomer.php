@@ -120,7 +120,7 @@
                     </div>
                     <div class="col-md-4 form-group">
                         <label id="labelDateCreate">วันที่ก่อตั้ง</label>
-                        <input type="text" name="addcus_cuscompanycreate" id="addcus_cuscompanycreate" data-zdp_readonly_element="false" class="form-control form-control-sm" placeholder="วัน-เดือน-ปี" required>
+                        <input type="text" name="addcus_cuscompanycreate" id="addcus_cuscompanycreate" class="form-control form-control-sm" placeholder="วัน-เดือน-ปี" required>
                     </div>
                 </div>
 
@@ -572,8 +572,24 @@
 <script>
 
 $(document).ready(function(){
-    $('#addcus_cuscompanycreate').Zebra_DatePicker({
-        format: 'd-m-Y'
+    // $('#addcus_cuscompanycreate').Zebra_DatePicker({
+    //     format: 'd-m-Y'
+    // });
+    $(document).on('keyup' , '#addcus_cuscompanycreate' , function(){
+        let regex = /^(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[0-2])-\d{4}$/;
+        let input = $(this);
+        console.log(regex.test(input.val()));
+        if(regex.test(input.val()) === true){
+            input.css({
+                'border-color' : '#009900',
+                'border-width' : '2px'
+            });
+        }else{
+            input.css({
+                'border-color': '#CC0000',
+                'border-width' : '2px'
+            });
+        }
     });
 });
 

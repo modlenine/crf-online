@@ -182,7 +182,7 @@
                     </div>
                     <div class="col-md-4 form-group">
                         <label for="">วันที่ก่อตั้ง</label>
-                        <input type="date" name="edit_cuscompanycreate" id="edit_cuscompanycreate" class="form-control form-control-sm" value="{edit_comcreate}">
+                        <input type="text" name="edit_cuscompanycreate" id="edit_cuscompanycreate" class="form-control form-control-sm" value="{edit_comcreate}" placeholder="วัน-เดือน-ปี">
                         <div id="alert_cuscompanycreate"></div>
                     </div>
                 </div>
@@ -789,26 +789,44 @@
                 <hr>
             </form>
 
-            <script>
-                $(document).ready(function() {
-                    $('#crf_condition_credit').change(function() {
-                        var oldCredit = $('#crf_creditterm').val();
-                        var creditMethod = $('#crf_condition_credit').val();
-                        if (oldCredit != '') {
-                            $.ajax({
-                                url: "<?php echo base_url(); ?>main/filterCreditTerm",
-                                method: "POST",
-                                data: {
-                                    oldCredit: oldCredit,
-                                    creditMethod: creditMethod
-                                }, //ส่งค่าออกไปแล้วนำไปใช้ใน Controller fetch_topic
-                                success: function(data) {
-                                    $('#showcredit2').html(data);
-                                }
-                            })
+    <script>
+        $(document).ready(function() {
+            $('#crf_condition_credit').change(function() {
+                var oldCredit = $('#crf_creditterm').val();
+                var creditMethod = $('#crf_condition_credit').val();
+                if (oldCredit != '') {
+                    $.ajax({
+                        url: "<?php echo base_url(); ?>main/filterCreditTerm",
+                        method: "POST",
+                        data: {
+                            oldCredit: oldCredit,
+                            creditMethod: creditMethod
+                        }, //ส่งค่าออกไปแล้วนำไปใช้ใน Controller fetch_topic
+                        success: function(data) {
+                            $('#showcredit2').html(data);
                         }
+                    })
+                }
+            });
+
+
+            $(document).on('keyup' , '#edit_cuscompanycreate' , function(){
+                let regex = /^(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[0-2])-\d{4}$/;
+                let input = $(this);
+                console.log(regex.test(input.val()));
+                if(regex.test(input.val()) === true){
+                    input.css({
+                        'border-color' : '#009900',
+                        'border-width' : '2px'
                     });
+                }else{
+                    input.css({
+                        'border-color': '#CC0000',
+                        'border-width' : '2px'
+                    });
+                }
+            });
 
                     
-                });
-            </script>
+        });
+    </script>

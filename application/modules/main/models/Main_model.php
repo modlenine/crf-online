@@ -14,7 +14,7 @@ class Main_model extends CI_Model
 
     private function uploadFiles($fileinput = '', $filenameType = '', $formno , $filetime)
     {
-
+        $url = $_SERVER['HTTP_HOST'];
         $time = $filetime; //ดึงวันที่และเวลามาก่อน
         $file_name = $_FILES[$fileinput]['name'];
         $filename_type = substr($file_name, -4);
@@ -22,11 +22,9 @@ class Main_model extends CI_Model
 
         $file_tmp = $_FILES[$fileinput]['tmp_name'];
         move_uploaded_file($file_tmp, "upload/" . $file_name_date);
+
         $filelocation = "upload";
 
-
-        // print_r($file_name_date);
-        // echo "<br>" . "Copy/Upload Complete" . "<br>";
         return $file_name_date;
     }
 
@@ -49,6 +47,8 @@ class Main_model extends CI_Model
         $resultFile5 = "";
         $resultFile6 = "";
 
+        $filetime = date('H-i-s');
+
         $conReportDate = date_create($this->input->post("crf_datecreate"));
         $report_date = date_format($conReportDate, "d");
 
@@ -64,7 +64,7 @@ class Main_model extends CI_Model
                 if ($_FILES["crf_file_person"]["name"] != "") {
                     $fileperson = "crf_file_person";
                     $fileTypeperson = "personalid";
-                    $filetime = date('H:i:s');
+
                     $this->uploadFiles($fileperson, $fileTypeperson, $getFormNo , $filetime);
                     $resultFilePersonal = $this->uploadFiles($fileperson, $fileTypeperson, $getFormNo , $filetime);
                 } else {
@@ -74,7 +74,7 @@ class Main_model extends CI_Model
                 if ($_FILES["crf_file1"]["name"] != "") {
                     $file1 = "crf_file1";
                     $fileType1 = "ภพ20";
-                    $filetime = date('H:i:s');
+
                     $this->uploadFiles($file1, $fileType1, $getFormNo , $filetime);
                     $resultFile1 = $this->uploadFiles($file1, $fileType1, $getFormNo , $filetime);
                 } else {
@@ -84,7 +84,7 @@ class Main_model extends CI_Model
                 if ($_FILES["crf_file2"]["name"] != "") {
                     $file2 = "crf_file2";
                     $fileType2 = "หนังสือรับรอง";
-                    $filetime = date('H:i:s');
+
                     $this->uploadFiles($file2, $fileType2, $getFormNo , $filetime);
                     $resultFile2 = $this->uploadFiles($file2, $fileType2, $getFormNo , $filetime);
                 } else {
@@ -94,7 +94,7 @@ class Main_model extends CI_Model
                 if ($_FILES["crf_file3"]["name"] != "") {
                     $file3 = "crf_file3";
                     $fileType3 = "ข้อมูลทั่วไป";
-                    $filetime = date('H:i:s');
+
                     $this->uploadFiles($file3, $fileType3, $getFormNo , $filetime);
                     $resultFile3 = $this->uploadFiles($file3, $fileType3, $getFormNo , $filetime);
                 } else {
@@ -104,7 +104,7 @@ class Main_model extends CI_Model
                 if ($_FILES["crf_file4"]["name"] != "") {
                     $file4 = "crf_file4";
                     $fileType4 = "งบดุล";
-                    $filetime = date('H:i:s');
+
                     $this->uploadFiles($file4, $fileType4, $getFormNo , $filetime);
                     $resultFile4 = $this->uploadFiles($file4, $fileType4, $getFormNo , $filetime);
                 } else {
@@ -114,7 +114,7 @@ class Main_model extends CI_Model
                 if ($_FILES["crf_file5"]["name"] != "") {
                     $file5 = "crf_file5";
                     $fileType5 = "งบกำไรขาดทุน";
-                    $filetime = date('H:i:s');
+
                     $this->uploadFiles($file5, $fileType5, $getFormNo , $filetime);
                     $resultFile5 = $this->uploadFiles($file5, $fileType5, $getFormNo , $filetime);
                 } else {
@@ -124,7 +124,7 @@ class Main_model extends CI_Model
                 if ($_FILES["crf_file6"]["name"] != "") {
                     $file6 = "crf_file6";
                     $fileType6 = "วิเคราะห์ผลการดำเนินงาน";
-                    $filetime = date('H:i:s');
+
                     $this->uploadFiles($file6, $fileType6, $getFormNo , $filetime);
                     $resultFile6 = $this->uploadFiles($file6, $fileType6, $getFormNo , $filetime);
                 } else {
@@ -137,7 +137,7 @@ class Main_model extends CI_Model
             if ($_FILES["crf_tablebill"]["name"] != "") {
                 $tablebill = "crf_tablebill";
                 $tablebillname = "ตารางวางบิล";
-                $filetime = date('H:i:s');
+
                 $this->uploadFiles($tablebill, $tablebillname, $getFormNo , $filetime);
                 $resulttablebill = $this->uploadFiles($tablebill, $tablebillname, $getFormNo , $filetime);
             } else {
@@ -147,7 +147,7 @@ class Main_model extends CI_Model
             if ($_FILES["crf_mapbill"]["name"] != "") {
                 $mapbill = "crf_mapbill";
                 $mapbillname = "แผนที่ที่ไปวางบิล";
-                $filetime = date('H:i:s');
+
                 $this->uploadFiles($mapbill, $mapbillname, $getFormNo , $filetime);
                 $resultmapbill = $this->uploadFiles($mapbill, $mapbillname, $getFormNo , $filetime);
             } else {
@@ -158,7 +158,7 @@ class Main_model extends CI_Model
             if ($_FILES["crf_mapbill2"]["name"] != "") {
                 $mapbill2 = "crf_mapbill2";
                 $mapbillname2 = "แผนที่ที่ไปวางบิล2";
-                $filetime = date('H:i:s');
+
                 $this->uploadFiles($mapbill2, $mapbillname2, $getFormNo , $filetime);
                 $resultmapbill2 = $this->uploadFiles($mapbill2, $mapbillname2, $getFormNo , $filetime);
             } else {
@@ -172,7 +172,7 @@ class Main_model extends CI_Model
             if ($_FILES["crf_recive_cheuqetable"]["name"] != "") {
                 $recive_cheuqetable = "crf_recive_cheuqetable";
                 $recive_cheuqetablename = "ตารางวางบิลรับเช็ค";
-                $filetime = date('H:i:s');
+
                 $this->uploadFiles($recive_cheuqetable, $recive_cheuqetablename, $getFormNo , $filetime);
                 $result_recive_cheuqetable = $this->uploadFiles($recive_cheuqetable, $recive_cheuqetablename, $getFormNo , $filetime);
             } else {
@@ -184,7 +184,7 @@ class Main_model extends CI_Model
             if ($_FILES["crf_mapfile"]["name"] != "") {
                 $crf_mapfile = "crf_mapfile";
                 $crf_mapfilename = "แผนที่ตั้งของลูกค้า";
-                $filetime = date('H:i:s');
+     
                 $this->uploadFiles($crf_mapfile, $crf_mapfilename, $getFormNo , $filetime);
                 $customermapfile = $this->uploadFiles($crf_mapfile, $crf_mapfilename, $getFormNo , $filetime);
             } else {
@@ -494,7 +494,7 @@ class Main_model extends CI_Model
                     if ($_FILES["crf_file1"]["name"] != "") {
                         $file1 = "crf_file1";
                         $fileType1 = "ภพ20";
-                        $filetime = date('H:i:s');
+
                         $this->uploadFiles($file1, $fileType1, $getFormNo , $filetime);
                         $resultFile1 = $this->uploadFiles($file1, $fileType1, $getFormNo , $filetime);
                     } else {
@@ -504,7 +504,7 @@ class Main_model extends CI_Model
                     if ($_FILES["crf_file_person"]["name"] != "") {
                         $fileperson = "crf_file_person";
                         $fileTypeperson = "personalid";
-                        $filetime = date('H:i:s');
+
                         $this->uploadFiles($fileperson, $fileTypeperson, $getFormNo , $filetime);
                         $resultFilePersonal = $this->uploadFiles($fileperson, $fileTypeperson, $getFormNo , $filetime);
                     } else {
@@ -597,7 +597,7 @@ class Main_model extends CI_Model
                 if ($_FILES["crf_mapfile"]["name"] != "") {
                     $crf_mapfile = "crf_mapfile";
                     $crf_mapfilename = "แผนที่ตั้งของลูกค้า";
-                    $filetime = date('H:i:s');
+ 
                     $this->uploadFiles($crf_mapfile, $crf_mapfilename, $getFormNo , $filetime);
                     $customermapfile = $this->uploadFiles($crf_mapfile, $crf_mapfilename, $getFormNo , $filetime);
                 } else {
@@ -611,7 +611,7 @@ class Main_model extends CI_Model
                     if ($_FILES["crf_file_person"]["name"] != "") {
                         $fileperson = "crf_file_person";
                         $fileTypeperson = "personalid";
-                        $filetime = date('H:i:s');
+
                         $this->uploadFiles($fileperson, $fileTypeperson, $getFormNo , $filetime);
                         $resultFilePersonal = $this->uploadFiles($fileperson, $fileTypeperson, $getFormNo , $filetime);
                     } else {
@@ -621,7 +621,7 @@ class Main_model extends CI_Model
                     if ($_FILES["crf_file1"]["name"] != "") {
                         $file1 = "crf_file1";
                         $fileType1 = "ภพ20";
-                        $filetime = date('H:i:s');
+
                         $this->uploadFiles($file1, $fileType1, $getFormNo , $filetime);
                         $resultFile1 = $this->uploadFiles($file1, $fileType1, $getFormNo , $filetime);
                     } else {
@@ -631,7 +631,7 @@ class Main_model extends CI_Model
                     if ($_FILES["crf_file2"]["name"] != "") {
                         $file2 = "crf_file2";
                         $fileType2 = "หนังสือรับรอง";
-                        $filetime = date('H:i:s');
+
                         $this->uploadFiles($file2, $fileType2, $getFormNo , $filetime);
                         $resultFile2 = $this->uploadFiles($file2, $fileType2, $getFormNo , $filetime);
                     } else {
@@ -641,7 +641,7 @@ class Main_model extends CI_Model
                     if ($_FILES["crf_file3"]["name"] != "") {
                         $file3 = "crf_file3";
                         $fileType3 = "ข้อมูลทั่วไป";
-                        $filetime = date('H:i:s');
+
                         $this->uploadFiles($file3, $fileType3, $getFormNo , $filetime);
                         $resultFile3 = $this->uploadFiles($file3, $fileType3, $getFormNo , $filetime);
                     } else {
@@ -651,7 +651,7 @@ class Main_model extends CI_Model
                     if ($_FILES["crf_file4"]["name"] != "") {
                         $file4 = "crf_file4";
                         $fileType4 = "งบดุล";
-                        $filetime = date('H:i:s');
+
                         $this->uploadFiles($file4, $fileType4, $getFormNo , $filetime);
                         $resultFile4 = $this->uploadFiles($file4, $fileType4, $getFormNo , $filetime);
                     } else {
@@ -661,7 +661,7 @@ class Main_model extends CI_Model
                     if ($_FILES["crf_file5"]["name"] != "") {
                         $file5 = "crf_file5";
                         $fileType5 = "งบกำไรขาดทุน";
-                        $filetime = date('H:i:s');
+ 
                         $this->uploadFiles($file5, $fileType5, $getFormNo , $filetime);
                         $resultFile5 = $this->uploadFiles($file5, $fileType5, $getFormNo , $filetime);
                     } else {
@@ -671,7 +671,7 @@ class Main_model extends CI_Model
                     if ($_FILES["crf_file6"]["name"] != "") {
                         $file6 = "crf_file6";
                         $fileType6 = "วิเคราะห์ผลการดำเนินงาน";
-                        $filetime = date('H:i:s');
+  
                         $this->uploadFiles($file6, $fileType6, $getFormNo , $filetime);
                         $resultFile6 = $this->uploadFiles($file6, $fileType6, $getFormNo , $filetime);
                     } else {
@@ -3103,6 +3103,7 @@ class Main_model extends CI_Model
         // $resultFile4 = "";
         // $resultFile5 = "";
         // $resultFile6 = "";
+        $filetime = date('H-i-s');
 
         $conReportDate = date_create($this->input->post("crf_datecreate"));
         $report_date = date_format($conReportDate, "d");
@@ -3119,8 +3120,8 @@ class Main_model extends CI_Model
         if ($_FILES["crf_file_person"]["name"] != "") {
             $fileperson = "crf_file_person";
             $fileTypeperson = "personalid";
-            $this->uploadFiles($fileperson, $fileTypeperson, $editformno);
-            $resultFilePersonal = $this->uploadFiles($fileperson, $fileTypeperson, $editformno);
+            $this->uploadFiles($fileperson, $fileTypeperson, $editformno , $filetime);
+            $resultFilePersonal = $this->uploadFiles($fileperson, $fileTypeperson, $editformno , $filetime);
         } else {
             $resultFilePersonal = $this->input->post("editcusoldpersonal");
         }
@@ -3129,8 +3130,9 @@ class Main_model extends CI_Model
         if ($_FILES["crf_file1"]["name"] != "") {
             $file1 = "crf_file1";
             $fileType1 = "ภพ20";
-            $this->uploadFiles($file1, $fileType1, $editformno);
-            $resultFile1 = $this->uploadFiles($file1, $fileType1, $editformno);
+
+            $this->uploadFiles($file1, $fileType1, $editformno , $filetime);
+            $resultFile1 = $this->uploadFiles($file1, $fileType1, $editformno , $filetime);
         } else {
             $resultFile1 = $this->input->post("get_crf_file1");
         }
@@ -3138,8 +3140,9 @@ class Main_model extends CI_Model
         if ($_FILES["crf_file2"]["name"] != "") {
             $file2 = "crf_file2";
             $fileType2 = "หนังสือรับรอง";
-            $this->uploadFiles($file2, $fileType2, $editformno);
-            $resultFile2 = $this->uploadFiles($file2, $fileType2, $editformno);
+
+            $this->uploadFiles($file2, $fileType2, $editformno , $filetime);
+            $resultFile2 = $this->uploadFiles($file2, $fileType2, $editformno , $filetime);
         } else {
             $resultFile2 = $this->input->post("get_crf_file2");
         }
@@ -3147,8 +3150,9 @@ class Main_model extends CI_Model
         if ($_FILES["crf_file3"]["name"] != "") {
             $file3 = "crf_file3";
             $fileType3 = "ข้อมูลทั่วไป";
-            $this->uploadFiles($file3, $fileType3, $editformno);
-            $resultFile3 = $this->uploadFiles($file3, $fileType3, $editformno);
+
+            $this->uploadFiles($file3, $fileType3, $editformno , $filetime);
+            $resultFile3 = $this->uploadFiles($file3, $fileType3, $editformno , $filetime);
         } else {
             $resultFile3 = $this->input->post("get_crf_file3");
         }
@@ -3156,8 +3160,9 @@ class Main_model extends CI_Model
         if ($_FILES["crf_file4"]["name"] != "") {
             $file4 = "crf_file4";
             $fileType4 = "งบดุล";
-            $this->uploadFiles($file4, $fileType4, $editformno);
-            $resultFile4 = $this->uploadFiles($file4, $fileType4, $editformno);
+
+            $this->uploadFiles($file4, $fileType4, $editformno , $filetime);
+            $resultFile4 = $this->uploadFiles($file4, $fileType4, $editformno , $filetime);
         } else {
             $resultFile4 = $this->input->post("get_crf_file4");
         }
@@ -3165,8 +3170,9 @@ class Main_model extends CI_Model
         if ($_FILES["crf_file5"]["name"] != "") {
             $file5 = "crf_file5";
             $fileType5 = "งบกำไรขาดทุน";
-            $this->uploadFiles($file5, $fileType5, $editformno);
-            $resultFile5 = $this->uploadFiles($file5, $fileType5, $editformno);
+
+            $this->uploadFiles($file5, $fileType5, $editformno , $filetime);
+            $resultFile5 = $this->uploadFiles($file5, $fileType5, $editformno , $filetime);
         } else {
             $resultFile5 = $this->input->post("get_crf_file5");
         }
@@ -3174,8 +3180,9 @@ class Main_model extends CI_Model
         if ($_FILES["crf_file6"]["name"] != "") {
             $file6 = "crf_file6";
             $fileType6 = "วิเคราะห์ผลการดำเนินงาน";
-            $this->uploadFiles($file6, $fileType6, $editformno);
-            $resultFile6 = $this->uploadFiles($file6, $fileType6, $editformno);
+
+            $this->uploadFiles($file6, $fileType6, $editformno , $filetime);
+            $resultFile6 = $this->uploadFiles($file6, $fileType6, $editformno , $filetime);
         } else {
             $resultFile6 = $this->input->post("get_crf_file6");
         }
@@ -3183,8 +3190,9 @@ class Main_model extends CI_Model
         if ($_FILES["crf_file7"]["name"] != "") {
             $file7 = "crf_file7";
             $fileType7 = "ตารางวางบิล";
-            $this->uploadFiles($file7, $fileType7, $editformno);
-            $resultFile7 = $this->uploadFiles($file7, $fileType7, $editformno);
+
+            $this->uploadFiles($file7, $fileType7, $editformno , $filetime);
+            $resultFile7 = $this->uploadFiles($file7, $fileType7, $editformno , $filetime);
         } else {
             $resultFile7 = $this->input->post("get_crf_file7");
         }
@@ -3192,8 +3200,9 @@ class Main_model extends CI_Model
         if ($_FILES["crf_file8"]["name"] != "") {
             $file8 = "crf_file8";
             $fileType8 = "แผนที่ที่ไปวางบิล";
-            $this->uploadFiles($file8, $fileType8, $editformno);
-            $resultFile8 = $this->uploadFiles($file8, $fileType8, $editformno);
+
+            $this->uploadFiles($file8, $fileType8, $editformno , $filetime);
+            $resultFile8 = $this->uploadFiles($file8, $fileType8, $editformno , $filetime);
         } else {
             $resultFile8 = $this->input->post("get_crf_file8");
         }
@@ -3201,8 +3210,9 @@ class Main_model extends CI_Model
         if ($_FILES["crf_file9"]["name"] != "") {
             $file9 = "crf_file9";
             $fileType9 = "แผนที่ที่ไปวางบิล2";
-            $this->uploadFiles($file9, $fileType9, $editformno);
-            $resultFile9 = $this->uploadFiles($file9, $fileType9, $editformno);
+
+            $this->uploadFiles($file9, $fileType9, $editformno , $filetime);
+            $resultFile9 = $this->uploadFiles($file9, $fileType9, $editformno , $filetime);
         } else {
             $resultFile9 = $this->input->post("get_crf_file9");
         }
@@ -3211,8 +3221,9 @@ class Main_model extends CI_Model
         if ($_FILES["crf_mapfile_edit"]["name"] != "") {
             $mapfile = "crf_mapfile_edit";
             $mapfilename = "แผนที่ตั้งของลูกค้า";
-            $this->uploadFiles($mapfile, $mapfilename, $editformno);
-            $resultMapFile = $this->uploadFiles($mapfile, $mapfilename, $editformno);
+
+            $this->uploadFiles($mapfile, $mapfilename, $editformno , $filetime);
+            $resultMapFile = $this->uploadFiles($mapfile, $mapfilename, $editformno , $filetime);
         } else {
             $resultMapFile = $this->input->post("get_crf_mapfile_edit");
         }

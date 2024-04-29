@@ -91,7 +91,7 @@
                 </div>
                 <div class="col-md-4 form-group">
                     <label for="">วันที่ก่อตั้ง</label>
-                    <input readonly type="text" name="crf_cuscompanycreate_view" id="crf_cuscompanycreate_view" class="form-control form-control-sm" value="<?= $result->crfcus_comdatecreate ?>">
+                    <input readonly type="text" name="crf_cuscompanycreate_view" id="crf_cuscompanycreate_view" class="form-control form-control-sm" value="<?= conDateFromDb($result->crfcus_comdatecreate); ?>">
                 </div>
             </div>
 
@@ -574,7 +574,7 @@ if($checkType != "https"){
             <div class="row form-group">
                 <div class="col-md-6">
                     <label for="">วงเงิน</label>
-                    <input readonly type="text" name="crf_finance_old_view" id="crf_finance_old_view" class="form-control form-control-sm" value="<?= getCreditMax($result->crfcus_code , $result->crfcus_area)?>">
+                    <input readonly type="text" name="crf_finance_old_view" id="crf_finance_old_view" class="form-control form-control-sm" value="<?= number_format(getCreditMax($result->crfcus_code , $result->crfcus_area) , 2);?>">
                 </div>
             </div>
 

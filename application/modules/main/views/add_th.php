@@ -174,7 +174,7 @@
                     </div>
                     <div class="col-md-4 form-group">
                         <label for="">วันที่ก่อตั้ง</label>
-                        <input type="text" name="crf_cuscompanycreate" id="crf_cuscompanycreate" data-zdp_readonly_element="false" class="form-control form-control-sm" placeholder="วัน-เดือน-ปี">
+                        <input type="text" name="crf_cuscompanycreate" id="crf_cuscompanycreate" class="form-control form-control-sm" placeholder="วัน-เดือน-ปี">
                         <div id="alert_cuscompanycreate"></div>
                     </div>
                 </div>
@@ -771,9 +771,24 @@
 </body>
 <script>
 $(document).ready(function(){
-    $('#crf_cuscompanycreate').Zebra_DatePicker({
-        format: 'd-m-Y'
-    });
+    
+
+$(document).on('keyup' , '#crf_cuscompanycreate' , function(){
+    let regex = /^(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[0-2])-\d{4}$/;
+    let input = $(this);
+    console.log(regex.test(input.val()));
+    if(regex.test(input.val()) === true){
+        input.css({
+            'border-color' : '#009900',
+            'border-width' : '2px'
+        });
+    }else{
+        input.css({
+            'border-color': '#CC0000',
+            'border-width' : '2px'
+        });
+    }
+});
 
     $('#crf_customername').focus(function(){
         let custype = $('input:radio[name="crf_person_type"]:checked');

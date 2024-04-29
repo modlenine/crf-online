@@ -2509,7 +2509,7 @@ $(document).ready(function () {
 
 
     // format number
-    $('#crf_finance_req_number_view , #crf_regiscost_view , #crf_finance_old_view , #crf_finance_change_number_view , #crf_finance_change_total_view').val(function (index, value) {
+    $('#crf_finance_req_number_view , #crf_regiscost_view  , #crf_finance_change_number_view , #crf_finance_change_total_view').val(function (index, value) {
         return value
             .replace(/\D/g, "")
             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -5798,33 +5798,7 @@ $(document).ready(function () {
         loadcustomerlist();
     }
 
-    // $('#addcus_customercode').blur(function () {
-    //     var cuscode = $('#addcus_customercode').val();
-    //     var area = $('input:radio[name="addcus_company"]:checked').val();
-    //     checkCuscodeManual(cuscode, area);
-    // });
 
-    // Check company
-    // $('#addcus_customercode').click(function () {
-    //     var addcus_company = $('input:radio[name="addcus_company"]:checked');
-    //     if (addcus_company.length < 1) {
-    //         $('#alert_addcus_company').html('<div class="alert alert-danger" role="alert">กรุณาเลือกบริษัทด้วยค่ะ !!</div>');
-    //         $('#addcus_customercode').val('');
-    //         exit;
-    //     } else {
-    //         $('#alert_addcus_company').html('');
-    //     }
-    // });
-    // $('#addcus_customercode').keyup(function () {
-    //     var addcus_company = $('input:radio[name="addcus_company"]:checked');
-    //     if (addcus_company.length < 1) {
-    //         $('#alert_addcus_company').html('<div class="alert alert-danger" role="alert">กรุณาเลือกบริษัทด้วยค่ะ !!</div>');
-    //         $('#addcus_customercode').val('');
-    //         exit;
-    //     } else {
-    //         $('#alert_addcus_company').html('');
-    //     }
-    // });
 
 
 
@@ -5956,19 +5930,21 @@ $(document).ready(function () {
         });
 
         $(document).on('click', '.selectCusCodeManualcode', function () {
-            var data_addcus_code = $(this).attr('data_addcus_code');
-            var data_addcus_name = $(this).attr('data_addcus_name');
-            var data_addcus_address = $(this).attr('data_addcus_address');
-            var data_addcus_phone = $(this).attr('data_addcus_phone');
-            var data_addcus_fax = $(this).attr('data_addcus_fax');
-            var data_addcus_email = $(this).attr('data_addcus_email');
-            var data_addcus_taxid = $(this).attr('data_addcus_taxid');
-            var data_addcus_area = $(this).attr('data_addcus_area');
-            var data_addcus_branch = $(this).attr('data_addcus_branch');
-            var data_addcus_termid = $(this).attr('data_addcus_termid');
-            var data_addcus_termname = $(this).attr('data_addcus_termname');
-            var data_addcus_creditlimit = $(this).attr('data_addcus_creditlimit');
-            var data_addcus_firstname = $(this).attr('data_addcus_firstname');
+            let data_addcus_code = $(this).attr('data_addcus_code');
+            let data_addcus_name = $(this).attr('data_addcus_name');
+            let data_addcus_address = $(this).attr('data_addcus_address');
+            let data_addcus_phone = $(this).attr('data_addcus_phone');
+            let data_addcus_fax = $(this).attr('data_addcus_fax');
+            let data_addcus_email = $(this).attr('data_addcus_email');
+            let data_addcus_taxid = $(this).attr('data_addcus_taxid');
+            let data_addcus_area = $(this).attr('data_addcus_area');
+            let data_addcus_branch = $(this).attr('data_addcus_branch');
+            let data_addcus_termid = $(this).attr('data_addcus_termid');
+            let data_addcus_termname = $(this).attr('data_addcus_termname');
+            let data_addcus_creditlimit = $(this).attr('data_addcus_creditlimit');
+            let data_addcus_firstname = $(this).attr('data_addcus_firstname');
+
+
 
             if(data_addcus_termname != ""){
                 $('#addcus_creditterm').attr("style", "pointer-events: none;");
@@ -5979,65 +5955,70 @@ $(document).ready(function () {
             }
 
 
-            let result = checkCuscodeManual(data_addcus_code, data_addcus_area , getCallback);
-            alert(result);
+            $.ajax({
+                url:"/intsys/crf/customers/fetchCustomercode",
+                method:"POST",
+                data:{
+                    cuscode:data_addcus_code,
+                    taxid:data_addcus_taxid
+                },
+                success:function(data){
+                    if(JSON.parse(data).result > 0){
+                        $('#alertCuscode').fadeIn();
+                        $('#alertCuscode').html('<div class="alert alert-danger" role="alert">พบข้อมูลซ้ำในระบบ</div>').fadeOut(3500);
+                        $('#addcus_customercode').val('');
+                        $('#autocuscodemanual').html('');
+                    }else{
+                        $('#addcus_customercode').val(data_addcus_code);
+                        $('#addcus_customername').val(data_addcus_name);
+                        $('#addcus_addressname').val(data_addcus_address);
+                        $('#addcus_telcontact').val(data_addcus_phone);
+                        $('#addcus_faxcontact').val(data_addcus_fax);
+                        $('#addcus_emailcontact').val(data_addcus_email);
+                        $('#addcus_customertaxid').val(data_addcus_taxid);
+                        $('#addcus_customerbranch').val(data_addcus_branch);
+                        $('#addcus_creditterm option:selected').val(data_addcus_termid).text(data_addcus_termname);
+                        $('#crf_finance_req_number').val(data_addcus_creditlimit);
+                        $('#addcus_namecontact').val(data_addcus_firstname);
+            
+                        $('input:radio[id="addcus_addresstype1"]').prop('checked', true);
+
+                        // Convert Currency to comma
+                        $('input[name=addcus_regiscost]').keyup(function (event) {
+                            /*****Comma function*******/
+                            // skip for arrow keys
+                            if (event.which >= 37 && event.which <= 40)
+                                return;
+
+                            // format number
+                            $(this).val(function (index, value) {
+                                return value
+                                    .replace(/\D/g, "")
+                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                    ;
+                            });
+                        });
 
 
-
-
-
-            $('#addcus_customercode').val(data_addcus_code);
-            $('#addcus_customername').val(data_addcus_name);
-            $('#addcus_addressname').val(data_addcus_address);
-            $('#addcus_telcontact').val(data_addcus_phone);
-            $('#addcus_faxcontact').val(data_addcus_fax);
-            $('#addcus_emailcontact').val(data_addcus_email);
-            $('#addcus_customertaxid').val(data_addcus_taxid);
-            $('#addcus_customerbranch').val(data_addcus_branch);
-            $('#addcus_creditterm option:selected').val(data_addcus_termid).text(data_addcus_termname);
-            $('#crf_finance_req_number').val(data_addcus_creditlimit);
-            $('#addcus_namecontact').val(data_addcus_firstname);
-
-            $('input:radio[id="addcus_addresstype1"]').prop('checked', true);
-
-            // $('#crf_finance_req_number').val(function (index, value) {
-            //     return value
-            //         .replace(/\D/g, "")
-            //         .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            //         ;
-            // });
-
-
-
-            // Convert Currency to comma
-            $('input[name=addcus_regiscost]').keyup(function (event) {/*****Comma function*******/
-
-                // skip for arrow keys
-                if (event.which >= 37 && event.which <= 40)
-                    return;
-
-                // format number
-                $(this).val(function (index, value) {
-                    return value
-                        .replace(/\D/g, "")
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                        ;
-                });
+                        if (data_addcus_area == 'sln') {
+                            $('input:radio[id="addcus_company_sln"]').prop('checked', true);
+                        } else if (data_addcus_area == 'poly') {
+                            $('input:radio[id="addcus_company_poly"]').prop('checked', true);
+                        } else if (data_addcus_area == 'ca') {
+                            $('input:radio[id="addcus_company_ca"]').prop('checked', true);
+                        }else if(data_addcus_area == 'tbb'){
+                            $('input:radio[id="addcus_company_tb"]').prop('checked' , true);
+                        }else if(data_addcus_area == 'st'){
+                            $('input:radio[id="addcus_company_st"]').prop('checked' , true);
+                        }
+            
+                        $('#autocuscodemanual').html('');
+                        $('#autocuscodemanualname').html('');
+                    }
+                }
             });
 
-            if (data_addcus_area == 'sln') {
-                $('input:radio[id="addcus_company_sln"]').prop('checked', true);
-            } else if (data_addcus_area == 'poly') {
-                $('input:radio[id="addcus_company_poly"]').prop('checked', true);
-            } else if (data_addcus_area == 'ca') {
-                $('input:radio[id="addcus_company_ca"]').prop('checked', true);
-            }
-
-            $('#autocuscodemanual').html('');
-            $('#autocuscodemanualname').html('');
-
-
-        })
+        });
 
     }
     // Control by page

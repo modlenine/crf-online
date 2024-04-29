@@ -10,6 +10,7 @@ class Customers_model extends CI_Model
         parent::__construct();
         //Do your magic here
         $this->db3 = $this->load->database('sql_custtable', TRUE);
+        $this->db_applystd = $this->load->database('sql_custtable2' , TRUE);
         date_default_timezone_set("Asia/Bangkok");
     }
 
@@ -315,10 +316,17 @@ class Customers_model extends CI_Model
     public function checkCustomerCode()
     {
         $cuscode = $this->input->post("cuscode");
-        $cusarea = $this->input->post("area");
+        $taxid = $this->input->post("taxid");
 
-        $queryforcheckcuscode = $this->db->query("SELECT crfcus_code FROM crf_customers WHERE crfcus_code = '$cuscode' and crfcus_area = '$cusarea' ");
-        echo $queryforcheckcuscode->num_rows();
+        $queryforcheckcuscode = $this->db->query("SELECT crfcus_code FROM crf_customers WHERE crfcus_code = '$cuscode' and crfcus_taxid = '$taxid' ");
+        
+        $output = array(
+            "msg" => "Check ข้อมูลซ้ำเรียบร้อยแล้ว",
+            "status" => "Check Data Success",
+            "result" => $queryforcheckcuscode->num_rows()
+        );
+
+        echo json_encode($output);
     }
 
 
@@ -400,86 +408,105 @@ class Customers_model extends CI_Model
         accountnum,
         paymtermid,
         name,
-        address,
+        street as address,
         phone,
         telefax,
         email,
-        bpc_whtid,
+        bpc_tax_vatid,
         dataAreaId,
         -- SLC_idBranchTxt,
-        slc_fname,
         CreditMax
-         FROM custtable where accountnum like '$cuscode%' and accountnum NOT LIKE 'EX%' and accountnum NOT LIKE 'BR%' ");
+         FROM slc_custview where accountnum like '$cuscode%' and accountnum NOT LIKE 'EX%' and accountnum NOT LIKE 'BR%' ");
+
+         if($query->num_rows() == 0){
+            $query = $this->db_applystd->query("SELECT TOP 10 
+            accountnum,
+            paymtermid,
+            name,
+            street as address,
+            phone,
+            telefax,
+            email,
+            bpc_tax_vatid,
+            dataAreaId,
+            -- SLC_idBranchTxt,
+            CreditMax
+             FROM slc_custview where accountnum like '$cuscode%' and accountnum NOT LIKE 'EX%' and accountnum NOT LIKE 'BR%' ");
+         }
+
+
         $output = "";
         foreach ($query->result() as $rs) {
 
-            switch ($rs->paymtermid) {
-                case "Advance":
-                    $creditid = 1;
-                    $creditname = "Advance ( โอนเงินก่อนส่งของ )";
+                switch ($rs->paymtermid) {
+                    case "Advance":
+                        $creditid = 1;
+                        $creditname = "Advance ( โอนเงินก่อนส่งของ )";
+                        break;
+                    case "CASH":
+                        $creditid = 2;
+                        $creditname = "Cash";
+                        break;
+                    case "7D":
+                        $creditid = 3;
+                        $creditname = "7 Day";
+                        break;
+                    case "15D":
+                        $creditid = 4;
+                        $creditname = "15 Day";
+                        break;
+                    case "30D":
+                        $creditid = 5;
+                        $creditname = "30 Day";
+                        break;
+                    case "45D":
+                        $creditid = 6;
+                        $creditname = "45 Day";
+                        break;
+                    case "60D":
+                        $creditid = 7;
+                        $creditname = "60 Day";
+                        break;
+                    case "75D":
+                        $creditid = 8;
+                        $creditname = "75 Day";
+                        break;
+                    case "90D":
+                        $creditid = 9;
+                        $creditname = "90 Day";
+                        break;
+                    case "120D":
+                        $creditid = 10;
+                        $creditname = "120 Day";
+                        break;
+                    default:
+                        $creditid = "";
+                        $creditname = "";
                     break;
-                case "CASH":
-                    $creditid = 2;
-                    $creditname = "Cash";
-                    break;
-                case "7D":
-                    $creditid = 3;
-                    $creditname = "7 Day";
-                    break;
-                case "15D":
-                    $creditid = 4;
-                    $creditname = "15 Day";
-                    break;
-                case "30D":
-                    $creditid = 5;
-                    $creditname = "30 Day";
-                    break;
-                case "45D":
-                    $creditid = 6;
-                    $creditname = "45 Day";
-                    break;
-                case "60D":
-                    $creditid = 7;
-                    $creditname = "60 Day";
-                    break;
-                case "75D":
-                    $creditid = 8;
-                    $creditname = "75 Day";
-                    break;
-                case "90D":
-                    $creditid = 9;
-                    $creditname = "90 Day";
-                    break;
-                case "120D":
-                    $creditid = 10;
-                    $creditname = "120 Day";
-                    break;
-                default:
-                    $creditid = "";
-                    $creditname = "";
-                break;
-            }
-        $conCredit = number_format($rs->CreditMax,2);
-            $output .= "<ul class='list-group'>";
-            $output .= "<a href='javascript:void(0)' class='selectCusCodeManualcode'
-
-        data_addcus_code = '$rs->accountnum'
-        data_addcus_name = '$rs->name'
-        data_addcus_address = '$rs->address'
-        data_addcus_phone = '$rs->phone'
-        data_addcus_fax = '$rs->telefax'
-        data_addcus_email = '$rs->email'
-        data_addcus_taxid = '$rs->bpc_whtid'
-        data_addcus_area = '$rs->dataAreaId'
-        data_addcus_branch = ''
-        data_addcus_termid = '$creditid'
-        data_addcus_termname = '$creditname'
-        data_addcus_creditlimit = '$conCredit'
-        data_addcus_fristname = '$rs->slc_fname'
-        
-        ><li class='list-group-item'>" . $rs->accountnum . "&nbsp;" . $rs->name . " (" . $rs->dataAreaId . ")" . "</li></a>";
-            $output .= "</ul>";
+                }
+                $conCredit = number_format($rs->CreditMax,2);
+                $output .= "<ul class='list-group'>";
+                
+                    $output .= "<a href='javascript:void(0)' class='selectCusCodeManualcode'
+                    data_addcus_code = '$rs->accountnum'
+                    data_addcus_name = '$rs->name'
+                    data_addcus_address = '$rs->address'
+                    data_addcus_phone = '$rs->phone'
+                    data_addcus_fax = '$rs->telefax'
+                    data_addcus_email = '$rs->email'
+                    data_addcus_taxid = '$rs->bpc_tax_vatid'
+                    data_addcus_area = '$rs->dataAreaId'
+                    data_addcus_branch = ''
+                    data_addcus_termid = '$creditid'
+                    data_addcus_termname = '$creditname'
+                    data_addcus_creditlimit = '$conCredit'
+                    ><li class='list-group-item'>" . $rs->accountnum . "&nbsp;" . $rs->name . " (" . $rs->dataAreaId . ")" . "</li></a>";
+                
+                $output .= "</ul>";
+            
         }
+
+
 
         echo $output;
     }
