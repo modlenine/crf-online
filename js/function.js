@@ -677,6 +677,9 @@ function checkTelPat(telIn)
 // Check ข้อมูลทุกฟิลด์ที่จำเป็น
 function checkBeforeSave()
 {
+    let regex = /^(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[0-2])-\d{4}$/;
+    let input = $('#crf_cuscompanycreate');
+
     if($('input:radio[name="crf_type"]:checked').val() == 1){
 
 
@@ -695,7 +698,7 @@ function checkBeforeSave()
         $('#alert_submit').html('<div class="alert alert-danger" role="alert">กรุณาระบุชื่อลูกค้าด้วยค่ะ</div>');
         $('#user_submit').prop('disabled' , true);
 
-    }else if($('#crf_cuscompanycreate').val() == ''){
+    }else if($('#crf_cuscompanycreate').val() == '' || regex.test(input.val()) === false){
         // เช็ควันที่ก่อตั้ง
         $('#alert_cuscompanycreate').html('<div class="alert alert-danger" role="alert">กรุณาระบุวันที่ก่อตั้งด้วยค่ะ</div>');
         $('#alert_submit').html('<div class="alert alert-danger" role="alert">กรุณาระบุวันที่ก่อตั้งด้วยค่ะ</div>');
@@ -792,7 +795,7 @@ function checkBeforeSave()
         $('#alert_submit').html('<div class="alert alert-danger" role="alert">กรุณาระบุชื่อลูกค้าด้วยค่ะ</div>');
         $('#user_submit').prop('disabled' , true);
 
-    }else if($('#crf_cuscompanycreate').val() == ''){
+    }else if($('#crf_cuscompanycreate').val() == '' || regex.test(input.val()) === false){
         // เช็ควันที่ก่อตั้ง
         $('#alert_cuscompanycreate').html('<div class="alert alert-danger" role="alert">กรุณาระบุวันที่ก่อตั้งด้วยค่ะ</div>');
         $('#alert_submit').html('<div class="alert alert-danger" role="alert">กรุณาระบุวันที่ก่อตั้งด้วยค่ะ</div>');

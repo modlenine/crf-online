@@ -2992,7 +2992,7 @@ $(document).ready(function () {
 
     // Control Account Manager
     if (checkStatus == "CS POST BR" && checkDeptCodeL == 1003 && checkUserPosi > 15 || 
-    checkStatus == "CS POST BR" && checkUserecodeL == "M1767") {
+    checkStatus == "CS POST BR" && checkUserecodeL == "M1260" || checkStatus == "CS POST BR" && checkUserecodeL == "M2217") {
         $('.acc_manager').css('display', '');
         if ($('#formgraccappro').val() == "") {
             $('.formgr_appro , #forcrf_accmgr_detail , #forcrf_accmgr_name , #forcrf_accmgr_datatime').css('display', 'none');
@@ -3006,11 +3006,11 @@ $(document).ready(function () {
         if ($('#formgraccappro').val() == "") {
             $('.formgr_appro , #forcrf_accmgr_detail , #forcrf_accmgr_name , #forcrf_accmgr_datatime').css('display', 'none');
         }
-    }else if(checkStatus == "Manager Approved" && checkUserecodeL == "M1767" && changeSales == 1 || 
-    checkStatus == "Manager Approved" && checkUserecodeL == "M1767" && changeAddress == 2 || 
-    checkStatus == "Manager Approved" && checkUserecodeL == "M1767" && changeCreditTerm == 3 || 
-    checkStatus == "Manager Approved" && checkUserecodeL == "M1767" && changeFinance == 4 || 
-    checkStatus == "Manager Approved" && checkUserecodeL == "M1767" && editCustomer == 5){
+    }else if(checkStatus == "Manager Approved" && checkUserecodeL == "M2217" && changeSales == 1 || 
+    checkStatus == "Manager Approved" && checkUserecodeL == "M2217" && changeAddress == 2 || 
+    checkStatus == "Manager Approved" && checkUserecodeL == "M2217" && changeCreditTerm == 3 || 
+    checkStatus == "Manager Approved" && checkUserecodeL == "M2217" && changeFinance == 4 || 
+    checkStatus == "Manager Approved" && checkUserecodeL == "M2217" && editCustomer == 5){
         $('.acc_manager').css('display', '');
         if ($('#formgraccappro').val() == "") {
             $('.formgr_appro , #forcrf_accmgr_detail , #forcrf_accmgr_name , #forcrf_accmgr_datatime').css('display', 'none');
@@ -4803,8 +4803,9 @@ $(document).ready(function () {
         }
 
         if (checkStatus == 'CS Added BR CODE' && checkUserDeptView == 1003 && checkCusPosi > 55 ||
-        checkStatus == 'CS Added BR CODE' && checkUserEcodeEx == "M1767" ||
-        checkStatus == 'CS Added BR CODE' && checkUserEcodeEx == "M1260") {
+        checkStatus == 'CS Added BR CODE' && $('#checkUserEcodeEx').val() == "M1767" ||
+        checkStatus == 'CS Added BR CODE' && $('#checkUserEcodeEx').val() == "M1260" || 
+        checkStatus == 'CS Added BR CODE' && $('#checkUserEcodeEx').val() == "M2217") {
             $('.accManagerApprove').css('display', '');
             $('#ex_accManagerSubmit').prop('disabled', true);
             $('input:radio[name="ex_accMgrApprove"]').click(function () {
@@ -4825,8 +4826,9 @@ $(document).ready(function () {
                 }
             });
 
-        }else if(checkStatus == 'Manager approved' && checkUserEcodeEx == "M1767" ||
-        checkStatus == 'Manager approved' && checkUserEcodeEx == "M1260"){
+        }else if(checkStatus == 'Manager approved' && $('#checkUserEcodeEx').val() == "M1767" ||
+        checkStatus == 'Manager approved' && $('#checkUserEcodeEx').val() == "M1260" || 
+        checkStatus == 'Manager approved' && $('#checkUserEcodeEx').val() == "M2217"){
             $('.accManagerApprove').css('display', '');
             $('#ex_accManagerSubmit').prop('disabled', true);
             $('input:radio[name="ex_accMgrApprove"]').click(function () {

@@ -174,7 +174,7 @@
                     </div>
                     <div class="col-md-4 form-group">
                         <label for="">วันที่ก่อตั้ง</label>
-                        <input type="text" name="crf_cuscompanycreate" id="crf_cuscompanycreate" class="form-control form-control-sm" placeholder="วัน-เดือน-ปี">
+                        <input type="text" name="crf_cuscompanycreate" id="crf_cuscompanycreate" class="form-control form-control-sm" placeholder="วัน-เดือน-ปี (ตย. 25-12-2565)">
                         <div id="alert_cuscompanycreate"></div>
                     </div>
                 </div>

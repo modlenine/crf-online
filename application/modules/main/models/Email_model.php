@@ -485,6 +485,12 @@ class Email_model extends CI_Model
       array_push($to , "tassanee_s@saleecolour.com");
       array_push($ecodeAr , "M1767");
 
+      array_push($to , "supawadee.su@saleecolour.com");
+      array_push($ecodeAr , "M2217");
+
+      array_push($to , "siriporn_p@saleecolour.com");
+      array_push($ecodeAr , "M1260");
+
       $ecodecc = getDataEmail($formno)->crf_userecodepost;
       $optioncc = getuserEmailToOwner($ecodecc);
 
@@ -639,6 +645,12 @@ class Email_model extends CI_Model
 
       array_push($to , "tassanee_s@saleecolour.com");
       array_push($ecodeAr , "M1767");
+
+      array_push($to , "supawadee.su@saleecolour.com");
+      array_push($ecodeAr , "M2217");
+
+      array_push($to , "siriporn_p@saleecolour.com");
+      array_push($ecodeAr , "M1260");
 
       $ecodecc = getDataEmail($formno)->crf_userecodepost;
       $optioncc = getuserEmailToOwner($ecodecc);
@@ -1423,7 +1435,7 @@ class Email_model extends CI_Model
 
       //  Email Zone
 
-      $ecode = " 'M1767' , 'M1260' , 'M2017' , 'M2075' , 'M2141' ";
+      $ecode = " 'M1767' , 'M1260' , 'M2017' , 'M2075' , 'M2141' , 'M2217' ";
       $option = getuserEmailToAc($ecode);
 
 
@@ -1633,7 +1645,7 @@ class Email_model extends CI_Model
 
       //  Email Zone
 
-      $ecode = " 'M1767' , 'M1260' , 'M2017' , 'M2075' , 'M2141' ";
+      $ecode = " 'M1767' , 'M1260' , 'M2017' , 'M2075' , 'M2141' , 'M2217' ";
       $option = getuserEmailToCs($ecode);
 
 
@@ -1808,7 +1820,7 @@ class Email_model extends CI_Model
 
       //  Email Zone
 
-      $ecode = " 'M1767' , 'M1260' , 'M2017' , 'M2075' , 'M2141' ";
+      $ecode = " 'M1767' , 'M1260' , 'M2017' , 'M2075' , 'M2141' , 'M2217' ";
       $option = getuserEmailToCs($ecode);
 
 
@@ -1826,12 +1838,14 @@ class Email_model extends CI_Model
       $ecodecc = getDataEmail($formno)->crf_userecodepost;
       $optioncc = getuserEmailToOwner($ecodecc);
 
+
       $cc = array();
       $ecodeccAr = array();
       foreach ($optioncc->result_array() as $resultcc) {
          $cc[] = $resultcc['memberemail'];
          $ecodeccAr[] = $resultcc['ecode'];
       }
+
 
       $to = array_unique($to);
       $cc = array_unique($cc);
@@ -1855,10 +1869,6 @@ class Email_model extends CI_Model
       $this->notifycenter->insertdataRead_template($ecodeReadArr , $title , $status , $link , $formno , $programname);
 
    }
-
-
-
-
 
 
    function sendemail_toOwner($formno)
@@ -3437,6 +3447,12 @@ class Email_model extends CI_Model
       array_push($to , "tassanee_s@saleecolour.com");
       array_push($ecodeAr , "M1767");
 
+      array_push($to , "supawadee.su@saleecolour.com");
+      array_push($ecodeAr , "M2217");
+
+      array_push($to , "siriporn_p@saleecolour.com");
+      array_push($ecodeAr , "M1260");
+
       $ecodecc = getDataEmailEx($formno)->crfexcus_userecode;
       $optioncc = getuserEmailToOwner($ecodecc);
 
@@ -3578,6 +3594,12 @@ class Email_model extends CI_Model
 
       array_push($to , "tassanee_s@saleecolour.com");
       array_push($ecodeAr , "M1767");
+
+      array_push($to , "supawadee.su@saleecolour.com");
+      array_push($ecodeAr , "M2217");
+
+      array_push($to , "siriporn_p@saleecolour.com");
+      array_push($ecodeAr , "M1260");
 
       $ecodecc = getDataEmailEx($formno)->crfexcus_userecode;
       $optioncc = getuserEmailToOwner($ecodecc);
@@ -4316,7 +4338,7 @@ class Email_model extends CI_Model
       // $deptcode = 1003;
       // $posi = "15";
       // $option = getuserEmailTo($deptcode, $posi);
-      $ecode = " 'M1767' , 'M1260' , 'M2017' , 'M2138' ";
+      $ecode = " 'M1767' , 'M1260' , 'M2017' , 'M2138' , 'M2217' ";
       $option = getuserEmailToCs($ecode);
 
 
@@ -4479,7 +4501,7 @@ class Email_model extends CI_Model
       //  $deptcode = 1003;
       //  $posi = "15";
       //  $option = getuserEmailTo($deptcode, $posi);
-      $ecode = " 'M1767' , 'M1260' , 'M2017' , 'M2138' ";
+      $ecode = " 'M1767' , 'M1260' , 'M2017' , 'M2138' , 'M2217' ";
       $option = getuserEmailToCs($ecode);
  
  
