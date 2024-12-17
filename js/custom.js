@@ -4788,7 +4788,7 @@ $(document).ready(function () {
             }
         }
 
-        if (checkStatus == 'Manager approved' && checkUserDeptView == 1010 || checkStatus == 'Manager approved' && checkUserDeptView == 1012 || checkStatus == 'Manager approved' && checkUserDeptView == 1004) {
+        if (checkStatus == 'Manager approved' && checkUserDeptView == 1010 || checkStatus == 'Manager approved' && checkUserDeptView == 1012 || checkStatus == 'Manager approved' && checkUserDeptView == 1004 || checkStatus == 'Manager approved' && $('#checkUserEcodeEx').val() == "M2119") {
             if (checkCusType == 2) {
                 $('.csAddBrDection').remove();
             } else {
