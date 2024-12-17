@@ -203,6 +203,22 @@ function getCusProcess()
     return $result->result();
 }
 
+function getCusProcessByAreaid($dataareaid)
+{
+    if(!empty($dataareaid)){
+        $obj = new getfn();
+        $obj->gci()->db->order_by("cuspro_name" , "ASC");
+        if($dataareaid == "st" || $dataareaid == "tb"){
+            $obj->gci()->db->where("cuspro_type" , "tb-st");
+        }else{
+            $obj->gci()->db->where("cuspro_type" , NULL);
+        }
+        
+        $result = $obj->gci()->db->get("crf_process");
+        return $result->result();
+    }
+}
+
 //Get Credit term #Form add
 function getCreditTerm()
 {

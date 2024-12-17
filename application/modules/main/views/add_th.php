@@ -390,12 +390,12 @@
                 </label>
                 <div id="showoldprocesscus" class="row form-group oldprocesscus"></div>
                 <div class="row form-group newprocesscus">
-                    {getCusProcess}
+                    <!-- {getCusProcess}
                     <div class="col-md-3 ">
                         <input type="checkbox" name="crf_process[]" id="crf_process" value="{cuspro_id}">
                         <label for="">{cuspro_name}</label>
                     </div>
-                    {/getCusProcess}
+                    {/getCusProcess} -->
                 </div>
                 <div id="alert_process"></div>
                 <br>

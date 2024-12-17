@@ -137,6 +137,8 @@ $(document).ready(function () {
             if ($(this).val() != '') {
                 // ช่องประเภทลูกค้า
                 $('input:radio[name="crf_type"]').prop('disabled', false);
+                console.log($(this).val());
+                getCusProcess($(this).val());
             } else {
                 $('input:radio[name="crf_type"]').prop('disabled', true);
             }

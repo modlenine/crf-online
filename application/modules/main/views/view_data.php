@@ -401,7 +401,7 @@ if ($result->crf_status == "Open") {
                 <h6><b><u>กระบวนการผลิตหลักในการผลิตสินค้า</u></b></h6>
             </label>
             <div class="row form-group">
-                <?php foreach (getCusProcess() as $rs) {
+                <?php foreach (getCusProcessByAreaid($result->crf_company) as $rs) {
                     $checked = "";
                     foreach (getProcess($result->crfcus_id)->result() as $rss) {
                         if ($rs->cuspro_id == $rss->crf_process_name) {
@@ -409,11 +409,19 @@ if ($result->crf_status == "Open") {
                             continue;
                         }
                     }
+                    $layout = "";
+                    if($result->crf_company == "st" || $result->crf_company == "tb"){
+                        $layout = "col-lg-6";
+                    }else{
+                        $layout = "col-md-3";
+                    }
                 ?>
-                    <div class="col-md-3 ">
+
+                    <div class="<?=$layout?>">
                         <input onclick="return false;" type="checkbox" name="crf_process[]" id="crf_process" value="<?= $rs->cuspro_id ?>" <?= $checked ?>>
                         <label for=""><?= $rs->cuspro_name ?></label>
                     </div>
+
                 <?php } ?>
             </div>
             <br>

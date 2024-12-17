@@ -424,7 +424,7 @@
                             }
                         }
                     ?>
-                        <div class="col-md-3 ">
+                        <div class="col-md-6 ">
                             <input type="checkbox" name="crf_process[]" id="crf_process" value="<?= $rs->cuspro_id ?>" <?= $checked ?>>
                             <label for=""><?= $rs->cuspro_name ?></label>
                         </div>

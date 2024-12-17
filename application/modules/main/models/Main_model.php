@@ -2196,6 +2196,40 @@ class Main_model extends CI_Model
         echo "$output";
     }
 
+    public function getCusProcess()
+    {
+        if($this->input->post("dataareaid") != ""){
+            $dataareaid = $this->input->post("dataareaid");
+            $condition = '';
+            if($dataareaid == "st" || $dataareaid == "tb"){
+                $condition = "WHERE cuspro_type = 'tb-st'";
+            }else{
+                $condition = "WHERE cuspro_type IS NULL";
+            }
+
+            $sql = $this->db->query("SELECT
+            cuspro_id,
+            cuspro_name
+            FROM crf_process $condition
+            ORDER BY cuspro_name ASC
+            ");
+
+            $output = array(
+                "msg" => "ดึงข้อมูล crf process สำเร็จ",
+                "status" => "Select Data Success",
+                "result" => $sql->result()
+            );
+
+        }else{
+            $output = array(
+                "msg" => "ดึงข้อมูล crf process ไม่สำเร็จ",
+                "status" => "Select Data Not Success",
+            );
+        }
+
+        echo json_encode($output);
+    }
+
 
     public function queryPrimanageUse()
     {

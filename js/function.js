@@ -89,6 +89,46 @@ function queryProcessUse(cusId) {
     });
 }
 
+function getCusProcess(dataareaid){
+    if(dataareaid !== ''){
+        $.ajax({
+            url:'main/getCusProcess',
+            method:'POST',
+            data:{
+                dataareaid:dataareaid
+            },
+            success:function(data){
+                console.log(JSON.parse(data));
+                if(JSON.parse(data).status == "Select Data Success"){
+                    let result = JSON.parse(data).result;
+                    let output = '';
+
+                    for(let key in result){
+                        if(dataareaid == "st" || dataareaid == "tb"){
+                            output +=`
+                                <div class="col-lg-6 ">
+                                    <input type="checkbox" name="crf_process[]" id="crf_process" value="`+result[key].cuspro_id+`">
+                                    <label for="">`+result[key].cuspro_name+`</label>
+                                </div>
+                            `;
+                        }else{
+                            output +=`
+                                <div class="col-md-3 ">
+                                    <input type="checkbox" name="crf_process[]" id="crf_process" value="`+result[key].cuspro_id+`">
+                                    <label for="">`+result[key].cuspro_name+`</label>
+                                </div>
+                            `;
+                        }
+                    }
+
+
+                    $('.newprocesscus').html(output);
+                }
+            }
+        });
+    }
+}
+
 function unclick(e) {
     e.preventDefault();
     return false;

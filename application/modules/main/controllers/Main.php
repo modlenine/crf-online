@@ -41,7 +41,7 @@ class Main extends MX_Controller
         calllogin();
         // Check Permission For Sales and CS only
         //M1848 = คุณโส , M0003 = คุณฉลวย
-        if (getUser()->DeptCode == 1006 || getUser()->DeptCode == 1010 || getUser()->ecode == "M1848" || getUser()->ecode == "M0003") {
+        if (getUser()->DeptCode == 1006 || getUser()->DeptCode == 1010 || getUser()->DeptCode == 1002 || getUser()->ecode == "M1848" || getUser()->ecode == "M0003") {
             $data['getFormCode'] = getFormCode();
             $data['getCusProcess'] = getCusProcess();
             $data['getCreditTerm'] = getCreditTerm();
@@ -435,6 +435,11 @@ class Main extends MX_Controller
     public function queryProcessUse()
     {
         $this->main->queryProcessUse();
+    }
+
+    public function getCusProcess()
+    {
+        $this->main->getCusProcess();
     }
 
     public function queryPrimanageUse()
