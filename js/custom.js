@@ -2949,7 +2949,8 @@ $(document).ready(function () {
     // Control CS Form
     if (checkDeptCodeL == 1010 && $('#formgr_appro').val() == "อนุมัติ" && changeSales != 1 && changeAddress != 2 && changeCreditTerm != 3 && changeFinance != 4 || checkUserecodeL == "M0019" && $('#formgr_appro').val() == "อนุมัติ" || 
     checkUserecodeL == "M1905" && $('#formgr_appro').val() == "อนุมัติ" || 
-    checkUserecodeL == "M2119" && $('#formgr_appro').val() == "อนุมัติ") {
+    checkUserecodeL == "M2119" && $('#formgr_appro').val() == "อนุมัติ" || 
+    checkUserecodeL == "M2385" && $('#formgr_appro').val() == "อนุมัติ") {
         $('.cs_br').css('display', '');
 
     } else if (checkStatus == "CS POST BR" || checkStatus == "Account Manager Approved" || checkStatus == "Waiting for second director approve" || checkStatus == "Directors approved" || checkStatus == "Completed") {
@@ -4790,7 +4791,7 @@ $(document).ready(function () {
             }
         }
 
-        if (checkStatus == 'Manager approved' && checkUserDeptView == 1010 || checkStatus == 'Manager approved' && checkUserDeptView == 1012 || checkStatus == 'Manager approved' && checkUserDeptView == 1004 || checkStatus == 'Manager approved' && $('#checkUserEcodeEx').val() == "M2119") {
+        if (checkStatus == 'Manager approved' && checkUserDeptView == 1010 || checkStatus == 'Manager approved' && checkUserDeptView == 1012 || checkStatus == 'Manager approved' && checkUserDeptView == 1004 || checkStatus == 'Manager approved' && $('#checkUserEcodeEx').val() == "M2119" || checkStatus == 'Manager approved' && $('#checkUserEcodeEx').val() == "M2385") {
             if (checkCusType == 2) {
                 $('.csAddBrDection').remove();
             } else {
