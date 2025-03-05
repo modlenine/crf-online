@@ -414,6 +414,7 @@ class Customers_model extends CI_Model
         email,
         bpc_tax_vatid,
         dataAreaId,
+        salesgroup,
         -- SLC_idBranchTxt,
         CreditMax
          FROM slc_custview where accountnum like '$cuscode%' and accountnum NOT LIKE 'EX%' and accountnum NOT LIKE 'BR%' ");
@@ -500,6 +501,8 @@ class Customers_model extends CI_Model
                     data_addcus_termid = '$creditid'
                     data_addcus_termname = '$creditname'
                     data_addcus_creditlimit = '$conCredit'
+                    
+                    data_addcus_salesgroup = '$rs->salesgroup'
                     ><li class='list-group-item'>" . $rs->accountnum . "&nbsp;" . $rs->name . " (" . $rs->dataAreaId . ")" . "</li></a>";
                 
                 $output .= "</ul>";
@@ -526,6 +529,7 @@ class Customers_model extends CI_Model
         email,
         bpc_whtid,
         dataAreaId,
+        salesgroup,
         -- SLC_idBranchTxt,
         slc_fname,
         CreditMax
@@ -596,6 +600,8 @@ class Customers_model extends CI_Model
         data_addcus_termname = '$creditname'
         data_addcus_creditlimit = '$conCredit'
         data_addcus_fristname = '$rs->slc_fname'
+
+        data_addcus_salesgroup = '$rs->salesgroup'
         
         ><li class='list-group-item'>" . $rs->accountnum . "&nbsp;" . $rs->name . " (" . $rs->dataAreaId . ")" . "</li></a>";
             $output .= "</ul>";

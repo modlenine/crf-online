@@ -5948,6 +5948,8 @@ $(document).ready(function () {
             let data_addcus_creditlimit = $(this).attr('data_addcus_creditlimit');
             let data_addcus_firstname = $(this).attr('data_addcus_firstname');
 
+            let data_addcus_salesgroup = $(this).attr('data_addcus_salesgroup');
+
 
 
             if(data_addcus_termname != ""){
@@ -5984,6 +5986,7 @@ $(document).ready(function () {
                         $('#addcus_creditterm option:selected').val(data_addcus_termid).text(data_addcus_termname);
                         $('#crf_finance_req_number').val(data_addcus_creditlimit);
                         $('#addcus_namecontact').val(data_addcus_firstname);
+                        $('#addcus_salesreps').val(data_addcus_salesgroup).prop('readonly' , true);
             
                         $('input:radio[id="addcus_addresstype1"]').prop('checked', true);
 
