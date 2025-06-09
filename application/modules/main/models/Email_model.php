@@ -1435,7 +1435,7 @@ class Email_model extends CI_Model
 
       //  Email Zone
 
-      $ecode = " 'M1767' , 'M1260' , 'M2017' , 'M2075' , 'M2141' , 'M2217' ";
+      $ecode = " 'M1260' , 'M2017' , 'M2217' , 'M2379' ";
       $option = getuserEmailToAc($ecode);
 
 
