@@ -158,7 +158,12 @@ class Email_model extends CI_Model
       //load library for insert data to notifycenter
       $this->db_saleecolour = $this->load->database("saleecolour" , TRUE);
       
-      $sqlfornitifyAction = $this->db_saleecolour->query("SELECT ecode From member WHERE DeptCode = '$deptcodeTo' AND resigned = 0 AND posi = 75 GROUP BY ecode");
+      // check for send notify
+      if($deptcodeTo == "1010"){
+         $sqlfornitifyAction = $this->db_saleecolour->query("SELECT ecode From member WHERE ecode = 'M0025' ");
+      }else{
+         $sqlfornitifyAction = $this->db_saleecolour->query("SELECT ecode From member WHERE DeptCode = '$deptcodeTo' AND resigned = 0 AND posi = 75 GROUP BY ecode");
+      }
 
       $sqlfornotifyRead = $this->db_saleecolour->query("SELECT ecode From member WHERE ecode = '$ecodecc' AND resigned = 0 GROUP BY ecode");
 

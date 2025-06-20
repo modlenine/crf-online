@@ -270,7 +270,14 @@ function getuserEmailTo($deptcode, $posi)
     $obj = new emailfn();
     $obj->gci()->db2 = $obj->gci()->load->database('saleecolour', TRUE);
 
-    $query = $obj->gci()->db2->query("SELECT memberemail , ecode FROM member WHERE DeptCode = '$deptcode' AND posi in ($posi) AND resigned = 0");
+    //สร้างเงื่อนไขของการ เช็กว่าจะส่ง Email ให้ ผจก ท่านใด
+    if($deptcode == "1010" && $posi > "60"){
+        //ถ้า Deptcode คือ CS&Planing ให้ส่งไปหาพี่นิต
+        $query = $obj->gci()->db2->query("SELECT memberemail , ecode FROM member WHERE ecode IN ('M0025') AND resigned = 0");
+    }else{
+        $query = $obj->gci()->db2->query("SELECT memberemail , ecode FROM member WHERE DeptCode = '$deptcode' AND posi in ($posi) AND resigned = 0");
+    }
+
     return $query;
 }
 

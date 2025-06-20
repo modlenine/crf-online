@@ -474,7 +474,7 @@ class Main extends MX_Controller
     public function addEx()
     {
         callLogin();
-        if (getUser()->DeptCode == 1006 || getUser()->DeptCode == 1010 || getUser()->DeptCode == 1004 || getUser()->DeptCode == 1012) {
+        if (getUser()->DeptCode == 1006 || getUser()->DeptCode == 1010 || getUser()->DeptCode == 1004 || getUser()->DeptCode == 1012 || getUser()->ecode == "M1809") {
             $data = array(
                 'username' => getUser()->Fname . " " . getUser()->Lname,
                 'deptcode' => getUser()->DeptCode,
