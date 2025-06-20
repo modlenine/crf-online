@@ -1650,7 +1650,7 @@ class Email_model extends CI_Model
 
       //  Email Zone
 
-      $ecode = " 'M1767' , 'M1260' , 'M2017' , 'M2075' , 'M2141' , 'M2217' ";
+      $ecode = " 'M1767' , 'M1260' , 'M2017' , 'M2075' , 'M2141' , 'M2217' , 'M2379' ";
       $option = getuserEmailToCs($ecode);
 
 
@@ -1825,7 +1825,7 @@ class Email_model extends CI_Model
 
       //  Email Zone
 
-      $ecode = " 'M1767' , 'M1260' , 'M2017' , 'M2075' , 'M2141' , 'M2217' ";
+      $ecode = " 'M1767' , 'M1260' , 'M2017' , 'M2075' , 'M2141' , 'M2217' , 'M2379' ";
       $option = getuserEmailToCs($ecode);
 
 
@@ -4145,7 +4145,7 @@ class Email_model extends CI_Model
       // $deptcode = 1003;
       // $posi = "15";
       // $option = getuserEmailTo($deptcode, $posi);
-      $ecode = " 'M1767' , 'M1260' , 'M2017' , 'M2138' ";
+      $ecode = " 'M1767' , 'M1260' , 'M2017' , 'M2138' , 'M2217' ,'M2379'  ";
       $option = getuserEmailToCs($ecode);
 
 
@@ -4343,7 +4343,7 @@ class Email_model extends CI_Model
       // $deptcode = 1003;
       // $posi = "15";
       // $option = getuserEmailTo($deptcode, $posi);
-      $ecode = " 'M1767' , 'M1260' , 'M2017' , 'M2138' , 'M2217' ";
+      $ecode = " 'M1767' , 'M1260' , 'M2017' , 'M2138' , 'M2217' ,'M2379' ";
       $option = getuserEmailToCs($ecode);
 
 
@@ -4506,7 +4506,7 @@ class Email_model extends CI_Model
       //  $deptcode = 1003;
       //  $posi = "15";
       //  $option = getuserEmailTo($deptcode, $posi);
-      $ecode = " 'M1767' , 'M1260' , 'M2017' , 'M2138' , 'M2217' ";
+      $ecode = " 'M1767' , 'M1260' , 'M2017' , 'M2138' , 'M2217' ,'M2379' ";
       $option = getuserEmailToCs($ecode);
  
  
