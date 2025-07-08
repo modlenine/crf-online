@@ -2895,6 +2895,10 @@ $(document).ready(function () {
         if(checkUserecodeL == "M0051" || checkUserecodeL == "M0112" || checkUserecodeL == "M0040" || checkUserecodeL == "M1848"){
             $('.author_manager').css('display', '');
         }
+    }else if(checkDeptCode == "1010"){
+        if(checkUserecodeL == "M0025"){
+            $('.author_manager').css('display', '');
+        }
     }else if(checkUserecode == "M1848"){
         //สำหรับการสร้างเองอนุมัติเอง
         if(checkUserecodeL == "M1848"){
