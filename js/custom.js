@@ -2891,34 +2891,39 @@ $(document).ready(function () {
 
     // Control CS , Sales Approve
 
-    if (checkDeptCodeL == checkDeptCode && checkUserecodeL != checkUserecode && checkUserPosi > 15) {//ตรวจสอบเงื่อนไขการ อนุมัติของผู้จัดการ Sales และผู้จัดการ CS โดยเงื่อนไขคือ เช็คว่า ที่ Login เข้ามานั้นใช่ของแผนกตัวเองหรือไม่ หากใช่ เช็คอีกว่าคนแจ้งกับคนอนุมัติ คนๆเดียวกันหรือไม่ จากนั้นเช็คอีกว่าไม่ใช่ Staff ใช่หรือไม่ หากตรงตามเงื่อนหมด เข้าสู่อีกขั้นตอนหนึ่ง
-        if(checkUserecodeL == "M0051" || checkUserecodeL == "M0112" || checkUserecodeL == "M0040" || checkUserecodeL == "M1848"){
-            $('.author_manager').css('display', '');
-        }
-    }else if(checkDeptCode == "1010"){
-        if(checkUserecodeL == "M0025"){
-            $('.author_manager').css('display', '');
-        }
-    }else if(checkUserecode == "M1848"){
-        //สำหรับการสร้างเองอนุมัติเอง
-        if(checkUserecodeL == "M1848"){
-            $('.author_manager').css('display', '');
-        }
-    }else if(checkUserecode == "M0051"){
-        //สำหรับการสร้างเองอนุมัติเอง
-        if(checkUserecodeL == "M0051"){
-            $('.author_manager').css('display', '');
-        }
-    }else if(checkUserecodeL == "M1848"){
-        //ปรับให้สามารถอนุมัติแทนพี่พลได้
-        $('.author_manager').css('display', '');
+const showStatusList = [
+    "Manager Approved", "CS POST BR", "Account Manager Approved", "Directors approved",
+    "Waiting for second director approve", "Completed", "Account staff process",
+    "Manager Not Approve", "Account Manager Not approve", "Director Not approve"
+];
+
+let showAuthorManager = false;
+
+if (showStatusList.includes(checkStatus)) {
+    // ถ้า status เป็น Manager Approved หรือสถานะอื่นๆ ที่ต้องการให้เห็น section นี้เสมอ
+    showAuthorManager = true;
+} else {
+    // ถ้า status ยังไม่ใช่ Manager Approved ให้เช็กสิทธิ์ manager ที่สามารถ approve ได้
+    if (
+        checkDeptCodeL === checkDeptCode &&
+        checkUserecodeL !== checkUserecode &&
+        checkUserPosi > 15 &&
+        ["M0051", "M0112", "M0040", "M1848"].includes(checkUserecodeL)
+    ) {
+        showAuthorManager = true;
+    } else if (checkDeptCode === "1010" && checkUserecodeL === "M0025") {
+        showAuthorManager = true;
+    } else if (
+        (checkUserecode === "M1848" && checkUserecodeL === "M1848") ||
+        (checkUserecode === "M0051" && checkUserecodeL === "M0051")
+    ) {
+        showAuthorManager = true;
+    } else if (checkUserecodeL === "M1848") {
+        showAuthorManager = true;
     }
-    else if (checkStatus == "Manager Approved" || checkStatus == "CS POST BR" || checkStatus == "Account Manager Approved" || checkStatus == "Directors approved" || checkStatus == "Waiting for second director approve" || checkStatus == "Completed" || checkStatus == "Account staff process" || checkStatus == "Manager Not Approve" || checkStatus == "Account Manager Not approve" || checkStatus == "Director Not approve") {
-        $('.author_manager').css('display', '');
-    }
-    else {
-        $('.author_manager').css('display', 'none');
-    }
+}
+
+$('.author_manager').css('display', showAuthorManager ? '' : 'none');
 
 
     if ($('#formgr_appro').val() != "") {
@@ -4796,7 +4801,7 @@ $(document).ready(function () {
             }
         }
 
-        if (checkStatus == 'Manager approved' && checkUserDeptView == 1010 || checkStatus == 'Manager approved' && checkUserDeptView == 1012 || checkStatus == 'Manager approved' && checkUserDeptView == 1004 || checkStatus == 'Manager approved' && $('#checkUserEcodeEx').val() == "M2119" || checkStatus == 'Manager approved' && $('#checkUserEcodeEx').val() == "M2385") {
+        if (checkStatus == 'Manager approved' && checkUserDeptView == 1010 || checkStatus == 'Manager approved' && checkUserDeptView == 1012 || checkStatus == 'Manager approved' && checkUserDeptView == 1004 || checkStatus == 'Manager approved' && $('#checkUserEcodeEx').val() == "M2119" || checkStatus == 'Manager approved' && $('#checkUserEcodeEx').val() == "M2385" || checkStatus == 'Manager approved' && $('#checkUserEcodeEx').val() == "M1905") {
             if (checkCusType == 2) {
                 $('.csAddBrDection').remove();
             } else {
