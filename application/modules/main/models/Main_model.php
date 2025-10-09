@@ -1811,7 +1811,8 @@ class Main_model extends CI_Model
             // Get money limit on ax
             $creditmaxOnAx =  floatval(getCreditMax($rs->crfcus_code , $rs->crfcus_area));
             if($creditmaxOnAx != $rs->crfcus_moneylimit){
-                $creditmaxOnAx = $creditmaxOnAx;
+                // $creditmaxOnAx = $creditmaxOnAx;
+                $creditmaxOnAx = $rs->crfcus_moneylimit;
             }else{
                 $creditmaxOnAx = $rs->crfcus_moneylimit;
             }

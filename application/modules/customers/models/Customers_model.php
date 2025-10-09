@@ -66,7 +66,8 @@ class Customers_model extends CI_Model
             // ถ้าเลือกประเภทลูกค้า = ลูกค้าใหม่
             $cuscode = $this->input->post("addcus_customercode");
             $area = $this->input->post("addcus_company");
-            if(checkCuscode($cuscode , $area)->num_rows() != 0){
+            // if(checkCuscode($cuscode , $area)->num_rows() != 0){
+            if(false){
                 echo "<script>";
                 echo "alert('ลูกค้าดังกล่าวมีอยู่ในฐานข้อมูลแล้ว')";
                 echo "</script>";
