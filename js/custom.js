@@ -2822,6 +2822,11 @@ $(document).ready(function () {
         $('input:radio[id="crf_condition_money2_view"]').prop('checked', true);
         $('.recive_cheuqe').css('display', '');
     }
+    if ($('#forcrf_countmonthdeli_view').val() == "เดือนส่งของไม่นับ") {
+        $('input[name="crfcus_countmonthdeli"][value="เดือนส่งของไม่นับ"]').prop('checked', true);
+    } else if ($('#forcrf_countmonthdeli_view').val() == "นับเดือนส่งของ") {
+        $('input[name="crfcus_countmonthdeli"][value="นับเดือนส่งของ"]').prop('checked', true);
+    }
     $('#recive_cheuqetable').click(function () {
         var recive_cheuqetable = $(this).attr('data_recive_cheuqetable');
         var url = 'https://intranet.saleecolour.com/intsys/crf/upload/';
@@ -4842,15 +4847,17 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
         }else if(checkStatus == 'Manager approved' && $('#checkUserEcodeEx').val() == "M1767" ||
         checkStatus == 'Manager approved' && $('#checkUserEcodeEx').val() == "M1260" || 
         checkStatus == 'Manager approved' && $('#checkUserEcodeEx').val() == "M2217"){
-            $('.accManagerApprove').css('display', '');
-            $('#ex_accManagerSubmit').prop('disabled', true);
-            $('input:radio[name="ex_accMgrApprove"]').click(function () {
-                if ($(this).val() != '') {
-                    $('#ex_accManagerSubmit').prop('disabled', false);
-                } else {
-                    $('#ex_accManagerSubmit').prop('disabled', true);
-                }
-            });
+            if(checkCusType == 2){
+                $('.accManagerApprove').css('display', '');
+                $('#ex_accManagerSubmit').prop('disabled', true);
+                $('input:radio[name="ex_accMgrApprove"]').click(function () {
+                    if ($(this).val() != '') {
+                        $('#ex_accManagerSubmit').prop('disabled', false);
+                    } else {
+                        $('#ex_accManagerSubmit').prop('disabled', true);
+                    }
+                });
+            }
         }
         else if (checkStatus == 'Account Manager Approved' || checkStatus == 'Director Approved' || checkStatus == 'Completed' || checkStatus == 'Waiting for second director approve' || checkStatus == 'Account Manager Not Approve' || checkStatus == 'Director Not Approve' || checkStatus == "Wait account staff process") {
             $('.accManagerApprove1').css('display', '');
@@ -4963,14 +4970,22 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
 
         }
 
-        if (checkStatus == "Open" && checkUserDeptView == 1006 || checkStatus == "Open" && checkUserDeptView == 1010 || checkStatus == "Open" && checkUserDeptView == 1004 || checkStatus == "Open" && checkUserDeptView == 1012) {
-            $('#btnEditZoneEx').css('display', '');
-        } else if (checkStatus == "Edited" && checkUserDeptView == 1006 || checkStatus == "Edited" && checkUserDeptView == 1010 || checkStatus == "Edited" && checkUserDeptView == 1004 || checkStatus == "Edited" && checkUserDeptView == 1012) {
-            $('#btnEditZoneEx').css('display', '');
-        }
-        else {
-            $('#btnEditZoneEx').css('display', 'none');
-        }
+        // if (checkStatus == "Open" && checkUserDeptView == 1006 || checkStatus == "Open" && checkUserDeptView == 1010 || checkStatus == "Open" && checkUserDeptView == 1004 || checkStatus == "Open" && checkUserDeptView == 1012) {
+        //     $('#btnEditZoneEx').css('display', '');
+        // } else if (checkStatus == "Edited" && checkUserDeptView == 1006 || checkStatus == "Edited" && checkUserDeptView == 1010 || checkStatus == "Edited" && checkUserDeptView == 1004 || checkStatus == "Edited" && checkUserDeptView == 1012) {
+        //     $('#btnEditZoneEx').css('display', '');
+        // }
+        // else {
+        //     $('#btnEditZoneEx').css('display', 'none');
+        // }
+
+        const dept = Number(checkUserDeptView);
+        const status = String(checkStatus);
+        const canEdit =
+        ["Open", "Edited"].includes(status) &&
+        [1006, 1010, 1004, 1012 , 1002].includes(dept);
+        $('#btnEditZoneEx').toggle(canEdit);
+
 
         $('#fileExView').click(function () {
 

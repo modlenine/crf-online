@@ -665,6 +665,7 @@ class Customers_model extends CI_Model
 
         echo $output;
     }
+
 }
 
 /* End of file ModelName.php */

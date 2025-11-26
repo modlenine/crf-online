@@ -873,8 +873,12 @@ class Main extends MX_Controller
     public function exCsAddBr($crfexid)
     {
         if (isset($_POST['ex_csSubmit'])) {
+            if($this->input->post("ex_csBrCode") == ""){
+                echo "<script>alert('กรุณากรอก BR Code')</script>";
+                header("refresh:0; url=" . base_url('main/viewdataEx/') . $crfexid);
+                die();
+            }
             $this->main->exCsAddBr($crfexid);
-            
         }
     }
 
@@ -1051,8 +1055,9 @@ class Main extends MX_Controller
                 "crfcus_taxid" => getViewData($crf_id)->crfcus_taxid,
                 "crfcus_branch" => getViewData($crf_id)->crfcus_branch,
                 "crfcus_products" => getViewData($crf_id)->crfcus_products,
-                "crf_sub_oldcus_editcustomer" => getViewData($crf_id)->crf_sub_oldcus_editcustomer
-    
+                "crf_sub_oldcus_editcustomer" => getViewData($crf_id)->crf_sub_oldcus_editcustomer,
+                "crfcus_memo2" => getViewData($crf_id)->crfcus_memo2,
+                "crfcus_countmonthdeli" => getViewData($crf_id)->crfcus_countmonthdeli
             );
     
     

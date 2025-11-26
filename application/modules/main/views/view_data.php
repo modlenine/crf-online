@@ -678,8 +678,26 @@ if ($result->crf_status == "Open") {
             </div>
 
 
-
-            <br>
+            <?php
+                $checked1 = '';
+                $checked2 = '';
+                if($result->crfcus_countmonthdeli == 'เดือนส่งของไม่นับ'){
+                    $checked1 = 'checked';
+                } elseif($result->crfcus_countmonthdeli == 'นับเดือนส่งของ'){
+                    $checked2 = 'checked';
+                }
+            ?>
+            <div class="row form-group">
+                <div class="col-md-4">
+                    <input type="radio" name="crfcus_countmonthdeli" id="crfcus_countmonthdeli1" value="เดือนส่งของไม่นับ" onclick="return false" class="crf_condition_moneyv1" <?= $checked1 ?>>
+                    <label for="">เดือนส่งของไม่นับ</label>
+                </div>
+                <div class="col-md-4">
+                    <input type="radio" name="crfcus_countmonthdeli" id="crfcus_countmonthdel2" value="นับเดือนส่งของ" onclick="return false" class="crf_condition_moneyv2" <?= $checked2 ?>>
+                    <label for="">นับเดือนส่งของ</label>
+                </div>
+            </div>
+            <hr>
 
             <label for="">
                 <h6><b><u>เงื่อนไขการวางบิล</u></b></h6>
@@ -834,6 +852,14 @@ if ($result->crf_status == "Open") {
                     <label for="">เหตุผลในการขอปรับวงเงิน</label>
                     <textarea readonly name="crf_finance_change_reson" id="crf_finance_change_reson" cols="30" rows="3" class="form-control"><?= $result->crf_finance_change_detail ?></textarea>
                 </div>
+            </div>
+
+            <!-- เพิ่มหมายเหตุ 25-11-2025 -->
+            <div class="row">
+            <div class="col-md-12">
+                <label for="">หมายเหตุเพิ่มเติม (ถ้ามี)</label>
+                <textarea name="crfcus_memo2_view" id="crfcus_memo2_view" cols="30" rows="3" readonly class="form-control"><?= $result->crfcus_memo2 ?></textarea>
+            </div>
             </div>
             <hr>
 

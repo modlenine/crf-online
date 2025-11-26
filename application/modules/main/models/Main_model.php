@@ -243,7 +243,10 @@ class Main_model extends CI_Model
                 "crfcus_branch" => $this->input->post("crf_customerbranch"), //update 12-05-2020
                 "crfcus_mapurl" => $this->input->post("crf_mapurl"), //update 12-05-2020
                 "crfcus_mapfile" => $customermapfile, //update 12-05-2020
-                "crfcus_products" => $this->input->post("crf_customer_product") //update 12-05-2020
+                "crfcus_products" => $this->input->post("crf_customer_product"), //update 12-05-2020
+
+                "crfcus_memo2" => $this->input->post("crfcus_memo2"),
+                "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli")
             );
 
 
@@ -2340,6 +2343,8 @@ class Main_model extends CI_Model
         $report_month = "";
         $report_year = "";
 
+        $filetime = date('H-i-s');
+
         $conReportDate = date_create($this->input->post("crfex_datecreate"));
         $report_date = date_format($conReportDate, "d");
 
@@ -2354,8 +2359,8 @@ class Main_model extends CI_Model
             if ($_FILES["crfex_file"]["name"] != "") {
                 $file = "crfex_file";
                 $fileType = "Document";
-                $this->uploadFiles($file, $fileType, $getFormNo);
-                $resultFile = $this->uploadFiles($file, $fileType, $getFormNo);
+                $this->uploadFiles($file, $fileType, $getFormNo , $filetime);
+                $resultFile = $this->uploadFiles($file, $fileType, $getFormNo, $filetime);
             } else {
                 $resultFile = "";
                 echo "Not found document !<br>";
@@ -3319,7 +3324,9 @@ class Main_model extends CI_Model
                     "crfcus_usermodify_datetime" => conDateTimeToDb($this->input->post("crf_userpostdatetime")),
                     "crfcus_mapurl" => $mapUrl,
                     "crfcus_mapfile" => $resultMapFile,
-                    "crfcus_products" => $this->input->post("edit_crf_customer_products")
+                    "crfcus_products" => $this->input->post("edit_crf_customer_products"),
+                    "crfcus_memo2" => $this->input->post("crfcus_memo2_edit"),
+                    "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli_edit")
                 );
                 $this->db->where("crfcus_formno", $this->input->post("check_EditFormNo"));
                 $this->db->update("crf_customers_temp", $arcustomer);

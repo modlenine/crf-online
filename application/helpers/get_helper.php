@@ -342,7 +342,9 @@ function getViewData($crf_id)
     crf_maindata.crf_memo_customercode,
     crf_maindata.crf_personal_type,
     crf_customers_temp.crfcus_personal,
-    crf_customers_temp.crfcus_area
+    crf_customers_temp.crfcus_area,
+    crf_customers_temp.crfcus_memo2,
+    crf_customers_temp.crfcus_countmonthdeli
 
     FROM
     crf_maindata

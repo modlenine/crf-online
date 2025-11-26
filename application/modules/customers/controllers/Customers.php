@@ -110,13 +110,36 @@ class Customers extends MX_Controller {
 
  public function view_customerdata($cuscode)
  {
-  $data = array(
-    "title" => "Customer information",
-    "result" => getcustomerdata($cuscode)
-  );
-  getHead();
-  $this->load->view("view_customerdata" , $data);
-  getFooter();
+    // Validate customer code
+    if (empty($cuscode)) {
+        show_error('Customer code is required.', 400);
+        return;
+    }
+
+    try {
+        // Fetch customer data using helper
+        $customerData = getcustomerdata($cuscode);
+
+        if (empty($customerData)) {
+            $data = array(
+                "title" => "Customer information",
+                "error" => "ไม่พบข้อมูลลูกค้า"
+            );
+        } else {
+            $data = array(
+                "title" => "Customer information",
+                "result" => $customerData
+            );
+        }
+
+        // Load the view
+        getHead();
+        $this->load->view("view_customerdata", $data);
+        getFooter();
+    } catch (Exception $e) {
+        log_message('error', $e->getMessage());
+        show_error('An unexpected error occurred.', 500);
+    }
 }
 
 

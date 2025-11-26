@@ -1181,7 +1181,9 @@ function saveCustomersCode($crfid, $crfcusid)
                 "crfcus_branch" => $result->crfcus_branch,
                 "crfcus_mapurl" => $result->crfcus_mapurl,
                 "crfcus_mapfile" => $result->crfcus_mapfile,
-                "crfcus_products" => $result->crfcus_products
+                "crfcus_products" => $result->crfcus_products,
+                "crfcus_memo2" => $result->crfcus_memo2,
+                "crfcus_countmonthdeli" => $result->crfcus_countmonthdeli,
 
             );
             $obj->gci()->db->where("crfcus_id" , $crfcusid);

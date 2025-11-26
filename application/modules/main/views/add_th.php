@@ -516,7 +516,6 @@
 
                 <div class="row form-group">
                     <div class="col-md-4 form-group">
-
                         <!-- For Change CreditTerm method -->
                         <input hidden type="text" name="oldCreditTerm" id="oldCreditTerm" >
                         <label for="">โปรดเลือกรายการ</label>
@@ -574,9 +573,18 @@
                         </select>
                     </div>
                 </div> -->
-                <br>
+                <div class="row form-group">
+                    <div class="col-md-4">
+                        <input type="radio" name="crfcus_countmonthdeli" id="crfcus_countmonthdeli1" value="เดือนส่งของไม่นับ" class="crf_condition_moneyv1">
+                        <label for="">เดือนส่งของไม่นับ</label>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="radio" name="crfcus_countmonthdeli" id="crfcus_countmonthdel2" value="นับเดือนส่งของ" class="crf_condition_moneyv2">
+                        <label for="">นับเดือนส่งของ</label>
+                    </div>
+                </div>
 
-
+                <hr>
                 <label for="">
                     <h6><b><u>เงื่อนไขการวางบิล</u></b></h6>
                 </label>
@@ -725,12 +733,19 @@
                         <textarea name="crf_finance_change_detail" id="crf_finance_change_detail" cols="30" rows="3" class="form-control"></textarea>
                     </div>
                 </div>
+
+                <!-- เพิ่มหมายเหตุ 25-11-2025 -->
+                 <div class="row">
+                    <div class="col-md-12">
+                        <label for="">หมายเหตุเพิ่มเติม (ถ้ามี)</label>
+                        <textarea name="crfcus_memo2" id="crfcus_memo2" cols="30" rows="3" class="form-control"></textarea>
+                    </div>
+                 </div>
                 <hr>
 
 
 
                 <div class="row form-group">
-
                     <div class="col-md-4 form-group">
                         <label for="">ผู้บันทึกข้อมูล</label>
                         <input readonly type="text" name="crf_userpost" id="crf_userpost" class="form-control form-control-sm" value="<?= getUser()->Fname . "&nbsp;" . getUser()->Lname ?>">
