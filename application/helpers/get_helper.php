@@ -868,7 +868,9 @@ function getcustomerdata($cuscode)
     crf_customers.crfcus_usermodify_deptcode,
     crf_customers.crfcus_usermodify_datetime,
     crf_customers.crfcus_area,
-    credit_term_category.credit_name
+    credit_term_category.credit_name,
+    crf_customers.crfcus_memo2,
+    crf_customers.crfcus_countmonthdeli
     FROM
     crf_customers
     INNER JOIN credit_term_category ON credit_term_category.credit_id = crf_customers.crfcus_creditterm    

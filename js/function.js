@@ -584,29 +584,7 @@ function loadcustomerlist()
 function getCallback(status){
     return status;
 }
-// Check Cuscode manual duplicate
-function checkCuscodeManual(cuscode , area , callback)
-{
-    $.ajax({
-        url:"/intsys/crf/customers/fetchCustomercode",
-        method:"POST",
-        data:{
-            cuscode:cuscode,
-            area:area
-        },
-        success:function(data){
-            if(data > 0){
-                $('#alertCuscode').fadeIn();
-                $('#alertCuscode').html('<div class="alert alert-danger" role="alert">พบข้อมูลซ้ำในระบบ</div>').fadeOut(3500);
-                $('#addcus_customercode').val('');
 
-                callback('Not Ok')
-            }else{
-                callback('Ok');
-            }
-        }
-    });
-}
 
 
 
@@ -955,37 +933,6 @@ function checkBeforeSave()
 
 
 // New function for control add customer manual page
-function autosearchCustomermanual(cuscode)
-{
-    $.ajax({
-        url: '/intsys/crf/customers/searchcustomerdata',
-        method: 'POST',
-        data: {
-            cuscode: cuscode
-        },
-        success: function (data) {
-            $('#autocuscodemanual').html(data);
-        }
-    });
-}
-
-
-function autosearchCustomermanualname(cusname)
-{
-    $.ajax({
-        url: '/intsys/crf/customers/searchcustomerdataname',
-        method: 'POST',
-        data: {
-            cusname: cusname
-        },
-        success: function (data) {
-            $('#autocuscodemanualname').html(data);
-        }
-    });
-}
-
-
-
 function autosearchCustomermanualex(cuscode)
 {
     $.ajax({

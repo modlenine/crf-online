@@ -258,7 +258,9 @@ class Customers_model extends CI_Model
                     "crfcus_branch" => $this->input->post("addcus_customerbranch"), //update 12-05-2020
                     "crfcus_mapurl" => $this->input->post("addcus_mapurl"), //update 12-05-2020
                     "crfcus_mapfile" => $customermapfile, //update 12-05-2020
-                    "crfcus_products" => $this->input->post("addcus_customer_product") //update 12-05-2020
+                    "crfcus_products" => $this->input->post("addcus_customer_product"), //update 12-05-2020
+                    "crfcus_memo2" => $this->input->post("crf_memo2"), //update 27-11-2025
+                    "crfcus_countmonthdeli" => $this->input->post("crf_countmonthdeli")
                 );
                 $this->db->insert("crf_customers",  $arcustomer);
     
@@ -314,12 +316,37 @@ class Customers_model extends CI_Model
     }
 
 
+    // Helper function to reduce code duplication
+    private function getCreditTermInfo($paymtermid)
+    {
+        $creditMap = array(
+            'Advance' => array('id' => 1, 'name' => 'Advance ( โอนเงินก่อนส่งของ )'),
+            'CASH'    => array('id' => 2, 'name' => 'Cash'),
+            '7D'      => array('id' => 3, 'name' => '7 Day'),
+            '15D'     => array('id' => 4, 'name' => '15 Day'),
+            '30D'     => array('id' => 5, 'name' => '30 Day'),
+            '45D'     => array('id' => 6, 'name' => '45 Day'),
+            '60D'     => array('id' => 7, 'name' => '60 Day'),
+            '75D'     => array('id' => 8, 'name' => '75 Day'),
+            '90D'     => array('id' => 9, 'name' => '90 Day'),
+            '120D'    => array('id' => 10, 'name' => '120 Day')
+        );
+        
+        return isset($creditMap[$paymtermid]) ? $creditMap[$paymtermid] : array('id' => '', 'name' => '');
+    }
+
     public function checkCustomerCode()
     {
-        $cuscode = $this->input->post("cuscode");
-        $taxid = $this->input->post("taxid");
+        $cuscode = $this->input->post("cuscode", true);
+        $areaid = $this->input->post("areaid", true);
 
-        $queryforcheckcuscode = $this->db->query("SELECT crfcus_code FROM crf_customers WHERE crfcus_code = '$cuscode' and crfcus_taxid = '$taxid' ");
+        // ใช้ Query Builder แทน raw query เพื่อป้องกัน SQL Injection
+        $this->db->select('crfcus_code')
+                 ->from('crf_customers')
+                 ->where('crfcus_code', $cuscode)
+                 ->where('crfcus_area', $areaid);
+        
+        $queryforcheckcuscode = $this->db->get();
         
         $output = array(
             "msg" => "Check ข้อมูลซ้ำเรียบร้อยแล้ว",
@@ -392,10 +419,16 @@ class Customers_model extends CI_Model
 
     public function checkCustomerCodeEx()
     {
-        $cuscode = $this->input->post("cuscode");
-        $cusarea = $this->input->post("area");
+        $cuscode = $this->input->post("cuscode", true);
+        $cusarea = $this->input->post("area", true);
 
-        $queryforcheckcuscode = $this->db->query("SELECT crfexcus_code FROM crfex_customers WHERE crfexcus_code = '$cuscode' and crfexcus_area = '$cusarea' ");
+        // ใช้ Query Builder แทน raw query เพื่อป้องกัน SQL Injection
+        $this->db->select('crfexcus_code')
+                 ->from('crfex_customers')
+                 ->where('crfexcus_code', $cuscode)
+                 ->where('crfexcus_area', $cusarea);
+        
+        $queryforcheckcuscode = $this->db->get();
         echo $queryforcheckcuscode->num_rows();
     }
 
@@ -404,113 +437,61 @@ class Customers_model extends CI_Model
     // Search customer data zone
     public function searchcustomerdata()
     {
-        $cuscode = $this->input->post("cuscode");
-        $query = $this->db3->query("SELECT TOP 10 
-        accountnum,
-        paymtermid,
-        name,
-        street as address,
-        phone,
-        telefax,
-        email,
-        bpc_tax_vatid,
-        dataAreaId,
-        salesgroup,
-        -- SLC_idBranchTxt,
-        CreditMax
-         FROM slc_custview where accountnum like '$cuscode%' and accountnum NOT LIKE 'EX%' and accountnum NOT LIKE 'BR%' ");
+        $cuscode = $this->input->post("cuscode", true);
+        $cuscode_escaped = $this->db3->escape_like_str($cuscode);
+        
+        // ใช้ Query Builder เพื่อป้องกัน SQL Injection
+        $this->db3->select('accountnum, paymtermid, name, street as address, phone, telefax, email, bpc_tax_vatid, dataAreaId, salesgroup, CreditMax')
+                  ->from('slc_custview')
+                  ->like('accountnum', $cuscode_escaped, 'after')
+                  ->not_like('accountnum', 'EX', 'after')
+                  ->not_like('accountnum', 'BR', 'after')
+                  ->limit(10);
+        
+        $query = $this->db3->get();
 
-         if($query->num_rows() == 0){
-            $query = $this->db_applystd->query("SELECT TOP 10 
-            accountnum,
-            paymtermid,
-            name,
-            street as address,
-            phone,
-            telefax,
-            email,
-            bpc_tax_vatid,
-            dataAreaId,
-            -- SLC_idBranchTxt,
-            CreditMax
-             FROM slc_custview where accountnum like '$cuscode%' and accountnum NOT LIKE 'EX%' and accountnum NOT LIKE 'BR%' ");
-         }
+        // Fallback to second database if no results
+        if($query->num_rows() == 0){
+            $cuscode_escaped2 = $this->db_applystd->escape_like_str($cuscode);
+            $this->db_applystd->select('accountnum, paymtermid, name, street as address, phone, telefax, email, bpc_tax_vatid, dataAreaId, CreditMax')
+                              ->from('slc_custview')
+                              ->like('accountnum', $cuscode_escaped2, 'after')
+                              ->not_like('accountnum', 'EX', 'after')
+                              ->not_like('accountnum', 'BR', 'after')
+                              ->limit(10);
+            $query = $this->db_applystd->get();
+        }
 
+        if($query->num_rows() == 0){
+            echo '<div class="text-muted p-2">ไม่พบข้อมูลที่ค้นหา</div>';
+            return;
+        }
 
         $output = "";
         foreach ($query->result() as $rs) {
-
-                switch ($rs->paymtermid) {
-                    case "Advance":
-                        $creditid = 1;
-                        $creditname = "Advance ( โอนเงินก่อนส่งของ )";
-                        break;
-                    case "CASH":
-                        $creditid = 2;
-                        $creditname = "Cash";
-                        break;
-                    case "7D":
-                        $creditid = 3;
-                        $creditname = "7 Day";
-                        break;
-                    case "15D":
-                        $creditid = 4;
-                        $creditname = "15 Day";
-                        break;
-                    case "30D":
-                        $creditid = 5;
-                        $creditname = "30 Day";
-                        break;
-                    case "45D":
-                        $creditid = 6;
-                        $creditname = "45 Day";
-                        break;
-                    case "60D":
-                        $creditid = 7;
-                        $creditname = "60 Day";
-                        break;
-                    case "75D":
-                        $creditid = 8;
-                        $creditname = "75 Day";
-                        break;
-                    case "90D":
-                        $creditid = 9;
-                        $creditname = "90 Day";
-                        break;
-                    case "120D":
-                        $creditid = 10;
-                        $creditname = "120 Day";
-                        break;
-                    default:
-                        $creditid = "";
-                        $creditname = "";
-                    break;
-                }
-                $conCredit = number_format($rs->CreditMax,2);
-                $output .= "<ul class='list-group'>";
-                
-                    $output .= "<a href='javascript:void(0)' class='selectCusCodeManualcode'
-                    data_addcus_code = '$rs->accountnum'
-                    data_addcus_name = '$rs->name'
-                    data_addcus_address = '$rs->address'
-                    data_addcus_phone = '$rs->phone'
-                    data_addcus_fax = '$rs->telefax'
-                    data_addcus_email = '$rs->email'
-                    data_addcus_taxid = '$rs->bpc_tax_vatid'
-                    data_addcus_area = '$rs->dataAreaId'
-                    data_addcus_branch = ''
-                    data_addcus_termid = '$creditid'
-                    data_addcus_termname = '$creditname'
-                    data_addcus_creditlimit = '$conCredit'
-                    
-                    data_addcus_salesgroup = '$rs->salesgroup'
-                    ><li class='list-group-item'>" . $rs->accountnum . "&nbsp;" . $rs->name . " (" . $rs->dataAreaId . ")" . "</li></a>";
-                
-                $output .= "</ul>";
+            // Use helper function
+            $creditInfo = $this->getCreditTermInfo($rs->paymtermid);
+            $conCredit = number_format($rs->CreditMax, 2);
             
+            // Escape output เพื่อป้องกัน XSS
+            $output .= "<ul class='list-group'>";
+            $output .= "<a href='javascript:void(0)' class='selectCusCodeManualcode'
+                data-addcus-code='" . htmlspecialchars($rs->accountnum, ENT_QUOTES, 'UTF-8') . "'
+                data-addcus-name='" . htmlspecialchars($rs->name, ENT_QUOTES, 'UTF-8') . "'
+                data-addcus-address='" . htmlspecialchars($rs->address, ENT_QUOTES, 'UTF-8') . "'
+                data-addcus-phone='" . htmlspecialchars($rs->phone, ENT_QUOTES, 'UTF-8') . "'
+                data-addcus-fax='" . htmlspecialchars($rs->telefax, ENT_QUOTES, 'UTF-8') . "'
+                data-addcus-email='" . htmlspecialchars($rs->email, ENT_QUOTES, 'UTF-8') . "'
+                data-addcus-taxid='" . htmlspecialchars($rs->bpc_tax_vatid, ENT_QUOTES, 'UTF-8') . "'
+                data-addcus-area='" . htmlspecialchars($rs->dataAreaId, ENT_QUOTES, 'UTF-8') . "'
+                data-addcus-branch=''
+                data-addcus-termid='" . $creditInfo['id'] . "'
+                data-addcus-termname='" . htmlspecialchars($creditInfo['name'], ENT_QUOTES, 'UTF-8') . "'
+                data-addcus-creditlimit='" . htmlspecialchars($conCredit, ENT_QUOTES, 'UTF-8') . "'
+                data-addcus-salesgroup='" . htmlspecialchars($rs->salesgroup, ENT_QUOTES, 'UTF-8') . "'
+            ><li class='list-group-item'>" . htmlspecialchars($rs->accountnum, ENT_QUOTES, 'UTF-8') . " " . htmlspecialchars($rs->name, ENT_QUOTES, 'UTF-8') . " (" . htmlspecialchars($rs->dataAreaId, ENT_QUOTES, 'UTF-8') . ")</li></a>";
+            $output .= "</ul>";
         }
-
-
 
         echo $output;
     }
@@ -519,92 +500,48 @@ class Customers_model extends CI_Model
     // Search customer data zone
     public function searchcustomerdataname()
     {
-        $cusname = $this->input->post("cusname");
-        $query = $this->db3->query("SELECT TOP 10 
-        accountnum,
-        paymtermid,
-        name,
-        address,
-        phone,
-        telefax,
-        email,
-        bpc_whtid,
-        dataAreaId,
-        salesgroup,
-        -- SLC_idBranchTxt,
-        slc_fname,
-        CreditMax
-         FROM custtable where name like '$cusname%' and accountnum NOT LIKE 'EX%' and accountnum NOT LIKE 'BR%' ");
+        $cusname = $this->input->post("cusname", true);
+        $cusname_escaped = $this->db3->escape_like_str($cusname);
+        
+        // ใช้ Query Builder เพื่อป้องกัน SQL Injection
+        $this->db3->select('accountnum, paymtermid, name, address, phone, telefax, email, bpc_whtid, dataAreaId, salesgroup, slc_fname, CreditMax')
+                  ->from('custtable')
+                  ->like('name', $cusname_escaped, 'after')
+                  ->not_like('accountnum', 'EX', 'after')
+                  ->not_like('accountnum', 'BR', 'after')
+                  ->limit(10);
+        
+        $query = $this->db3->get();
+        
+        if($query->num_rows() == 0){
+            echo '<div class="text-muted p-2">ไม่พบข้อมูลที่ค้นหา</div>';
+            return;
+        }
+        
         $output = "";
         foreach ($query->result() as $rs) {
-
-            switch ($rs->paymtermid) {
-                case "Advance":
-                    $creditid = 1;
-                    $creditname = "Advance ( โอนเงินก่อนส่งของ )";
-                    break;
-                case "CASH":
-                    $creditid = 2;
-                    $creditname = "Cash";
-                    break;
-                case "7D":
-                    $creditid = 3;
-                    $creditname = "7 Day";
-                    break;
-                case "15D":
-                    $creditid = 4;
-                    $creditname = "15 Day";
-                    break;
-                case "30D":
-                    $creditid = 5;
-                    $creditname = "30 Day";
-                    break;
-                case "45D":
-                    $creditid = 6;
-                    $creditname = "45 Day";
-                    break;
-                case "60D":
-                    $creditid = 7;
-                    $creditname = "60 Day";
-                    break;
-                case "75D":
-                    $creditid = 8;
-                    $creditname = "75 Day";
-                    break;
-                case "90D":
-                    $creditid = 9;
-                    $creditname = "90 Day";
-                    break;
-                case "120D":
-                    $creditid = 10;
-                    $creditname = "120 Day";
-                    break;
-                default:
-                    $creditid = "";
-                    $creditname = "";
-                break;
-            }
-        $conCredit = number_format($rs->CreditMax,2);
+            // Use helper function
+            $creditInfo = $this->getCreditTermInfo($rs->paymtermid);
+            $conCredit = number_format($rs->CreditMax, 2);
+            
+            // Escape output เพื่อป้องกัน XSS
             $output .= "<ul class='list-group'>";
             $output .= "<a href='javascript:void(0)' class='selectCusCodeManualcode'
-
-        data_addcus_code = '$rs->accountnum'
-        data_addcus_name = '$rs->name'
-        data_addcus_address = '$rs->address'
-        data_addcus_phone = '$rs->phone'
-        data_addcus_fax = '$rs->telefax'
-        data_addcus_email = '$rs->email'
-        data_addcus_taxid = '$rs->bpc_whtid'
-        data_addcus_area = '$rs->dataAreaId'
-        data_addcus_branch = ''
-        data_addcus_termid = '$creditid'
-        data_addcus_termname = '$creditname'
-        data_addcus_creditlimit = '$conCredit'
-        data_addcus_fristname = '$rs->slc_fname'
-
-        data_addcus_salesgroup = '$rs->salesgroup'
-        
-        ><li class='list-group-item'>" . $rs->accountnum . "&nbsp;" . $rs->name . " (" . $rs->dataAreaId . ")" . "</li></a>";
+                data-addcus-code='" . htmlspecialchars($rs->accountnum, ENT_QUOTES, 'UTF-8') . "'
+                data-addcus-name='" . htmlspecialchars($rs->name, ENT_QUOTES, 'UTF-8') . "'
+                data-addcus-address='" . htmlspecialchars($rs->address, ENT_QUOTES, 'UTF-8') . "'
+                data-addcus-phone='" . htmlspecialchars($rs->phone, ENT_QUOTES, 'UTF-8') . "'
+                data-addcus-fax='" . htmlspecialchars($rs->telefax, ENT_QUOTES, 'UTF-8') . "'
+                data-addcus-email='" . htmlspecialchars($rs->email, ENT_QUOTES, 'UTF-8') . "'
+                data-addcus-taxid='" . htmlspecialchars($rs->bpc_whtid, ENT_QUOTES, 'UTF-8') . "'
+                data-addcus-area='" . htmlspecialchars($rs->dataAreaId, ENT_QUOTES, 'UTF-8') . "'
+                data-addcus-branch=''
+                data-addcus-termid='" . $creditInfo['id'] . "'
+                data-addcus-termname='" . htmlspecialchars($creditInfo['name'], ENT_QUOTES, 'UTF-8') . "'
+                data-addcus-creditlimit='" . htmlspecialchars($conCredit, ENT_QUOTES, 'UTF-8') . "'
+                data-addcus-fristname='" . htmlspecialchars($rs->slc_fname, ENT_QUOTES, 'UTF-8') . "'
+                data-addcus-salesgroup='" . htmlspecialchars($rs->salesgroup, ENT_QUOTES, 'UTF-8') . "'
+            ><li class='list-group-item'>" . htmlspecialchars($rs->accountnum, ENT_QUOTES, 'UTF-8') . " " . htmlspecialchars($rs->name, ENT_QUOTES, 'UTF-8') . " (" . htmlspecialchars($rs->dataAreaId, ENT_QUOTES, 'UTF-8') . ")</li></a>";
             $output .= "</ul>";
         }
 

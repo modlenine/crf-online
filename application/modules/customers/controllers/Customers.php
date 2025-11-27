@@ -31,6 +31,7 @@ class Customers extends MX_Controller {
     getFooter();
   }
 
+
   public function saveCustomer()
   {
     $this->customer->saveCustomer();

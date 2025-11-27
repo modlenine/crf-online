@@ -5,16 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
-    <!-- <script type="text/javascript">
-            function noBack(){
-                window.history.forward()
-            }
-             
-            noBack();
-            window.onload = noBack;
-            window.onpageshow = function(evt) { if (evt.persisted) noBack() }
-            window.onunload = function() { void (0) }
-        </script> -->
 </head>
 
 <body>
@@ -23,15 +13,12 @@
 
         <div class="mt-3 p-3" style="border:solid #ccc 1px; background-color:#F8F8FF;">
             <form action="<?= base_url('customers/saveCustomer') ?>" method="POST" id="form1" enctype="multipart/form-data" autocomplete="off" class="needs-validation" novalidate>
-<input hidden type="text" name="checkaddcuspage" id="checkaddcuspage" value="{checkurl}">
+            <input hidden type="text" name="checkaddcuspage" id="checkaddcuspage" value="{checkurl}">
                 <!-- Document Head -->
                 <div class="row form-group">
                     <div align="left" class="col-md-6">
                         <h3>เพิ่มข้อมูลลูกค้า</h3>
                     </div>
-                    <!-- <div align="right" class="col-md-6">
-                        <h5>{getFormCode}</h5>
-                    </div> -->
                 </div>
 
                 <!-- Check area add page internal -->
@@ -97,7 +84,14 @@
                     </div>
                     <div class="col-md-4 form-group">
                         <label for="">Customer code : &nbsp;</label>
-                        <input type="text" name="addcus_customercode" id="addcus_customercode" class="form-control form-control-sm" required>
+                        <div class="input-group">
+                            <input type="text" name="addcus_customercode" id="addcus_customercode" class="form-control form-control-sm" required>
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-warning btn-sm" id="btnResetCustomerSearch" title="Reset และค้นหาใหม่" style="display:none;">
+                                    <i class="fas fa-redo"></i> Reset
+                                </button>
+                            </div>
+                        </div>
                         <div id="alertCuscode"></div>
                         <div id="autocuscodemanual"></div>
                     </div>
@@ -408,6 +402,17 @@
                     
                 </div>
 
+                <div class="row form-group">
+                    <div class="col-md-4">
+                        <input type="radio" name="crf_countmonthdeli" id="crf_countmonthdeli1" value="เดือนส่งของไม่นับ" class="crf_condition_money">
+                        <label for="">เดือนส่งของไม่นับ</label>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="radio" name="crf_countmonthdeli" id="crf_countmonthdel2" value="นับเดือนส่งของ" class="crf_condition_money">
+                        <label for="">นับเดือนส่งของ</label>
+                    </div>
+                </div>
+
                 <br>
 
 
@@ -514,6 +519,15 @@
                     </div>
                 </div>
 
+                <!-- เพิ่มหมายเหตุ 25-11-2025 -->
+                 <div class="row">
+                    <div class="col-md-12">
+                        <label for="">หมายเหตุเพิ่มเติม (ถ้ามี)</label>
+                        <textarea name="crf_memo2" id="crf_memo2" cols="30" rows="3" class="form-control"></textarea>
+                    </div>
+                 </div>
+                 <hr>
+
 
 
 
@@ -568,6 +582,8 @@
     </div>
 
 </body>
+
+<script src="<?= base_url('assets/js/addcustomer.js?v=' . time()) ?>"></script>
 
 <script>
 
