@@ -150,7 +150,14 @@
                     </div>
                     <div class="col-md-4 form-group">
                         <label for="">Customer code : &nbsp;</label>
-                        <input type="text" name="crf_customercode" id="crf_customercode" class="form-control form-control-sm" readonly="false">
+                        <div class="input-group">
+                            <input type="text" name="crf_customercode" id="crf_customercode" class="form-control form-control-sm" readonly="false">
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-warning btn-sm" id="btnResetCustomerSearchTH" title="Reset และค้นหาใหม่" style="display:none;">
+                                    <i class="fas fa-redo"></i> Reset
+                                </button>
+                            </div>
+                        </div>
                         <input type="text" name="crf_cusid" id="crf_cusid" style="display:none;">
                         <div id="autoCusCode"></div>
                     </div>
@@ -688,7 +695,7 @@
                     <div class="col-md-6">
                         <label for="">วงเงิน</label>
                         <input type="text" name="crf_finance_req_number" id="crf_finance_req_number" class="form-control form-control-sm">
-                        <input hidden type="text" name="crf_finance_req_number_calc" id="crf_finance_req_number_calc">
+                        <input type="text" name="crf_finance_req_number_calc" id="crf_finance_req_number_calc">
                     </div>
                 </div>
 

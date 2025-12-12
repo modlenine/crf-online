@@ -1,6 +1,11 @@
 // ============================================================================
 // Constants & Configuration
 // ============================================================================
+
+// Global variables for search management
+let searchTimeout = null;
+let currentRequest = null;
+
 const CUSTOMER_TYPE = {
 	NEW: '1',
 	OLD: '2'
@@ -50,6 +55,48 @@ const ALERT_MESSAGES = {
 // ============================================================================
 // Utility Functions - Form Control
 // ============================================================================
+
+/**
+ * Lock customer fields after selection
+ */
+const lockCustomerFieldsTH = () => {
+	$("#crf_customercode").prop("readonly", true).addClass("bg-light");
+	$("#crf_customername").prop("readonly", true).addClass("bg-light");
+	$("#crf_customertaxid").prop("readonly", true).addClass("bg-light");
+	$("#crf_addressname").prop("readonly", true).addClass("bg-light");
+	$("#crf_telcontact").prop("readonly", true).addClass("bg-light");
+	$("#crf_faxcontact").prop("readonly", true).addClass("bg-light");
+	$("#crf_emailcontact").prop("readonly", true).addClass("bg-light");
+	$("#crf_namecontact").prop("readonly", true).addClass("bg-light");
+	
+	// Show reset button
+	$("#btnResetCustomerSearchTH").fadeIn();
+};
+
+/**
+ * Unlock customer fields
+ */
+const unlockCustomerFieldsTH = () => {
+	$("#crf_customercode").prop("readonly", false).removeClass("bg-light");
+	$("#crf_customername").prop("readonly", false).removeClass("bg-light");
+	$("#crf_customertaxid").prop("readonly", false).removeClass("bg-light");
+	$("#crf_addressname").prop("readonly", false).removeClass("bg-light");
+	$("#crf_telcontact").prop("readonly", false).removeClass("bg-light");
+	$("#crf_faxcontact").prop("readonly", false).removeClass("bg-light");
+	$("#crf_emailcontact").prop("readonly", false).removeClass("bg-light");
+	$("#crf_namecontact").prop("readonly", false).removeClass("bg-light");
+	
+	// Hide reset button
+	$("#btnResetCustomerSearchTH").fadeOut();
+};
+
+/**
+ * Clear customer data and reload page
+ */
+const clearCustomerDataTH = () => {
+	// Refresh the page to reset all fields
+	location.reload();
+};
 
 /**
  * Toggle multiple form fields disabled state
@@ -289,7 +336,11 @@ $(document).ready(function () {
 	}
 
 	if ($("#checkPageAddTH").val() == "addTH") {
-		// Initial page load - disable all fields until company is selected
+		// Reset button click handler
+		$("#btnResetCustomerSearchTH").click(() => {
+			clearCustomerDataTH();
+		});
+
 		disableAllFieldsInitial();
 
 		// Company selection handler - enable customer type selection
@@ -347,22 +398,54 @@ $(document).ready(function () {
 
 				// Variable ที่ไม่ได้ใช้งานถูกลบออก
 
-				// Control Save Data ลูกค้าเก่า
+				// Control Save Data ลูกค้าเก่า with debounce
 				$("#crf_customercode").on("keyup", function () {
-					var cusCode = $(this).val();
-					if (cusCode != "") {
-						autoSearchCustomerDetail(cusCode);
+					const cusCode = $(this).val().trim();
+
+					// Cancel previous timeout
+					if (searchTimeout) {
+						clearTimeout(searchTimeout);
+					}
+
+					// Cancel previous AJAX request
+					if (currentRequest) {
+						currentRequest.abort();
+					}
+
+					if (cusCode !== "") {
+						// Show loading state
+						$("#autoCusCode").html(
+							'<div class="text-muted small p-2"><i>กำลังค้นหา...</i></div>'
+						);
+
+						// Debounce: รอ 300ms หลังจากพิมพ์ค่าสุดท้าย
+						searchTimeout = setTimeout(() => {
+							autoSearchCustomerDetail(cusCode);
+						}, 300);
 					} else {
 						$("#autoCusCode").html("");
 					}
 				});
 
-				// Auto search customer name
+				// Auto search customer name with debounce
 				$("#crf_customername").on("keyup", function () {
-					var cusname = $(this).val();
+					const cusname = $(this).val().trim();
 
-					if (cusname != "") {
-						autoSearchCustomerDetailName(cusname);
+					// Cancel previous timeout
+					if (searchTimeout) {
+						clearTimeout(searchTimeout);
+					}
+
+					if (cusname !== "") {
+						// Show loading state
+						$("#autoCusname").html(
+							'<div class="text-muted small p-2"><i>กำลังค้นหา...</i></div>'
+						);
+
+						// Debounce: รอ 300ms
+						searchTimeout = setTimeout(() => {
+							autoSearchCustomerDetailName(cusname);
+						}, 300);
 					} else {
 						$("#autoCusname").html("");
 					}
@@ -2340,9 +2423,6 @@ $(document).ready(function () {
         checkCustomerPendingOrders(customercode, function(response) {
             if (response.status === 'in_progress') {
                 // มีรายการค้างอยู่ - ไม่อนุญาตให้ดำเนินการต่อ
-                const baseUrl = $('#checkbaseurl').val() || '/intsys/crf/';
-                const viewUrl = baseUrl + 'customers/viewCustomer/' + response.crf_id;
-                
                 alert(`ลูกค้า ${customercode} (${customername}) มีรายการค้างอยู่\n\n` +
                       `เลขที่ฟอร์ม: ${response.form_no}\n` +
                       `สถานะ: ${response.status_name}\n\n` +
@@ -2352,11 +2432,6 @@ $(document).ready(function () {
                 // ล้างข้อมูลที่กรอก
                 $('#crf_customercode').val('');
                 $('#autoCusCode').html('');
-                
-                // เปิดรายการที่ค้างในแท็บใหม่
-                if (confirm('ต้องการเปิดรายการที่ค้างหรือไม่?')) {
-                    window.open(viewUrl, '_blank');
-                }
             } else if (response.status === 'available') {
                 // ไม่มีรายการค้าง โหลดข้อมูลได้เลย
                 loaddataforadd(element);
@@ -2377,9 +2452,6 @@ $(document).ready(function () {
         checkCustomerPendingOrders(customercode, function(response) {
             if (response.status === 'in_progress') {
                 // มีรายการค้างอยู่ - ไม่อนุญาตให้ดำเนินการต่อ
-                const baseUrl = $('#checkbaseurl').val() || '/intsys/crf/';
-                const viewUrl = baseUrl + 'customers/viewCustomer/' + response.crf_id;
-                
                 alert(`ลูกค้า ${customercode} (${customername}) มีรายการค้างอยู่\n\n` +
                       `เลขที่ฟอร์ม: ${response.form_no}\n` +
                       `สถานะ: ${response.status_name}\n\n` +
@@ -2389,11 +2461,6 @@ $(document).ready(function () {
                 // ล้างข้อมูลที่กรอก
                 $('#crf_customername').val('');
                 $('#autoCusname').html('');
-                
-                // เปิดรายการที่ค้างในแท็บใหม่
-                if (confirm('ต้องการเปิดรายการที่ค้างหรือไม่?')) {
-                    window.open(viewUrl, '_blank');
-                }
             } else if (response.status === 'available') {
                 // ไม่มีรายการค้าง โหลดข้อมูลได้เลย
                 loaddataforadd(element);
@@ -2464,6 +2531,10 @@ $(document).ready(function () {
         let base_url = $('#checkbaseurl').val();
         let data_crfcus_memo2 = element.attr('data_crfcus_memo2');
         let data_crfcus_countmonthdeli = element.attr('data_crfcus_countmonthdeli');
+
+		let data_ax_creditmaxvalue = element.attr('data_ax_creditmaxvalue');
+		let data_ax_creditusedvalue = element.attr('data_ax_creditusedvalue');
+		let data_ax_creditavailvalue = element.attr('data_ax_creditavailvalue');
         
         // Debug log
         console.log('Customer selected:', {
@@ -2633,7 +2704,7 @@ $(document).ready(function () {
         $('#oldCreditTerm').val(data_credit_id);
 
 
-        $('#crf_finance_req_number , #crf_finance_req_number_calc').val(data_crf_moneylimit);
+        $('#crf_finance_req_number , #crf_finance_req_number_calc').val(data_ax_creditmaxvalue);
         $('#crf_cusid').val(data_crf_cusid);
 
         if (data_crf_area == 'sln') {
@@ -2744,6 +2815,9 @@ $(document).ready(function () {
         $('#autoCusCode').html('');
         $('#autoCusname').html('');
         $('input:checkbox[id="crf_sub_oldcus"]').attr('onclick' , 'return false');
+        
+        // Lock customer fields after successful selection
+        lockCustomerFieldsTH();
     }
 
 });
@@ -2905,27 +2979,55 @@ $('input[type=file][name=crf_file1],[name=crf_file2],[name=crf_file3],[name=crf_
 // ============================================================================
 
 function autoSearchCustomerDetail(cusCode) {
-    $.ajax({
+    // Store AJAX request reference
+    currentRequest = $.ajax({
         url: 'main/searchCustomerDetail',
         method: 'POST',
         data: {
             cusCode: cusCode
         },
+        timeout: 10000, // 10 second timeout
         success: function (data) {
             $('#autoCusCode').html(data);
+            currentRequest = null;
+        },
+        error: function (xhr, status, error) {
+            // Don't show error if request was aborted
+            if (status !== "abort") {
+                $('#autoCusCode').html(
+                    '<div class="alert alert-warning small" role="alert">' +
+                    'เกิดข้อผิดพลาดในการค้นหา กรุณาลองใหม่อีกครั้ง' +
+                    '</div>'
+                );
+            }
+            currentRequest = null;
         }
     });
 }
 
 function autoSearchCustomerDetailName(cusName){
-    $.ajax({
+    // Store AJAX request reference (reuse same variable for name search)
+    currentRequest = $.ajax({
         url: 'main/searchCustomerDetailName',
         method: 'POST',
         data: {
             cusName: cusName
         },
+        timeout: 10000, // 10 second timeout
         success: function(data){
             $('#autoCusname').html(data);
+            currentRequest = null;
+        },
+        error: function (xhr, status, error) {
+            // Don't show error if request was aborted
+            if (status !== "abort") {
+                $('#autoCusname').html(
+                    '<div class="alert alert-warning small" role="alert">' +
+                    'เกิดข้อผิดพลาดในการค้นหา กรุณาลองใหม่อีกครั้ง' +
+                    '</div>'
+                );
+            }
+            currentRequest = null;
         }
     });
 }

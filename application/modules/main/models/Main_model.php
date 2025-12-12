@@ -7,9 +7,30 @@ class Main_model extends CI_Model
     {
         parent::__construct();
         //Do your magic here
+        $this->db3 = $this->load->database('sql_custtable', TRUE);
+        $this->db_applystd = $this->load->database('sql_custtable2' , TRUE);
         date_default_timezone_set("Asia/Bangkok");
         $this->load->model('email_model');
         $this->load->model("email_tb_model");
+    }
+
+    // Helper function to get credit term information from payment term ID
+    private function getCreditTermInfo($paymtermid)
+    {
+        $creditMap = array(
+            'Advance' => array('id' => 1, 'name' => 'Advance ( โอนเงินก่อนส่งของ )'),
+            'CASH'    => array('id' => 2, 'name' => 'Cash'),
+            '7D'      => array('id' => 3, 'name' => '7 Day'),
+            '15D'     => array('id' => 4, 'name' => '15 Day'),
+            '30D'     => array('id' => 5, 'name' => '30 Day'),
+            '45D'     => array('id' => 6, 'name' => '45 Day'),
+            '60D'     => array('id' => 7, 'name' => '60 Day'),
+            '75D'     => array('id' => 8, 'name' => '75 Day'),
+            '90D'     => array('id' => 9, 'name' => '90 Day'),
+            '120D'    => array('id' => 10, 'name' => '120 Day')
+        );
+        
+        return isset($creditMap[$paymtermid]) ? $creditMap[$paymtermid] : array('id' => '', 'name' => '');
     }
 
     private function uploadFiles($fileinput = '', $filenameType = '', $formno , $filetime)
@@ -1835,6 +1856,41 @@ class Main_model extends CI_Model
             }
             // check money limit with ax
 
+            // Get CreditMax and paymtermid from AX database
+            $axCreditMax = '';
+            $axPaymtermid = '';
+            $axCreditTermInfo = array('id' => '', 'name' => '');
+            
+            // Query from db3 (AX database) 
+            $this->db3->select('CreditMax, paymtermid')
+                      ->from('slc_custview')
+                      ->where('accountnum', $rs->crfcus_code)
+                      ->where('dataAreaId', $rs->crfcus_area)
+                      ->limit(1);
+            $axQuery = $this->db3->get();
+            
+            if($axQuery->num_rows() > 0) {
+                $axData = $axQuery->row();
+                $axCreditMax = number_format($axData->CreditMax, 2);
+                $axPaymtermid = $axData->paymtermid;
+                $axCreditTermInfo = $this->getCreditTermInfo($axPaymtermid);
+            } else {
+                // Fallback to db_applystd if not found in db3
+                $this->db_applystd->select('CreditMax, paymtermid')
+                                  ->from('slc_custview')
+                                  ->where('accountnum', $rs->crfcus_code)
+                                  ->where('dataAreaId', $rs->crfcus_area)
+                                  ->limit(1);
+                $axQuery2 = $this->db_applystd->get();
+                
+                if($axQuery2->num_rows() > 0) {
+                    $axData = $axQuery2->row();
+                    $axCreditMax = number_format($axData->CreditMax, 2);
+                    $axPaymtermid = $axData->paymtermid;
+                    $axCreditTermInfo = $this->getCreditTermInfo($axPaymtermid);
+                }
+            }
+
             $output .= "<ul class='list-group'>";
             $output .= "<a href='javascript:void(0)' class='selectCusCode' 
             data_crf_cusid = '$rs->crfcus_id'
@@ -1889,6 +1945,10 @@ class Main_model extends CI_Model
             data_crfcus_file6 = '$rs->crfcus_file6'
             data_crfcus_memo2 = '$rs->crfcus_memo2'
             data_crfcus_countmonthdeli = '$rs->crfcus_countmonthdeli'
+            data_ax_creditmaxvalue = '$axCreditMax'
+            data_ax_paymtermid = '$axPaymtermid'
+            data_ax_credittermid = '{$axCreditTermInfo['id']}'
+            data_ax_credittermname = '{$axCreditTermInfo['name']}'
             
             ><li class='list-group-item'>" . $rs->crfcus_code . "&nbsp;" . $rs->crfcus_name . " (" . $rs->crfcus_area . ")" . "</li></a>";
             $output .= "</ul>";
@@ -1963,10 +2023,55 @@ class Main_model extends CI_Model
             INNER JOIN crf_company_type ON crf_company_type.crf_comid = crf_customers.crfcus_companytype
             INNER JOIN credit_term_category ON credit_term_category.credit_id = crf_customers.crfcus_creditterm
             -- INNER JOIN crf_maindata ON crf_maindata.crf_cuscode = crf_customers.crfcus_id
-            WHERE crfcus_name LIKE '%$cusname%' GROUP BY crf_customers.crfcus_code , crf_customers.crfcus_area  ORDER BY crf_customers.crfcus_id DESC
+            WHERE crfcus_name LIKE '%$cusname%' GROUP BY crf_customers.crfcus_code , crf_customers.crfcus_area  ORDER BY crf_customers.crfcus_id DESC LIMIT 50
             ");
         $output = "";
+        $creditmaxOnAx= "";
         foreach ($query->result() as $rs) {
+
+            // Get money limit on ax
+            $creditmaxOnAx =  floatval(getCreditMax($rs->crfcus_code , $rs->crfcus_area));
+            if($creditmaxOnAx != $rs->crfcus_moneylimit){
+                $creditmaxOnAx = $rs->crfcus_moneylimit;
+            }else{
+                $creditmaxOnAx = $rs->crfcus_moneylimit;
+            }
+
+            // Get CreditMax and paymtermid from AX database
+            $axCreditMax = '';
+            $axPaymtermid = '';
+            $axCreditTermInfo = array('id' => '', 'name' => '');
+            
+            // Query from db3 (AX database) 
+            $this->db3->select('CreditMax, paymtermid')
+                      ->from('slc_custview')
+                      ->where('accountnum', $rs->crfcus_code)
+                      ->where('dataAreaId', $rs->crfcus_area)
+                      ->limit(1);
+            $axQuery = $this->db3->get();
+            
+            if($axQuery->num_rows() > 0) {
+                $axData = $axQuery->row();
+                $axCreditMax = number_format($axData->CreditMax, 2);
+                $axPaymtermid = $axData->paymtermid;
+                $axCreditTermInfo = $this->getCreditTermInfo($axPaymtermid);
+            } else {
+                // Fallback to db_applystd if not found in db3
+                $this->db_applystd->select('CreditMax, paymtermid')
+                                  ->from('slc_custview')
+                                  ->where('accountnum', $rs->crfcus_code)
+                                  ->where('dataAreaId', $rs->crfcus_area)
+                                  ->limit(1);
+                $axQuery2 = $this->db_applystd->get();
+                
+                if($axQuery2->num_rows() > 0) {
+                    $axData = $axQuery2->row();
+                    $axCreditMax = number_format($axData->CreditMax, 2);
+                    $axPaymtermid = $axData->paymtermid;
+                    $axCreditTermInfo = $this->getCreditTermInfo($axPaymtermid);
+                }
+            }
+
             $output .= "<ul class='list-group'>";
             $output .= "<a href='javascript:void(0)' class='selectCusName' 
                 data_crf_cusid = '$rs->crfcus_id'
@@ -2004,7 +2109,7 @@ class Main_model extends CI_Model
                 data_crf_finance_req_number = '$rs->crfcus_moneylimit'
                 data_crf_creditterm2 = '$rs->crfcus_creditterm2'
                 data_crf_creditterm2name = '$rs->crfcus_creditterm2'
-                data_crf_moneylimit = '$rs->crfcus_moneylimit'
+                data_crf_moneylimit = '$creditmaxOnAx'
                 data_crf_area = '$rs->crfcus_area'
                 data_crf_file1 = '$rs->crfcus_file1'
                 data_crf_taxid = '$rs->crfcus_taxid'
@@ -2019,6 +2124,10 @@ class Main_model extends CI_Model
                 data_crfcus_file4 = '$rs->crfcus_file4'
                 data_crfcus_file5 = '$rs->crfcus_file5'
                 data_crfcus_file6 = '$rs->crfcus_file6'
+                data_ax_creditmaxvalue = '$axCreditMax'
+                data_ax_paymtermid = '$axPaymtermid'
+                data_ax_credittermid = '{$axCreditTermInfo['id']}'
+                data_ax_credittermname = '{$axCreditTermInfo['name']}'
                 
                 ><li class='list-group-item'>" . $rs->crfcus_name . "&nbsp;" . $rs->crfcus_code . " (" . $rs->crfcus_area . ")" . "</li></a>";
             $output .= "</ul>";
