@@ -695,7 +695,7 @@
                     <div class="col-md-6">
                         <label for="">วงเงิน</label>
                         <input type="text" name="crf_finance_req_number" id="crf_finance_req_number" class="form-control form-control-sm">
-                        <input type="text" name="crf_finance_req_number_calc" id="crf_finance_req_number_calc">
+                        <input type="hidden" name="crf_finance_req_number_calc" id="crf_finance_req_number_calc">
                     </div>
                 </div>
 

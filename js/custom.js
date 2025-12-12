@@ -180,7 +180,15 @@ $(document).ready(function () {
         $('#finance_change_total').val(total);
     });
 
-
+    // Helper function to format number with comma
+    function formatNumberWithComma(value) {
+        // Parse as number
+        var numValue = parseFloat(value) || 0;
+        // Format with comma, keeping decimals if they exist
+        var parts = numValue.toString().split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join('.');
+    }
 
 
     // Convert Currency to comma
@@ -192,11 +200,23 @@ $(document).ready(function () {
 
         // format number
         $(this).val(function (index, value) {
-            return value
-                .replace(/\D/g, "")
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                ;
+            return formatNumberWithComma(value);
         });
+    });
+
+    // Sync formatted value to calc field
+    $('input[name="crf_finance_req_number"]').on('keyup change blur input', function() {
+        var valueWithoutComma = $(this).val().replace(/,/g, '');
+        $('#crf_finance_req_number_calc').val(valueWithoutComma);
+        console.log('Finance sync (custom.js) - Display:', $(this).val(), 'Calc:', valueWithoutComma);
+    });
+
+    // Before form submit, ensure values are synced
+    $('#form1').on('submit', function(e) {
+        var financeDisplay = $('#crf_finance_req_number').val();
+        var financeCalc = financeDisplay.replace(/,/g, '');
+        $('#crf_finance_req_number_calc').val(financeCalc);
+        console.log('Form submit (custom.js) - Finance Display:', financeDisplay, 'Finance Calc:', financeCalc);
     });
 
     // Convert Currency to comma
@@ -1227,7 +1247,12 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
         $('#crf_creditterm option:selected').val(data_credit_id).text(data_credit_name);
         $('#oldCreditTerm').val(data_credit_id);
 
-        $('#crf_finance_req_number , #crf_finance_req_number_calc').val(data_crf_moneylimit);
+        // Set finance request number with proper formatting
+        var financeValue = data_crf_moneylimit;
+        console.log('Loading from DB (custom.js) - Raw value:', financeValue);
+        $('#crf_finance_req_number_calc').val(financeValue); // Store raw value
+        $('#crf_finance_req_number').val(formatNumberWithComma(financeValue)); // Display with comma
+        console.log('After format (custom.js) - Display:', formatNumberWithComma(financeValue), 'Calc:', financeValue);
         $('#crf_cusid').val(data_crf_cusid);
 
         if (data_crf_area == 'sln') {

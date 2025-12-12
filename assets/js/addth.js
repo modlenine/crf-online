@@ -235,9 +235,12 @@ function validateCheckboxChecked(checkboxId, alertId, message) {
  * @returns {String} Formatted number string
  */
 function formatNumberWithComma(value) {
-	return value
-		.replace(/\D/g, "")
-		.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	// Parse as number
+	var numValue = parseFloat(value) || 0;
+	// Format with comma, keeping decimals if they exist
+	var parts = numValue.toString().split('.');
+	parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	return parts.join('.');
 }
 
 /**
@@ -2704,7 +2707,12 @@ $(document).ready(function () {
         $('#oldCreditTerm').val(data_credit_id);
 
 
-        $('#crf_finance_req_number , #crf_finance_req_number_calc').val(data_ax_creditmaxvalue);
+        // Set finance request number with proper formatting
+        var financeValue = data_ax_creditmaxvalue;
+        console.log('Loading from DB - Raw value:', financeValue);
+        $('#crf_finance_req_number_calc').val(financeValue); // Store raw value without comma
+        $('#crf_finance_req_number').val(formatNumberWithComma(financeValue)); // Display with comma
+        console.log('After format - Display:', formatNumberWithComma(financeValue), 'Calc:', financeValue);
         $('#crf_cusid').val(data_crf_cusid);
 
         if (data_crf_area == 'sln') {
@@ -2958,6 +2966,24 @@ $('#finance_change_number').keyup(function () {
 
 // Setup comma formatting for financial fields (using utility function)
 setupCommaFormatting('input[name="crf_finance_req_number"], input[name="crf_regiscost"]');
+
+// Sync formatted value (with commas) to calc field (without commas) for finance_req_number
+$('input[name="crf_finance_req_number"]').on('keyup change blur input', function() {
+	// Remove commas and store in the _calc field
+	var valueWithoutComma = $(this).val().replace(/,/g, '');
+	$('#crf_finance_req_number_calc').val(valueWithoutComma);
+	console.log('Finance sync - Display:', $(this).val(), 'Calc:', valueWithoutComma);
+});
+
+// Before form submit, ensure values are synced properly
+$('#form1').on('submit', function(e) {
+	// Sync finance request number one more time before submit
+	var financeDisplay = $('#crf_finance_req_number').val();
+	var financeCalc = financeDisplay.replace(/,/g, '');
+	$('#crf_finance_req_number_calc').val(financeCalc);
+	
+	console.log('Form submit - Finance Display:', financeDisplay, 'Finance Calc:', financeCalc);
+});
 
 // Check File Format And Size
 $('input[type=file][name=crf_file1],[name=crf_file2],[name=crf_file3],[name=crf_file4],[name=crf_file5],[name=crf_file6]').change(function () {
