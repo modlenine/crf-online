@@ -973,7 +973,7 @@ function accProcess($crfid, $crfcusid)
 function accProcessSaleRep($formno, $cusid)
 {
     $obj = new addfn();
-    $obj->gci()->db->select("crfcus_salesreps");
+    $obj->gci()->db->select("crfcus_salesreps , crfcus_memo2 , crfcus_countmonthdeli");
     $obj->gci()->db->from("crf_customers_temp");
     $obj->gci()->db->where("crfcus_formno", $formno);
     $queryTemp = $obj->gci()->db->get();
@@ -981,6 +981,8 @@ function accProcessSaleRep($formno, $cusid)
     foreach ($queryTemp->result() as $result) {
         $arUpdateToCustomers = array(
             "crfcus_salesreps" => $result->crfcus_salesreps,
+            "crfcus_memo2" => $result->crfcus_memo2,
+            "crfcus_countmonthdeli" => $result->crfcus_countmonthdeli,
             "crfcus_usermodify_datetime" => date("Y-m-d H:i:s")
         );
         $obj->gci()->db->where("crfcus_id", $cusid);

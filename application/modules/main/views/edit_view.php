@@ -590,24 +590,25 @@
                 <div id="alert_creditterm"></div>
 
             <?php
-                $checked1 = '';
-                $checked2 = '';
+                $checked11 = '';
+                $checked22 = '';
                 if($crfcus_countmonthdeli == 'เดือนส่งของไม่นับ'){
-                    $checked1 = 'checked';
-                } else if($crfcus_countmonthdeli == 'นับเดือนส่งของ'){
-                    $checked2 = 'checked';
+                    $checked11 = 'checked';
+                } else if($crfcus_countmonthdeli == "นับเดือนส่งของ"){
+                    $checked22 = 'checked';
                 }
             ?>
             <div class="row form-group">
                 <div class="col-md-4">
-                    <input type="radio" name="crfcus_countmonthdeli_edit" id="crfcus_countmonthdeli1" value="เดือนส่งของไม่นับ" class="crf_condition_moneyv1" <?= $checked1 ?>>
-                    <label for="">เดือนส่งของไม่นับ</label>
+                    <input type="radio" name="crfcus_countmonthdeli_edit" id="crfcus_countmonthdeli1_edit" value="เดือนส่งของไม่นับ" class="crf_condition_moneyv1_edit" <?= $checked11 ?>>
+                    <label for="crfcus_countmonthdeli1_edit">เดือนส่งของไม่นับ</label>
                 </div>
                 <div class="col-md-4">
-                    <input type="radio" name="crfcus_countmonthdeli_edit" id="crfcus_countmonthdel2" value="นับเดือนส่งของ" class="crf_condition_moneyv2" <?= $checked2 ?>>
-                    <label for="">นับเดือนส่งของ</label>
+                    <input type="radio" name="crfcus_countmonthdeli_edit" id="crfcus_countmonthdel2_edit" value="นับเดือนส่งของ" class="crf_condition_moneyv2_edit" <?= $checked22 ?>>
+                    <label for="crfcus_countmonthdeli2_edit">นับเดือนส่งของ</label>
                 </div>
             </div>
+            <?=$crfcus_countmonthdeli?>
 
                 <hr>
 

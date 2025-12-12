@@ -402,7 +402,9 @@ class Main_model extends CI_Model
                         "crfcus_usermodify_deptcode" => $result->crfcus_usermodify_deptcode,
                         "crfcus_usermodify_datetime" => date("Y-m-d H:i:s"),
                         "crfcus_tempstatus" => "Processing",
-                        "crfcus_formno" => $getFormNo
+                        "crfcus_formno" => $getFormNo,
+                        "crfcus_memo2" => $result->crfcus_memo2,
+                        "crfcus_countmonthdeli" => $result->crfcus_countmonthdeli
 
                     );
                     $this->db->insert("crf_customers_temp", $arCopyToTempTable);
@@ -473,6 +475,8 @@ class Main_model extends CI_Model
 
                     $arUpdateTemp = array(
                         "crfcus_salesreps" => $this->input->post("crf_salesreps"),
+                        "crfcus_memo2" => $this->input->post("crfcus_memo2"),
+                        "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli")
                     );
                     $this->db->where("crfcus_formno", $getFormNo);
                     $this->db->update("crf_customers_temp", $arUpdateTemp);
@@ -578,6 +582,8 @@ class Main_model extends CI_Model
                     // "crfcus_regiscapital" => conPrice($this->input->post("crf_regiscost")),
                     "crfcus_file1" => $resultFile1,
                     "crfcus_personal" => $resultFilePersonal,
+                    "crfcus_memo2" => $this->input->post("crfcus_memo2"),
+                    "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli")
                 );
                 
                 $this->db->where("crfcus_formno", $getFormNo);
@@ -768,7 +774,9 @@ class Main_model extends CI_Model
                     "crfcus_file3" => $resultFile3,
                     "crfcus_file4" => $resultFile4,
                     "crfcus_file5" => $resultFile5,
-                    "crfcus_file6" => $resultFile6
+                    "crfcus_file6" => $resultFile6,
+                    "crfcus_memo2" => $this->input->post("crfcus_memo2"),
+                    "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli")
                 );
 
                 $this->db->where("crfcus_formno", $getFormNo);
@@ -826,6 +834,8 @@ class Main_model extends CI_Model
 
                 $arUpdateTemp = array(
                     "crfcus_creditterm2" => $this->input->post("crf_creditterm2"),
+                    "crfcus_memo2" => $this->input->post("crfcus_memo2"),
+                    "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli")
                 );
                 $this->db->where("crfcus_formno", $getFormNo);
                 $this->db->update("crf_customers_temp", $arUpdateTemp);
@@ -887,6 +897,8 @@ class Main_model extends CI_Model
 
                 $arUpdateTemp = array(
                     "crfcus_moneylimit2" => conPrice($this->input->post("crf_finance_change_total")),
+                    "crfcus_memo2" => $this->input->post("crfcus_memo2"),
+                    "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli")
                 );
                 $this->db->where("crfcus_formno", $getFormNo);
                 $this->db->update("crf_customers_temp", $arUpdateTemp);
@@ -1799,7 +1811,9 @@ class Main_model extends CI_Model
         crf_customers.crfcus_mapurl,
         crf_customers.crfcus_mapfile,
         crf_customers.crfcus_products,
-        crf_customers.crfcus_personal
+        crf_customers.crfcus_personal,
+        crf_customers.crfcus_memo2,
+        crf_customers.crfcus_countmonthdeli
         FROM
         crf_customers
         INNER JOIN crf_company_type ON crf_company_type.crf_comid = crf_customers.crfcus_companytype
@@ -1873,6 +1887,8 @@ class Main_model extends CI_Model
             data_crfcus_file4 = '$rs->crfcus_file4'
             data_crfcus_file5 = '$rs->crfcus_file5'
             data_crfcus_file6 = '$rs->crfcus_file6'
+            data_crfcus_memo2 = '$rs->crfcus_memo2'
+            data_crfcus_countmonthdeli = '$rs->crfcus_countmonthdeli'
             
             ><li class='list-group-item'>" . $rs->crfcus_code . "&nbsp;" . $rs->crfcus_name . " (" . $rs->crfcus_area . ")" . "</li></a>";
             $output .= "</ul>";
@@ -2249,7 +2265,7 @@ class Main_model extends CI_Model
         FROM
         crf_pri_manage
         WHERE
-        crf_pri_manage.crf_pricusid LIKE '$cusId%' ORDER BY crf_primanage_id ASC");
+        crf_pri_manage.crf_pricusid = '$cusId' ORDER BY crf_primanage_id ASC");
 
         $output = '';
         foreach ($query->result() as $rss) {
@@ -3431,7 +3447,9 @@ class Main_model extends CI_Model
                         "crfcus_usermodify" => $this->input->post("crf_userpost"),
                         "crfcus_usermodify_ecode" => $this->input->post("crf_userecodepost"),
                         "crfcus_usermodify_deptcode" => $this->input->post("crf_userdeptcodepost"),
-                        "crfcus_usermodify_datetime" => date("Y-m-d H:i:s")
+                        "crfcus_usermodify_datetime" => date("Y-m-d H:i:s"),
+                        "crfcus_memo2" => $this->input->post("crfcus_memo2_edit"),
+                        "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli_edit")
                     );
                     $this->db->where("crfcus_formno", $this->input->post("check_EditFormNo"));
                     if ($this->db->update("crf_customers_temp", $arUpdateSalesReps)) {
@@ -3462,7 +3480,9 @@ class Main_model extends CI_Model
                         "crfcus_usermodify" => $this->input->post("crf_userpost"),
                         "crfcus_usermodify_ecode" => $this->input->post("crf_userecodepost"),
                         "crfcus_usermodify_deptcode" => $this->input->post("crf_userdeptcodepost"),
-                        "crfcus_usermodify_datetime" => date("Y-m-d H:i:s")
+                        "crfcus_usermodify_datetime" => date("Y-m-d H:i:s"),
+                        "crfcus_memo2" => $this->input->post("crfcus_memo2_edit"),
+                    "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli_edit")
                     );
                     $this->db->where("crfcus_formno", $this->input->post("check_EditFormNo"));
                     if ($this->db->update("crf_customers_temp", $arUpdateAddress)) {
@@ -3507,7 +3527,9 @@ class Main_model extends CI_Model
                         "crfcus_usermodify" => $this->input->post("crf_userpost"),
                         "crfcus_usermodify_ecode" => $this->input->post("crf_userecodepost"),
                         "crfcus_usermodify_deptcode" => $this->input->post("crf_userdeptcodepost"),
-                        "crfcus_usermodify_datetime" => date("Y-m-d H:i:s")
+                        "crfcus_usermodify_datetime" => date("Y-m-d H:i:s"),
+                        "crfcus_memo2" => $this->input->post("crfcus_memo2_edit"),
+                    "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli_edit")
                     );
                     $this->db->where("crfcus_formno", $this->input->post("check_EditFormNo"));
                     if ($this->db->update("crf_customers_temp", $arUpdateCustomer)) {
@@ -3541,7 +3563,9 @@ class Main_model extends CI_Model
                         "crfcus_usermodify" => $this->input->post("crf_userpost"),
                         "crfcus_usermodify_ecode" => $this->input->post("crf_userecodepost"),
                         "crfcus_usermodify_deptcode" => $this->input->post("crf_userdeptcodepost"),
-                        "crfcus_usermodify_datetime" => date("Y-m-d H:i:s")
+                        "crfcus_usermodify_datetime" => date("Y-m-d H:i:s"),
+                        "crfcus_memo2" => $this->input->post("crfcus_memo2_edit"),
+                    "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli_edit")
                     );
                     $this->db->where("crfcus_formno", $this->input->post("check_EditFormNo"));
                     if ($this->db->update("crf_customers_temp", $arUpdateChangeCredit)) {
@@ -3576,7 +3600,9 @@ class Main_model extends CI_Model
                         "crfcus_usermodify" => $this->input->post("crf_userpost"),
                         "crfcus_usermodify_ecode" => $this->input->post("crf_userecodepost"),
                         "crfcus_usermodify_deptcode" => $this->input->post("crf_userdeptcodepost"),
-                        "crfcus_usermodify_datetime" => date("Y-m-d H:i:s")
+                        "crfcus_usermodify_datetime" => date("Y-m-d H:i:s"),
+                        "crfcus_memo2" => $this->input->post("crfcus_memo2_edit"),
+                    "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli_edit")
                     );
                     $this->db->where("crfcus_formno", $this->input->post("check_EditFormNo"));
                     if ($this->db->update("crf_customers_temp", $arUpdateChangeFinance)) {
@@ -3902,6 +3928,52 @@ class Main_model extends CI_Model
 
         $data["rss"] = $this->queryThdate($datestart, $dateend);
         $this->load->view("report/resultReportTh", $data);
+    }
+
+    /**
+     * ตรวจสอบสถานะของลูกค้าว่ามีรายการที่กำลังทำงานอยู่หรือไม่
+     * @param string $customercode รหัสลูกค้า (TH code)
+     * @return object|null ข้อมูลรายการถ้ามี หรือ null ถ้าไม่มี
+     */
+    public function checkCustomerStatus($customercode)
+    {
+        // Query เพื่อหา customer ID จากตาราง crf_customers
+        $cusQuery = $this->db->query("
+            SELECT crfcus_id, crfcus_code, crfcus_name 
+            FROM crf_customers 
+            WHERE crfcus_code = ? 
+            LIMIT 1
+        ", array($customercode));
+        
+        if ($cusQuery->num_rows() == 0) {
+            // ไม่พบข้อมูลลูกค้า
+            return null;
+        }
+        
+        $customer = $cusQuery->row();
+        $cusId = $customer->crfcus_id;
+        
+        // Query หารายการที่ยังไม่เสร็จสมบูรณ์
+        $this->db->select('crf_id, crf_formno, crf_status, crf_cuscode');
+        $this->db->from('crf_maindata');
+        $this->db->where('crf_cuscode', $cusId);
+        $this->db->where('crf_status !=', 'Completed');
+        $this->db->where('crf_status !=', 'Cancel');
+        $this->db->order_by('crf_id', 'DESC');
+        $this->db->limit(1);
+        
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $result = $query->row();
+            // เพิ่มข้อมูลลูกค้า
+            $result->crf_customercode = $customercode;
+            $result->crf_customername = $customer->crfcus_name;
+            $result->crf_status_name = $result->crf_status;
+            return $result;
+        }
+        
+        return null;
     }
 }
 // Main Model

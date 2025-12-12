@@ -842,6 +842,7 @@ $(document).on('keyup' , '#crf_cuscompanycreate' , function(){
     
 });
 </script>
-
+<!-- Load addth.js with versioning to prevent caching -->
+<script src="<?= base_url('assets/js/addth.js?v=') . filemtime('assets/js/addth.js') ?>"></script>
 
 </html>

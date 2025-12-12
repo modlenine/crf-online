@@ -10,32 +10,6 @@ function saveCustomerCode() {
 }
 
 
-function autoSearchCustomerDetail(cusCode) {
-    $.ajax({
-        url: 'main/searchCustomerDetail',
-        method: 'POST',
-        data: {
-            cusCode: cusCode
-        },
-        success: function (data) {
-            $('#autoCusCode').html(data);
-        }
-    });
-}
-
-function autoSearchCustomerDetailName(cusName){
-    $.ajax({
-        url: 'main/searchCustomerDetailName',
-        method: 'POST',
-        data: {
-            cusName: cusName
-        },
-        success: function(data){
-            $('#autoCusname').html(data);
-        }
-    });
-}
-
 
 function autoSearchCustomerDetailEx(cusCode) {
     $.ajax({

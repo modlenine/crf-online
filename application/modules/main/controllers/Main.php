@@ -55,6 +55,7 @@ class Main extends MX_Controller
         }
     }
 
+
     public function savedata()
     {
         calllogin();
@@ -1485,16 +1486,43 @@ public function test_api_request()
 
 }
 
-
-
-
-
-
-
-
-
-
-
+    /**
+     * ตรวจสอบว่ามีรายการของลูกค้านี้ที่กำลังทำงานอยู่หรือไม่
+     * สำหรับป้องกันการสร้างรายการซ้ำซ้อน
+     */
+    public function checkCustomerInProgress()
+    {
+        header('Content-Type: application/json');
+        
+        $customercode = $this->input->post('customercode');
+        
+        if (empty($customercode)) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'กรุณาระบุรหัสลูกค้า'
+            ]);
+            return;
+        }
+        
+        // เรียก Model เพื่อตรวจสอบสถานะ
+        $result = $this->main->checkCustomerStatus($customercode);
+        
+        if ($result) {
+            // มีรายการที่กำลังทำงานอยู่
+            echo json_encode([
+                'status' => 'in_progress',
+                'form_no' => $result->crf_formno,
+                'status_name' => $result->crf_status_name,
+                'crf_id' => $result->crf_id
+            ]);
+        } else {
+            // ไม่มีรายการค้าง สามารถสร้างใหม่ได้
+            echo json_encode([
+                'status' => 'available',
+                'message' => 'สามารถใช้งานได้'
+            ]);
+        }
+    }
 
 }
 // Main Controller
