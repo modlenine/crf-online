@@ -889,7 +889,7 @@ class Main_model extends CI_Model
                     "crf_finance_req_number" => $this->input->post("crf_finance_req_number_calc"),
                     "crf_finance_status" => $this->input->post("crf_finance_status"),
                     "crf_finance_change_status" => $this->input->post("crf_finance_change_status"),
-                    "crf_finance_change_number" => $this->input->post("crf_finance_change_number"),
+                    "crf_finance_change_number" => conPrice($this->input->post("crf_finance_change_number")),
                     "crf_finance_change_total" => conPrice($this->input->post("crf_finance_change_total")),
                     "crf_finance_change_detail" => $this->input->post("crf_finance_change_detail"),
 

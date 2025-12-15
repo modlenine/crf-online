@@ -235,11 +235,15 @@ function validateCheckboxChecked(checkboxId, alertId, message) {
  * @returns {String} Formatted number string
  */
 function formatNumberWithComma(value) {
+	// Handle empty or invalid input
+	if (!value) return '';
+	
 	// Remove existing commas first, then parse as number
-	var cleanValue = String(value).replace(/,/g, '');
-	var numValue = parseFloat(cleanValue) || 0;
+	const cleanValue = String(value).replace(/,/g, '');
+	const numValue = parseFloat(cleanValue) || 0;
+	
 	// Format with comma, keeping decimals if they exist
-	var parts = numValue.toString().split('.');
+	const parts = numValue.toString().split('.');
 	parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	return parts.join('.');
 }
