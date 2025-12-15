@@ -819,29 +819,40 @@ $(document).ready(function () {
 
 							$("#crf_file1").prop("disabled", true);
 
-							$("#crf_finance_change_number").keyup(function () {
-								var oldmoney = parseInt(
-									$("#crf_finance_req_number_calc").val()
-								);
-								var newmoney = parseInt($(this).val());
-								if ($("#showChangeStatus").val() == "เพิ่ม") {
-									$("#crf_finance_change_total").val(oldmoney + newmoney);
-								} else if ($("#showChangeStatus").val() == "ลด") {
-									$("#crf_finance_change_total").val(oldmoney - newmoney);
-								}
-
-								$("#crf_finance_change_total").val(function (index, value) {
-									return value
-										.replace(/\D/g, "")
-										.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-								});
-								if ($(this).val() != "") {
-									$("#user_submit").prop("disabled", false);
-								} else {
-									$("#user_submit").prop("disabled", true);
-								}
-							});
-						} else {
+						$("#crf_finance_change_number").keyup(function (event) {
+							// Skip for arrow keys
+							if (event.which >= 37 && event.which <= 40) return;
+							
+							// Format current input with commas
+					var oldValue = $(this).val();
+					var formattedInput = formatNumberWithComma(oldValue);
+					$(this).val(formattedInput);
+					
+					// Calculate total amount
+					// Remove commas before parsing to integer
+					var oldmoneyStr = $("#crf_finance_req_number_calc").val().replace(/,/g, "");
+					var newmoneyStr = $(this).val().replace(/,/g, "");
+					
+					var oldmoney = parseInt(oldmoneyStr) || 0;
+					var newmoney = parseInt(newmoneyStr) || 0;
+					
+					var totalAmount = 0;
+					if ($("#showChangeStatus").val() == "เพิ่ม") {
+						totalAmount = oldmoney + newmoney;
+					} else if ($("#showChangeStatus").val() == "ลด") {
+						totalAmount = oldmoney - newmoney;
+					}
+					// Format with commas
+					var formattedTotal = totalAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+					$("#crf_finance_change_total").val(formattedTotal);
+					
+					if ($(this).val() != "") {
+						$("#user_submit").prop("disabled", false);
+					} else {
+						$("#user_submit").prop("disabled", true);
+					}
+				});
+			} else {
 							$(".finance_change_detail").css("display", "none");
 							$("input[name=crf_finance]").prop("checked", false);
 						}
@@ -2422,9 +2433,10 @@ $(document).ready(function () {
         const element = $(this);
         const customercode = element.attr('data_crf_customercode');
         const customername = element.attr('data_crf_customername');
+		const dataareaid = element.attr('data_crf_area');
         
         // เช็คว่ามีรายการค้างหรือไม่ก่อนที่จะโหลดข้อมูล
-        checkCustomerPendingOrders(customercode, function(response) {
+        checkCustomerPendingOrders(customercode , dataareaid , function(response) {
             if (response.status === 'in_progress') {
                 // มีรายการค้างอยู่ - ไม่อนุญาตให้ดำเนินการต่อ
                 alert(`ลูกค้า ${customercode} (${customername}) มีรายการค้างอยู่\n\n` +
@@ -2451,9 +2463,10 @@ $(document).ready(function () {
         const element = $(this);
         const customercode = element.attr('data_crf_customercode');
         const customername = element.attr('data_crf_customername');
+		const dataareaid = element.attr('data_crf_area');
         
         // เช็คว่ามีรายการค้างหรือไม่ก่อนที่จะโหลดข้อมูล
-        checkCustomerPendingOrders(customercode, function(response) {
+        checkCustomerPendingOrders(customercode, dataareaid, function(response) {
             if (response.status === 'in_progress') {
                 // มีรายการค้างอยู่ - ไม่อนุญาตให้ดำเนินการต่อ
                 alert(`ลูกค้า ${customercode} (${customername}) มีรายการค้างอยู่\n\n` +
@@ -3229,13 +3242,14 @@ function checkDuplicateNameCustomer(cusName , comName) {
  * @param {string} customercode - รหัสลูกค้า TH code
  * @param {function} callback - Callback function เมื่อได้ผลลัพธ์
  */
-function checkCustomerPendingOrders(customercode, callback) {
+function checkCustomerPendingOrders(customercode , dataareaid , callback) {
     $.ajax({
         url: 'main/checkCustomerInProgress',
         method: 'POST',
         dataType: 'json',
         data: {
-            customercode: customercode
+            customercode: customercode,
+			dataareaid: dataareaid
         },
         success: function (response) {
             if (typeof callback === 'function') {

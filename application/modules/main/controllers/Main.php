@@ -1495,6 +1495,7 @@ public function test_api_request()
         header('Content-Type: application/json');
         
         $customercode = $this->input->post('customercode');
+        $dataareaid = $this->input->post('dataareaid');
         
         if (empty($customercode)) {
             echo json_encode([
@@ -1505,7 +1506,7 @@ public function test_api_request()
         }
         
         // เรียก Model เพื่อตรวจสอบสถานะ
-        $result = $this->main->checkCustomerStatus($customercode);
+        $result = $this->main->checkCustomerStatus($customercode , $dataareaid);
         
         if ($result) {
             // มีรายการที่กำลังทำงานอยู่

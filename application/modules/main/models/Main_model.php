@@ -4044,13 +4044,13 @@ class Main_model extends CI_Model
      * @param string $customercode รหัสลูกค้า (TH code)
      * @return object|null ข้อมูลรายการถ้ามี หรือ null ถ้าไม่มี
      */
-    public function checkCustomerStatus($customercode)
+    public function checkCustomerStatus($customercode , $dataareaid)
     {
         // Query เพื่อหา customer ID จากตาราง crf_customers
         $cusQuery = $this->db->query("
             SELECT crfcus_id, crfcus_code, crfcus_name 
             FROM crf_customers 
-            WHERE crfcus_code = ? 
+            WHERE crfcus_code = ?
             LIMIT 1
         ", array($customercode));
         
@@ -4066,8 +4066,10 @@ class Main_model extends CI_Model
         $this->db->select('crf_id, crf_formno, crf_status, crf_cuscode');
         $this->db->from('crf_maindata');
         $this->db->where('crf_cuscode', $cusId);
+        $this->db->where('crf_company', $dataareaid);
         $this->db->where('crf_status !=', 'Completed');
         $this->db->where('crf_status !=', 'Cancel');
+        $this->db->where('crf_status !=', 'Account Manager Not approve');
         $this->db->order_by('crf_id', 'DESC');
         $this->db->limit(1);
         

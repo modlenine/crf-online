@@ -728,7 +728,7 @@
 
                     <div class="col-md-6 form-group">
                         <label for="">จำนวนที่ขอเพิ่ม / ลด</label>
-                        <input type="number" name="crf_finance_change_number" id="crf_finance_change_number" class="form-control form-control-sm">
+                        <input type="text" name="crf_finance_change_number" id="crf_finance_change_number" class="form-control form-control-sm" pattern="[0-9,]*" inputmode="numeric">
                         <div id="alert_crf_finance_change_number"></div>
                     </div>
                     <div class="col-md-6 form-group">

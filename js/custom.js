@@ -3027,28 +3027,8 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
             }
         });
 
-
-        $('#crf_finance_change_number').keyup(function () {
-            var oldmoney = parseInt($('#crf_finance_req_number_calc').val());
-            var newmoney = parseInt($(this).val())
-            if ($('#crf_finance_change_status').val() == 'เพิ่ม') {
-                $('#crf_finance_change_total').val(oldmoney + newmoney);
-            } else if ($('#crf_finance_change_status').val() == 'ลด') {
-                $('#crf_finance_change_total').val(oldmoney - newmoney);
-            }
-
-            $('#crf_finance_change_total').val(function (index, value) {
-                return value
-                    .replace(/\D/g, "")
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                    ;
-            });
-            if ($(this).val() != '') {
-                $('#user_submit').prop('disabled', false);
-            } else {
-                $('#user_submit').prop('disabled', true);
-            }
-        });
+        // Note: Finance change calculation function has been moved to addth.js
+        // to avoid duplication and maintain consistency
 
 
 
