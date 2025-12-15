@@ -235,8 +235,9 @@ function validateCheckboxChecked(checkboxId, alertId, message) {
  * @returns {String} Formatted number string
  */
 function formatNumberWithComma(value) {
-	// Parse as number
-	var numValue = parseFloat(value) || 0;
+	// Remove existing commas first, then parse as number
+	var cleanValue = String(value).replace(/,/g, '');
+	var numValue = parseFloat(cleanValue) || 0;
 	// Format with comma, keeping decimals if they exist
 	var parts = numValue.toString().split('.');
 	parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -2708,11 +2709,10 @@ $(document).ready(function () {
 
 
         // Set finance request number with proper formatting
-        var financeValue = data_ax_creditmaxvalue;
+        let financeValue = data_ax_creditmaxvalue;
         console.log('Loading from DB - Raw value:', financeValue);
         $('#crf_finance_req_number_calc').val(financeValue); // Store raw value without comma
-        $('#crf_finance_req_number').val(formatNumberWithComma(financeValue)); // Display with comma
-        console.log('After format - Display:', formatNumberWithComma(financeValue), 'Calc:', financeValue);
+        $('#crf_finance_req_number').val(financeValue); // Display with comma
         $('#crf_cusid').val(data_crf_cusid);
 
         if (data_crf_area == 'sln') {
@@ -2810,7 +2810,7 @@ $(document).ready(function () {
         $('#crfcus_memo2').val(data_crfcus_memo2);
 
 
-        $('#crf_finance_req_number , #crf_regiscost').val(function (index, value) {
+        $('#crf_regiscost').val(function (index, value) {
             return value
                 .replace(/\D/g, "")
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -2965,7 +2965,7 @@ $('#finance_change_number').keyup(function () {
 });
 
 // Setup comma formatting for financial fields (using utility function)
-setupCommaFormatting('input[name="crf_finance_req_number"], input[name="crf_regiscost"]');
+setupCommaFormatting('input[name="crf_regiscost"]');
 
 // Sync formatted value (with commas) to calc field (without commas) for finance_req_number
 $('input[name="crf_finance_req_number"]').on('keyup change blur input', function() {

@@ -182,8 +182,9 @@ $(document).ready(function () {
 
     // Helper function to format number with comma
     function formatNumberWithComma(value) {
-        // Parse as number
-        var numValue = parseFloat(value) || 0;
+        // Remove existing commas first, then parse as number
+        var cleanValue = String(value).replace(/,/g, '');
+        var numValue = parseFloat(cleanValue) || 0;
         // Format with comma, keeping decimals if they exist
         var parts = numValue.toString().split('.');
         parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -1247,12 +1248,7 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
         $('#crf_creditterm option:selected').val(data_credit_id).text(data_credit_name);
         $('#oldCreditTerm').val(data_credit_id);
 
-        // Set finance request number with proper formatting
-        var financeValue = data_crf_moneylimit;
-        console.log('Loading from DB (custom.js) - Raw value:', financeValue);
-        $('#crf_finance_req_number_calc').val(financeValue); // Store raw value
-        $('#crf_finance_req_number').val(formatNumberWithComma(financeValue)); // Display with comma
-        console.log('After format (custom.js) - Display:', formatNumberWithComma(financeValue), 'Calc:', financeValue);
+        // Finance number formatting is handled in addth.js
         $('#crf_cusid').val(data_crf_cusid);
 
         if (data_crf_area == 'sln') {
