@@ -577,6 +577,7 @@
                             <option value="เพิ่ม">เพิ่ม</option>
                             <option value="ลด">ลด</option>
                         </select>
+                        <div id="alert_crf_condition_credit"></div>
                     </div>
 
                     <div class="col-md-4 form-group change_credit_detail" style="display:none">
@@ -585,6 +586,7 @@
                         <select name="showcredit2" id="showcredit2" class="form-control showcredit2">
                             <option value="{get_creditterm2code}">{get_creditterm2name}</option>
                         </select>
+                        <div id="alert_showcredit2"></div>
                     </div>
                 </div>
                 <div id="alert_creditterm"></div>
@@ -726,11 +728,11 @@
 
 
                 <!-- สำหรับขอวงเงิน -->
-                <div class="row form-group finance_request_detail">
+                <div class="row form-group finance_request_detail" style="display:none;">
                     <div class="col-md-6">
                         <label for="">วงเงิน</label>
                         <input type="text" name="crf_finance_req_number" id="crf_finance_req_number" class="form-control form-control-sm" value="{edit_moneylimit}">
-                        <input hidden type="text" name="crf_finance_req_number_calc" id="crf_finance_req_number_calc" value="{edit_moneylimit}">
+                        <input type="hidden" name="crf_finance_req_number_calc" id="crf_finance_req_number_calc" value="{edit_moneylimit}">
                     </div>
                 </div>
 
@@ -744,6 +746,7 @@
                             <option value="วงเงินชั่วคราว">วงเงินชั่วคราว</option>
                             <option value="วงเงินถาวร">วงเงินถาวร</option>
                         </select>
+                        <div id="alert_crf_finance_status"></div>
                     </div>
                     <div class="col-md-6 form-group">
                         <label for="">สถานะการขอ</label>
@@ -753,6 +756,7 @@
                             <option value="ลด">ลด</option>
                         </select>
                         <input hidden type="text" name="showChangeStatus" id="showChangeStatus">
+                        <div id="alert_crf_finance_change_status"></div>
                     </div>
                     <!-- <div class="col-md-4 form-group">
                         <label for="">วงเงินเดิม</label>
@@ -761,11 +765,12 @@
 
                     <div class="col-md-6 form-group">
                         <label for="">จำนวนที่ขอเพิ่ม / ลด</label>
-                        <input type="text" name="crf_finance_change_number" id="crf_finance_change_number" class="form-control form-control-sm" value="{edit_crf_finance_change_number}">
+                        <input type="text" name="crf_finance_change_number" id="crf_finance_change_number" class="form-control form-control-sm" pattern="[0-9,]*" inputmode="numeric" value="{edit_crf_finance_change_number}">
+                        <div id="alert_crf_finance_change_number"></div>
                     </div>
                     <div class="col-md-6 form-group">
                         <label for="">รวมทั้งสิ้น</label>
-                        <input type="text" name="crf_finance_change_total" id="crf_finance_change_total" class="form-control form-control-sm" value="{edit_crf_finance_change_total}">
+                        <input readonly type="text" name="crf_finance_change_total" id="crf_finance_change_total" class="form-control form-control-sm" value="{edit_crf_finance_change_total}">
                     </div>
                     <div class="col-md-12 form-group">
                         <label for="">เหตุผลในการขอปรับวงเงิน</label>
@@ -817,7 +822,127 @@
             </form>
 
     <script>
+        // ============================================================================
+        // Utility Functions - Number Formatting
+        // ============================================================================
+        
+        /**
+         * Format number with comma separators
+         * @param {String} value - Number string to format
+         * @returns {String} Formatted number string
+         */
+        function formatNumberWithComma(value) {
+            // Handle empty or invalid input
+            if (!value) return '';
+            
+            // Remove existing commas first, then parse as number
+            const cleanValue = String(value).replace(/,/g, '');
+            const numValue = parseFloat(cleanValue) || 0;
+            
+            // Format with comma, keeping decimals if they exist
+            const parts = numValue.toString().split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return parts.join('.');
+        }
+        
+        /**
+         * Setup comma formatting for input fields
+         * @param {String} selector - jQuery selector for input fields
+         */
+        function setupCommaFormatting(selector) {
+            $(selector).on('keyup', function(event) {
+                // Skip for arrow keys
+                if (event.which >= 37 && event.which <= 40) return;
+                
+                $(this).val(function(index, value) {
+                    return formatNumberWithComma(value);
+                });
+            });
+        }
+        
         $(document).ready(function() {
+            // ============================================================================
+            // Check for Success Message from URL Parameter
+            // ============================================================================
+            
+            // Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const successMsg = urlParams.get('success');
+            const editMsg = urlParams.get('edited');
+            
+            // Show success alert if parameter exists
+            if (successMsg === 'true' || editMsg === '1') {
+                alert('บันทึกข้อมูลสำเร็จแล้ว!');
+                
+                // Optional: Remove parameter from URL without page reload
+                if (window.history.replaceState) {
+                    const cleanUrl = window.location.href.split('?')[0];
+                    window.history.replaceState({}, document.title, cleanUrl);
+                }
+            }
+            
+            // ============================================================================
+            // Setup Comma Formatting for Financial Fields
+            // ============================================================================
+            
+            // Format registered capital field
+            setupCommaFormatting('input[name="edit_regiscost"]');
+            
+            // Format finance request number
+            setupCommaFormatting('input[name="crf_finance_req_number"]');
+            
+            // Format finance change number
+            setupCommaFormatting('input[name="crf_finance_change_number"]');
+            
+            // ============================================================================
+            // Sync Finance Request Number (Display vs Calc)
+            // ============================================================================
+            
+            $('input[name="crf_finance_req_number"]').on('keyup change blur input', function() {
+                // Remove commas and store in the _calc field
+                var valueWithoutComma = $(this).val().replace(/,/g, '');
+                $('#crf_finance_req_number_calc').val(valueWithoutComma);
+            });
+            
+            // ============================================================================
+            // Calculate Finance Change Total (Auto-calculate เพิ่ม/ลด)
+            // ============================================================================
+            
+            $('#crf_finance_change_number').on('keyup change blur', function(event) {
+                // Skip for arrow keys
+                if (event.which >= 37 && event.which <= 40) return;
+                
+                // Get old money (วงเงินเดิม) from calc field
+                var oldmoneyStr = $('#crf_finance_req_number_calc').val().replace(/,/g, '');
+                var newmoneyStr = $(this).val().replace(/,/g, '');
+                
+                var oldmoney = parseInt(oldmoneyStr) || 0;
+                var newmoney = parseInt(newmoneyStr) || 0;
+                
+                var totalAmount = 0;
+                var changeStatus = $('#crf_finance_change_status').val();
+                
+                if (changeStatus == "เพิ่ม") {
+                    totalAmount = oldmoney + newmoney;
+                } else if (changeStatus == "ลด") {
+                    totalAmount = oldmoney - newmoney;
+                }
+                
+                // Format with commas and update total field
+                var formattedTotal = totalAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                $('#crf_finance_change_total').val(formattedTotal);
+            });
+            
+            // Recalculate when change status changes
+            $('#crf_finance_change_status').on('change', function() {
+                $('#showChangeStatus').val($(this).val());
+                $('#crf_finance_change_number').trigger('keyup');
+            });
+            
+            // ============================================================================
+            // Credit Term Change Handler
+            // ============================================================================
+            
             $('#crf_condition_credit').change(function() {
                 var oldCredit = $('#crf_creditterm').val();
                 var creditMethod = $('#crf_condition_credit').val();
@@ -828,32 +953,46 @@
                         data: {
                             oldCredit: oldCredit,
                             creditMethod: creditMethod
-                        }, //ส่งค่าออกไปแล้วนำไปใช้ใน Controller fetch_topic
+                        },
                         success: function(data) {
                             $('#showcredit2').html(data);
                         }
                     })
                 }
             });
-
-
-            $(document).on('keyup' , '#edit_cuscompanycreate' , function(){
+            
+            // ============================================================================
+            // Company Create Date Validation
+            // ============================================================================
+            
+            $(document).on('keyup', '#edit_cuscompanycreate', function(){
                 let regex = /^(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[0-2])-\d{4}$/;
                 let input = $(this);
-                console.log(regex.test(input.val()));
+                
                 if(regex.test(input.val()) === true){
                     input.css({
-                        'border-color' : '#009900',
-                        'border-width' : '2px'
+                        'border-color': '#009900',
+                        'border-width': '2px'
                     });
-                }else{
+                } else {
                     input.css({
                         'border-color': '#CC0000',
-                        'border-width' : '2px'
+                        'border-width': '2px'
                     });
                 }
             });
-
-                    
+            
+            // ============================================================================
+            // Form Submit Handler - Sync Values
+            // ============================================================================
+            
+            $('#form1').on('submit', function(e) {
+                // Sync finance request number one more time before submit
+                var financeDisplay = $('#crf_finance_req_number').val();
+                var financeCalc = financeDisplay.replace(/,/g, '');
+                $('#crf_finance_req_number_calc').val(financeCalc);
+                
+                console.log('Form submit - Finance Display:', financeDisplay, 'Finance Calc:', financeCalc);
+            });
         });
     </script>

@@ -812,7 +812,7 @@
                         }
                     ?>
                     <label for="" class="labelcrf_finance_old_view">วงเงิน</label>
-                    <input readonly type="text" name="crf_finance_old_view" id="crf_finance_old_view" class="form-control form-control-sm" value="<?php echo $moneylimitnow?>">
+                    <input readonly type="text" name="crf_finance_old_view" id="crf_finance_old_view" class="form-control form-control-sm" value="<?php echo number_format($moneylimitnow)?>">
                 </div>
             </div>
 
