@@ -3436,6 +3436,17 @@ class Main_model extends CI_Model
             $resultFile9 = $this->input->post("get_crf_file9");
         }
 
+        // Handle crf_recive_cheuqetable file upload for edit view
+        if ($_FILES["crf_recive_cheuqetable"]["name"] != "") {
+            $recive_cheuqetable = "crf_recive_cheuqetable";
+            $recive_cheuqetablename = "ตารางรับเช็ค";
+
+            $this->uploadFiles($recive_cheuqetable, $recive_cheuqetablename, $editformno , $filetime);
+            $result_recive_cheuqetable = $this->uploadFiles($recive_cheuqetable, $recive_cheuqetablename, $editformno , $filetime);
+        } else {
+            $result_recive_cheuqetable = $this->input->post("get_cheuqetable");
+        }
+
 
         if ($_FILES["crf_mapfile_edit"]["name"] != "") {
             $mapfile = "crf_mapfile_edit";
@@ -3456,6 +3467,15 @@ class Main_model extends CI_Model
 
 
         if (isset($_POST['user_edit'])) {
+
+            // Debug: Log received condition values
+            error_log("=== EDIT DEBUG START ===");
+            error_log("DEBUG: user_edit button clicked");
+            error_log("DEBUG: condition_bill = " . $this->input->post("crf_condition_bill"));
+            error_log("DEBUG: condition_money = " . $this->input->post("edit_condition_money"));
+            error_log("DEBUG: check_editcustype = " . $this->input->post("check_editcustype"));
+            error_log("DEBUG: Will enter condition block: " . ($this->input->post("check_editcustype") == 1 ? "YES" : "NO"));
+            error_log("=== EDIT DEBUG END ===");
 
             if ($this->input->post("check_editcustype") == 1) {
                 $arcustomer = array(
@@ -3496,6 +3516,8 @@ class Main_model extends CI_Model
                     "crfcus_datebill" => $this->input->post("crf_datebill"),
                     "crfcus_mapbill2" => $resultFile9,
                     "crfcus_conditionmoney" => $this->input->post("edit_condition_money"),
+                    "crfcus_cheuqetable" => $result_recive_cheuqetable,
+                    "crfcus_cheuqedetail" => $this->input->post("crf_recive_cheuqedetail"),
                     "crfcus_moneylimit" => conPrice($this->input->post("crf_finance_req_number_calc")),
                     "crfcus_usermodify" => $this->input->post("crf_userpost"),
                     "crfcus_usermodify_ecode" => $this->input->post("crf_userecodepost"),
@@ -3509,6 +3531,10 @@ class Main_model extends CI_Model
                 );
                 $this->db->where("crfcus_formno", $this->input->post("check_EditFormNo"));
                 $this->db->update("crf_customers_temp", $arcustomer);
+
+                // Debug: Log after database update
+                error_log("DEBUG: Database update completed for condition_bill = " . $this->input->post("crf_condition_bill"));
+                error_log("DEBUG: Last query = " . $this->db->last_query());
 
 
                 $arcrfmain = array(
@@ -3686,7 +3712,14 @@ class Main_model extends CI_Model
                         "crfcus_file4" => $resultFile4,
                         "crfcus_file5" => $resultFile5,
                         "crfcus_file6" => $resultFile6,
+                        "crfcus_conditionbill" => $this->input->post("crf_condition_bill"),
+                        "crfcus_tablebill" => $resultFile7,
+                        "crfcus_mapbill" => $resultFile8,
+                        "crfcus_datebill" => $this->input->post("crf_datebill"),
+                        "crfcus_mapbill2" => $resultFile9,
                         "crfcus_conditionmoney" => $this->input->post("edit_condition_money"),
+                        "crfcus_cheuqetable" => $result_recive_cheuqetable,
+                        "crfcus_cheuqedetail" => $this->input->post("crf_recive_cheuqedetail"),
                         "crfcus_usermodify" => $this->input->post("crf_userpost"),
                         "crfcus_usermodify_ecode" => $this->input->post("crf_userecodepost"),
                         "crfcus_usermodify_deptcode" => $this->input->post("crf_userdeptcodepost"),
