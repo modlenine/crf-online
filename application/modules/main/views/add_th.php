@@ -509,6 +509,12 @@
                     </div>
                 </div>
 
+                <!-- Hidden fields for billing and payment condition files -->
+                <input hidden type="text" name="editcusoldtablebill" id="editcusoldtablebill">
+                <input hidden type="text" name="editcusoldmapbill" id="editcusoldmapbill">
+                <input hidden type="text" name="editcusoldmapbill2" id="editcusoldmapbill2">
+                <input hidden type="text" name="editcusoldcheuqetable" id="editcusoldcheuqetable">
+
 
                 <label for="">
                     <h6><b><u>Credit term</u></b></h6>

@@ -2918,7 +2918,7 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
 
 
         $('.edit_salesrepsCur').remove();
-        $('#edit_customername , #edit_cuscompanycreate , #edit_addressname , #edit_namecontact , #edit_telcontact , #edit_faxcontact , #edit_emailcontact  ,  #edit_forecast , #crf_recive_cheuqedetail , #crf_finance_req_number , #edit_salesreps').prop('readonly', true);
+        $('#crf_customername , #crf_cuscompanycreate , #crf_addressname , #crf_namecontact , #crf_telcontact , #crf_faxcontact , #crf_emailcontact  ,  #crf_forecast , #crf_recive_cheuqedetail , #crf_finance_req_number , #crf_salesreps').prop('readonly', true);
         $('#crf_file1 , #crf_file2 , #crf_file3 , #crf_file4 , #crf_file5 , #crf_file6 , #crf_file7 , #crf_file8 , #crf_file9 , #crf_recive_cheuqetable').css('display', 'none');
         // $('#add_more_primanage').css('display', 'none');
         // $('input:radio').attr('onclick', 'return false');
@@ -2930,20 +2930,20 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
         // Control subold customer method
         if ($('#check_changearea').val() == 1) {
             $('input[name="crf_sub_oldcus_changearea"]').prop('checked', true);
-            $('#edit_salesreps').prop('readonly', false);
+            $('#crf_salesreps').prop('readonly', false);
         } else {
-            $('#edit_salesreps').prop('readonly', true);
+            $('#crf_salesreps').prop('readonly', true);
         }
 
         if ($('#check_changeaddress').val() == 2) {
             $('input[name="crf_sub_oldcus_changeaddress"]').prop('checked', true);
-            $('#edit_addressname , #edit_namecontact , #edit_telcontact , #edit_faxcontact , #edit_emailcontact').prop('readonly', false);
+            $('#crf_addressname , #crf_namecontact , #crf_telcontact , #crf_faxcontact , #crf_emailcontact').prop('readonly', false);
             $('#crf_file1').css('display', '');
-            $('input:radio[name="edit_addresstype"]').attr('onclick', '');
+            $('input:radio[name="crf_addresstype"]').attr('onclick', '');
         } else {
-            $('#edit_addressname , #edit_namecontact , #edit_telcontact , #edit_faxcontact , #edit_emailcontact').prop('readonly', true);
+            $('#crf_addressname , #crf_namecontact , #crf_telcontact , #crf_faxcontact , #crf_emailcontact').prop('readonly', true);
             $('#crf_file1').css('display', 'none');
-            $('input:radio[name="edit_addresstype"]').attr('onclick', 'return false');
+            $('input:radio[name="crf_addresstype"]').attr('onclick', 'return false');
         }
 
         if ($('#check_changecredit').val() == 3) {
@@ -2973,21 +2973,21 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
 
         $('input:checkbox[name="crf_sub_oldcus_changearea"]').click(function () {
             if ($(this).prop('checked') == true) {
-                $('#edit_salesreps').prop('readonly', false);
+                $('#crf_salesreps').prop('readonly', false);
             } else {
-                $('#edit_salesreps').prop('readonly', true);
+                $('#crf_salesreps').prop('readonly', true);
             }
         });
 
         $('input:checkbox[name="crf_sub_oldcus_changeaddress"]').click(function () {
             if ($(this).prop('checked') == true) {
-                $('#edit_addressname , #edit_namecontact , #edit_telcontact , #edit_faxcontact , #edit_emailcontact').prop('readonly', false);
+                $('#crf_addressname , #crf_namecontact , #crf_telcontact , #crf_faxcontact , #crf_emailcontact').prop('readonly', false);
                 $('#crf_file1').css('display', '');
-                $('input:radio[name="edit_addresstype"]').attr('onclick', '');
+                $('input:radio[name="crf_addresstype"]').attr('onclick', '');
             } else {
-                $('#edit_addressname , #edit_namecontact , #edit_telcontact , #edit_faxcontact , #edit_emailcontact').prop('readonly', true);
+                $('#crf_addressname , #crf_namecontact , #crf_telcontact , #crf_faxcontact , #crf_emailcontact').prop('readonly', true);
                 $('#crf_file1').css('display', 'none');
-                $('input:radio[name="edit_addresstype"]').attr('onclick', 'return false');
+                $('input:radio[name="crf_addresstype"]').attr('onclick', 'return false');
             }
         });
 
@@ -3015,7 +3015,7 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
         $('input:checkbox[name="crf_sub_oldcus_editcustomer"]').click(function(){
             if($(this).prop('checked') == true){
                 console.log('test');
-                $('#edit_namecontact , #edit_telcontact , #edit_faxcontact , #edit_emailcontact').prop('readonly' , false);
+                $('#crf_namecontact , #crf_telcontact , #crf_faxcontact , #crf_emailcontact').prop('readonly' , false);
                 $('.crf_file1_edit').css('display' , '');
                 $('.crf_file2_edit').css('display' , '');
                 $('.crf_file3_edit').css('display' , '');
@@ -3023,7 +3023,7 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
                 $('.crf_file5_edit').css('display' , '');
                 $('.crf_file6_edit').css('display' , '');
             }else{
-                $('#edit_namecontact , #edit_telcontact , #edit_faxcontact , #edit_emailcontact').prop('readonly' , true);
+                $('#crf_namecontact , #crf_telcontact , #crf_faxcontact , #crf_emailcontact').prop('readonly' , true);
             }
         });
 

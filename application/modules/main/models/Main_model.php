@@ -496,6 +496,8 @@ class Main_model extends CI_Model
 
                     $arUpdateTemp = array(
                         "crfcus_salesreps" => $this->input->post("crf_salesreps"),
+                        "crfcus_conditionbill" => $this->input->post("crf_condition_bill"),
+                        "crfcus_conditionmoney" => $this->input->post("crf_condition_money"),
                         "crfcus_memo2" => $this->input->post("crfcus_memo2"),
                         "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli")
                     );
@@ -603,6 +605,8 @@ class Main_model extends CI_Model
                     // "crfcus_regiscapital" => conPrice($this->input->post("crf_regiscost")),
                     "crfcus_file1" => $resultFile1,
                     "crfcus_personal" => $resultFilePersonal,
+                    "crfcus_conditionbill" => $this->input->post("crf_condition_bill"),
+                    "crfcus_conditionmoney" => $this->input->post("crf_condition_money"),
                     "crfcus_memo2" => $this->input->post("crfcus_memo2"),
                     "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli")
                 );
@@ -709,12 +713,50 @@ class Main_model extends CI_Model
                     }
                 }
 
+                // จัดการการอัพโหลดไฟล์สำหรับเงื่อนไขการวางบิล
+                $resulttablebill = "";
+                if ($_FILES["crf_tablebill"]["name"] != "") {
+                    $tablebill = "crf_tablebill";
+                    $tablebillname = "ตารางวางบิล";
 
+                    $this->uploadFiles($tablebill, $tablebillname, $getFormNo , $filetime);
+                    $resulttablebill = $this->uploadFiles($tablebill, $tablebillname, $getFormNo , $filetime);
+                } else {
+                    $resulttablebill = $this->input->post("editcusoldtablebill");
+                }
 
+                $resultmapbill = "";
+                if ($_FILES["crf_mapbill"]["name"] != "") {
+                    $mapbill = "crf_mapbill";
+                    $mapbillname = "แผนที่ที่ไปวางบิล";
+                    
+                    $this->uploadFiles($mapbill, $mapbillname, $getFormNo , $filetime);
+                    $resultmapbill = $this->uploadFiles($mapbill, $mapbillname, $getFormNo , $filetime);
+                } else {
+                    $resultmapbill = $this->input->post("editcusoldmapbill");
+                }
 
+                $resultmapbill2 = "";
+                if ($_FILES["crf_mapbill2"]["name"] != "") {
+                    $mapbill2 = "crf_mapbill2";
+                    $mapbill2name = "แผนที่ที่ไปรับเช็ค";
+                    
+                    $this->uploadFiles($mapbill2, $mapbill2name, $getFormNo , $filetime);
+                    $resultmapbill2 = $this->uploadFiles($mapbill2, $mapbill2name, $getFormNo , $filetime);
+                } else {
+                    $resultmapbill2 = $this->input->post("editcusoldmapbill2");
+                }
 
-
-
+                $result_recive_cheuqetable = "";
+                if ($_FILES["crf_recive_cheuqetable"]["name"] != "") {
+                    $recive_cheuqetable = "crf_recive_cheuqetable";
+                    $recive_cheuqetablename = "ตารางรับเช็ค";
+                    
+                    $this->uploadFiles($recive_cheuqetable, $recive_cheuqetablename, $getFormNo , $filetime);
+                    $result_recive_cheuqetable = $this->uploadFiles($recive_cheuqetable, $recive_cheuqetablename, $getFormNo , $filetime);
+                } else {
+                    $result_recive_cheuqetable = $this->input->post("editcusoldcheuqetable");
+                }
 
                 if ($this->input->post("crf_mapurl") != "") {
                     $mapurl = $this->input->post("crf_mapurl");
@@ -796,6 +838,14 @@ class Main_model extends CI_Model
                     "crfcus_file4" => $resultFile4,
                     "crfcus_file5" => $resultFile5,
                     "crfcus_file6" => $resultFile6,
+                    "crfcus_conditionbill" => $this->input->post("crf_condition_bill"),
+                    "crfcus_tablebill" => $resulttablebill,
+                    "crfcus_mapbill" => $resultmapbill,
+                    "crfcus_datebill" => $this->input->post("crf_datebill"),
+                    "crfcus_mapbill2" => $resultmapbill2,
+                    "crfcus_conditionmoney" => $this->input->post("crf_condition_money"),
+                    "crfcus_cheuqetable" => $result_recive_cheuqetable,
+                    "crfcus_cheuqedetail" => $this->input->post("crf_recive_cheuqedetail"),
                     "crfcus_memo2" => $this->input->post("crfcus_memo2"),
                     "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli")
                 );
@@ -855,6 +905,8 @@ class Main_model extends CI_Model
 
                 $arUpdateTemp = array(
                     "crfcus_creditterm2" => $this->input->post("crf_creditterm2"),
+                    "crfcus_conditionbill" => $this->input->post("crf_condition_bill"),
+                    "crfcus_conditionmoney" => $this->input->post("crf_condition_money"),
                     "crfcus_memo2" => $this->input->post("crfcus_memo2"),
                     "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli")
                 );
@@ -918,6 +970,8 @@ class Main_model extends CI_Model
 
                 $arUpdateTemp = array(
                     "crfcus_moneylimit2" => conPrice($this->input->post("crf_finance_change_total")),
+                    "crfcus_conditionbill" => $this->input->post("crf_condition_bill"),
+                    "crfcus_conditionmoney" => $this->input->post("crf_condition_money"),
                     "crfcus_memo2" => $this->input->post("crfcus_memo2"),
                     "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli")
                 );
