@@ -397,92 +397,35 @@ $(document).ready(function () {
     }
 
 
+    const ATTACH_BASE_URL = '/intsys/crf/upload/';
+    const previewAttachment = (triggerSelector, dataAttr, imgSelector, embedSelector) => {
+        $(triggerSelector).off('click.previewAttachment').on('click.previewAttachment', function () {
+            const fileName = $(this).attr(dataAttr);
+            if (!fileName) {
+                return;
+            }
+            const fileExt = fileName.split('.').pop().toLowerCase();
+            const isImage = ['jpg', 'jpeg', 'png'].indexOf(fileExt) !== -1;
+            const fullPath = ATTACH_BASE_URL + fileName;
+            const $img = $(imgSelector);
+            const $embed = $(embedSelector);
+            if (isImage) {
+                $img.attr('src', fullPath).show();
+                $embed.hide();
+            } else {
+                $embed.attr('src', fullPath).show();
+                $img.hide();
+            }
+        });
+    };
+
     // Controle show file upload to modal
-    $('#datafile1').click(function () {
-        var dataFile1 = $(this).attr('data_file1');
-        var url = '/intsys/crf/upload/';
-
-        // $('#embedshowfile1').attr('src', url + dataFile1);
-
-        var cutFileType1 = dataFile1.substr(-3, 4);
-        if (cutFileType1 == 'jpg' || cutFileType1 == 'JPG' || cutFileType1 == 'png' || cutFileType1 == 'PNG') {
-            $('#embedshowfile1Img').attr('src', url + dataFile1);
-            $('#embedshowfile1').hide();
-        } else {
-            $('#embedshowfile1').attr('src', url + dataFile1);
-            $('#embedshowfile1Img').hide();
-        }
-    });
-    $('#datafile2').click(function () {
-        var dataFile2 = $(this).attr('data_file2');
-        var url = '/intsys/crf/upload/';
-
-        // $('#embedshowfile2').attr('src', url + dataFile2);
-        var cutFileType2 = dataFile2.substr(-3, 4);
-        if (cutFileType2 == 'jpg' || cutFileType2 == 'JPG' || cutFileType2 == 'png' || cutFileType2 == 'PNG') {
-            $('#embedshowfile2Img').attr('src', url + dataFile2);
-            $('#embedshowfile2').hide();
-        } else {
-            $('#embedshowfile2').attr('src', url + dataFile2);
-            $('#embedshowfile2Img').hide();
-        }
-    });
-    $('#datafile3').click(function () {
-        var dataFile3 = $(this).attr('data_file3');
-        var url = '/intsys/crf/upload/';
-
-        // $('#embedshowfile3').attr('src', url + dataFile3);
-        var cutFileType3 = dataFile3.substr(-3, 4);
-        if (cutFileType3 == 'jpg' || cutFileType3 == 'JPG' || cutFileType3 == 'png' || cutFileType3 == 'PNG') {
-            $('#embedshowfile3Img').attr('src', url + dataFile3);
-            $('#embedshowfile3').hide();
-        } else {
-            $('#embedshowfile3').attr('src', url + dataFile3);
-            $('#embedshowfile3Img').hide();
-        }
-    });
-    $('#datafile4').click(function () {
-        var dataFile4 = $(this).attr('data_file4');
-        var url = '/intsys/crf/upload/';
-
-        // $('#embedshowfile4').attr('src', url + dataFile4);
-        var cutFileType4 = dataFile4.substr(-3, 4);
-        if (cutFileType4 == 'jpg' || cutFileType4 == 'JPG' || cutFileType4 == 'png' || cutFileType4 == 'PNG') {
-            $('#embedshowfile4Img').attr('src', url + dataFile4);
-            $('#embedshowfile4').hide();
-        } else {
-            $('#embedshowfile4').attr('src', url + dataFile4);
-            $('#embedshowfile4Img').hide();
-        }
-    });
-    $('#datafile5').click(function () {
-        var dataFile5 = $(this).attr('data_file5');
-        var url = '/intsys/crf/upload/';
-
-        // $('#embedshowfile5').attr('src', url + dataFile5);
-        var cutFileType5 = dataFile5.substr(-3, 4);
-        if (cutFileType5 == 'jpg' || cutFileType5 == 'JPG' || cutFileType5 == 'png' || cutFileType5 == 'PNG') {
-            $('#embedshowfile5Img').attr('src', url + dataFile5);
-            $('#embedshowfile5').hide();
-        } else {
-            $('#embedshowfile5').attr('src', url + dataFile5);
-            $('#embedshowfile5Img').hide();
-        }
-    });
-    $('#datafile6').click(function () {
-        var dataFile6 = $(this).attr('data_file6');
-        var url = '/intsys/crf/upload/';
-
-        // $('#embedshowfile6').attr('src', url + dataFile6);
-        var cutFileType6 = dataFile6.substr(-3, 4);
-        if (cutFileType6 == 'jpg' || cutFileType6 == 'JPG' || cutFileType6 == 'png' || cutFileType6 == 'PNG') {
-            $('#embedshowfile6Img').attr('src', url + dataFile6);
-            $('#embedshowfile6').hide();
-        } else {
-            $('#embedshowfile6').attr('src', url + dataFile6);
-            $('#embedshowfile6Img').hide();
-        }
-    });
+    previewAttachment('#datafile1', 'data_file1', '#embedshowfile1Img', '#embedshowfile1');
+    previewAttachment('#datafile2', 'data_file2', '#embedshowfile2Img', '#embedshowfile2');
+    previewAttachment('#datafile3', 'data_file3', '#embedshowfile3Img', '#embedshowfile3');
+    previewAttachment('#datafile4', 'data_file4', '#embedshowfile4Img', '#embedshowfile4');
+    previewAttachment('#datafile5', 'data_file5', '#embedshowfile5Img', '#embedshowfile5');
+    previewAttachment('#datafile6', 'data_file6', '#embedshowfile6Img', '#embedshowfile6');
 
 
     // Control Condition of bill เงื่อนไขการวางบิล
@@ -497,48 +440,9 @@ $(document).ready(function () {
     }
 
     // Show file on modal
-    $('#tablebill').click(function () {
-        var tablebill = $(this).attr('data_tablebill');
-        var url = 'http://intranet.saleecolour.com/intsys/crf/upload/';
-
-        // $('#embedshowfile7').attr('src', url + tablebill);
-        var cutFileType7 = tablebill.substr(-3, 4);
-        if (cutFileType7 == 'jpg' || cutFileType7 == 'JPG' || cutFileType7 == 'png' || cutFileType7 == 'PNG') {
-            $('#embedshowfile7Img').attr('src', url + tablebill);
-            $('#embedshowfile7').hide();
-        } else {
-            $('#embedshowfile7').attr('src', url + tablebill);
-            $('#embedshowfile7Img').hide();
-        }
-    });
-    $('#mapbill').click(function () {
-        var mapbill = $(this).attr('data_mapbill');
-        var url = 'http://intranet.saleecolour.com/intsys/crf/upload/';
-
-        // $('#embedshowfile8').attr('src', url + mapbill);
-        var cutFileType8 = mapbill.substr(-3, 4);
-        if (cutFileType8 == 'jpg' || cutFileType8 == 'JPG' || cutFileType8 == 'png' || cutFileType8 == 'PNG') {
-            $('#embedshowfile8Img').attr('src', url + mapbill);
-            $('#embedshowfile8').hide();
-        } else {
-            $('#embedshowfile8').attr('src', url + mapbill);
-            $('#embedshowfile8Img').hide();
-        }
-    });
-    $('#mapbill2').click(function () {
-        var mapbill2 = $(this).attr('data_mapbill2');
-        var url = 'https://intranet.saleecolour.com/intsys/crf/upload/';
-
-        // $('#embedshowfile9').attr('src', url + mapbill2);
-        var cutFileType9 = mapbill2.substr(-3, 4);
-        if (cutFileType9 == 'jpg' || cutFileType9 == 'JPG' || cutFileType9 == 'png' || cutFileType9 == 'PNG') {
-            $('#embedshowfile9Img').attr('src', url + mapbill2);
-            $('#embedshowfile9').hide();
-        } else {
-            $('#embedshowfile9').attr('src', url + mapbill2);
-            $('#embedshowfile9Img').hide();
-        }
-    });
+    previewAttachment('#tablebill', 'data_tablebill', '#embedshowfile7Img', '#embedshowfile7');
+    previewAttachment('#mapbill', 'data_mapbill', '#embedshowfile8Img', '#embedshowfile8');
+    previewAttachment('#mapbill2', 'data_mapbill2', '#embedshowfile9Img', '#embedshowfile9');
 
 
 
@@ -554,20 +458,7 @@ $(document).ready(function () {
     } else if ($('#forcrf_countmonthdeli_view').val() == "นับเดือนส่งของ") {
         $('input[name="crfcus_countmonthdeli"][value="นับเดือนส่งของ"]').prop('checked', true);
     }
-    $('#recive_cheuqetable').click(function () {
-        var recive_cheuqetable = $(this).attr('data_recive_cheuqetable');
-        var url = 'https://intranet.saleecolour.com/intsys/crf/upload/';
-
-        // $('#embedshowfile10').attr('src', url + recive_cheuqetable);
-        var cutFileType10 = recive_cheuqetable.substr(-3, 4);
-        if (cutFileType10 == 'jpg' || cutFileType10 == 'JPG' || cutFileType10 == 'png' || cutFileType10 == 'PNG') {
-            $('#embedshowfile10Img').attr('src', url + recive_cheuqetable);
-            $('#embedshowfile10').hide();
-        } else {
-            $('#embedshowfile10').attr('src', url + recive_cheuqetable);
-            $('#embedshowfile10Img').hide();
-        }
-    });
+    previewAttachment('#recive_cheuqetable', 'data_recive_cheuqetable', '#embedshowfile10Img', '#embedshowfile10');
 
 
 

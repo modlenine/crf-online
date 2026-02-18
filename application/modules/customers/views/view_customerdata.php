@@ -517,11 +517,37 @@
             <div class="row form-group crf_condition_bill2" style="display:none">
                 <div class="col-md-6">
                     <label for="">ตารางวางบิล</label><br>
-                    <span><b><a id="tablebill" href="#" data-toggle="modal" data-target="#show_file7" data_tablebill="<?php echo $result->crfcus_tablebill?>"><?php echo $result->crfcus_tablebill?></a></b></span>
+                    <?php
+                        $tablebillFile = trim((string) $result->crfcus_tablebill);
+                        if ($tablebillFile !== '') {
+                            $tablebillLabel = htmlspecialchars($tablebillFile, ENT_QUOTES, 'UTF-8');
+                            $tablebillExt = strtolower(pathinfo($tablebillFile, PATHINFO_EXTENSION));
+                            if ($tablebillExt === 'pdf') {
+                                echo '<span><b><a href="' . base_url('upload/' . $tablebillFile) . '" target="_blank">' . $tablebillLabel . '</a></b></span>';
+                            } else {
+                                echo '<span><b><a id="tablebill" href="#" data-toggle="modal" data-target="#show_file7" data_tablebill="' . htmlspecialchars($tablebillFile, ENT_QUOTES, 'UTF-8') . '">' . $tablebillLabel . '</a></b></span>';
+                            }
+                        } else {
+                            echo '<span>-</span>';
+                        }
+                    ?>
                 </div>
                 <div class="col-md-6">
                     <label for="">แผนที่ ที่ไปวางบิล</label><br>
-                    <span><b><a id="mapbill" href="#" data-toggle="modal" data-target="#show_file8" data_mapbill="<?php echo $result->crfcus_mapbill?>"><?php echo $result->crfcus_mapbill?></a></b></span>
+                    <?php
+                        $mapbillFile = trim((string) $result->crfcus_mapbill);
+                        if ($mapbillFile !== '') {
+                            $mapbillLabel = htmlspecialchars($mapbillFile, ENT_QUOTES, 'UTF-8');
+                            $mapbillExt = strtolower(pathinfo($mapbillFile, PATHINFO_EXTENSION));
+                            if ($mapbillExt === 'pdf') {
+                                echo '<span><b><a href="' . base_url('upload/' . $mapbillFile) . '" target="_blank">' . $mapbillLabel . '</a></b></span>';
+                            } else {
+                                echo '<span><b><a id="mapbill" href="#" data-toggle="modal" data-target="#show_file8" data_mapbill="' . htmlspecialchars($mapbillFile, ENT_QUOTES, 'UTF-8') . '">' . $mapbillLabel . '</a></b></span>';
+                            }
+                        } else {
+                            echo '<span>-</span>';
+                        }
+                    ?>
                 </div>
             </div>
 
@@ -532,7 +558,20 @@
                 </div>
                 <div class="col-md-6">
                     <label for="">แผนที่ ที่ไปวางบิล</label><br>
-                    <span><b><a id="mapbill2" href="#" data-toggle="modal" data-target="#show_file9" data_mapbill2="<?php echo $result->crfcus_mapbill2?>"><?php echo $result->crfcus_mapbill2?></a></b></span>
+                    <?php
+                        $mapbill2File = trim((string) $result->crfcus_mapbill2);
+                        if ($mapbill2File !== '') {
+                            $mapbill2Label = htmlspecialchars($mapbill2File, ENT_QUOTES, 'UTF-8');
+                            $mapbill2Ext = strtolower(pathinfo($mapbill2File, PATHINFO_EXTENSION));
+                            if ($mapbill2Ext === 'pdf') {
+                                echo '<span><b><a href="' . base_url('upload/' . $mapbill2File) . '" target="_blank">' . $mapbill2Label . '</a></b></span>';
+                            } else {
+                                echo '<span><b><a id="mapbill2" href="#" data-toggle="modal" data-target="#show_file9" data_mapbill2="' . htmlspecialchars($mapbill2File, ENT_QUOTES, 'UTF-8') . '">' . $mapbill2Label . '</a></b></span>';
+                            }
+                        } else {
+                            echo '<span>-</span>';
+                        }
+                    ?>
                 </div>
             </div><br>
 
@@ -559,7 +598,20 @@
             <div class="row form-group recive_cheuqe" style="display:none;">
                 <div class="col-md-6 form-group">
                     <label for="">แนบตารางวางบิล / รับเช็ค</label><br>
-                    <span><b><a id="recive_cheuqetable" href="#" data-toggle="modal" data-target="#show_file10" data_recive_cheuqetable="<?php echo $result->crfcus_cheuqetable?>"><?php echo $result->crfcus_cheuqetable?></a></b></span>
+                    <?php
+                        $chequeTableFile = trim((string) $result->crfcus_cheuqetable);
+                        if ($chequeTableFile !== '') {
+                            $chequeTableLabel = htmlspecialchars($chequeTableFile, ENT_QUOTES, 'UTF-8');
+                            $chequeTableExt = strtolower(pathinfo($chequeTableFile, PATHINFO_EXTENSION));
+                            if ($chequeTableExt === 'pdf') {
+                                echo '<span><b><a href="' . base_url('upload/' . $chequeTableFile) . '" target="_blank">' . $chequeTableLabel . '</a></b></span>';
+                            } else {
+                                echo '<span><b><a id="recive_cheuqetable" href="#" data-toggle="modal" data-target="#show_file10" data_recive_cheuqetable="' . htmlspecialchars($chequeTableFile, ENT_QUOTES, 'UTF-8') . '">' . $chequeTableLabel . '</a></b></span>';
+                            }
+                        } else {
+                            echo '<span>-</span>';
+                        }
+                    ?>
 
                 </div>
                 <div class="col-md-12 form-group">
