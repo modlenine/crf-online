@@ -130,7 +130,8 @@ class Customers extends MX_Controller {
         } else {
             $data = array(
                 "title" => "Customer information",
-                "result" => $customerData
+                "result" => $customerData,
+                "dueOptions" => $this->customer->getDueOptions()
             );
         }
 

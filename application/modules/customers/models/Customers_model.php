@@ -208,6 +208,9 @@ class Customers_model extends CI_Model
                 }
     
     
+                $selectedDueId = $this->input->post("crf_arcustdueid");
+                $dueDetail = $this->getDueDetail($selectedDueId);
+
     
                 $arcustomer = array(
                     "crfcus_id" => $getCustomerNumber,
@@ -260,7 +263,10 @@ class Customers_model extends CI_Model
                     "crfcus_mapfile" => $customermapfile, //update 12-05-2020
                     "crfcus_products" => $this->input->post("addcus_customer_product"), //update 12-05-2020
                     "crfcus_memo2" => $this->input->post("crf_memo2"), //update 27-11-2025
-                    "crfcus_countmonthdeli" => $this->input->post("crf_countmonthdeli")
+
+                    "crfcus_slc_arcustdueid" => $dueDetail ? $dueDetail->arcustdueid : null,
+                    "crfcus_duedescription" => $dueDetail ? $dueDetail->duedescription : null,
+                    "crfcus_numsofdays" => ($dueDetail && $dueDetail->numsofdays !== null) ? $dueDetail->numsofdays : null
                 );
                 $this->db->insert("crf_customers",  $arcustomer);
     
@@ -308,7 +314,7 @@ class Customers_model extends CI_Model
     
                 // $this->email_model->sendemail_savedatath($getFormNo);
 
-                header("refresh:0; url=".base_url());
+                // header("refresh:0; url=".base_url());
 
             }
 
@@ -455,6 +461,23 @@ class Customers_model extends CI_Model
             ->get();
 
         return $query->result();
+    }
+
+    private function getDueDetail($dueId)
+    {
+        $dueId = trim((string) $dueId);
+        if ($dueId === '') {
+            return null;
+        }
+
+        $query = $this->db3
+            ->select(array('arcustdueid', 'duedescription', 'numsofdays'))
+            ->from('slc_arcustduetable')
+            ->where('arcustdueid', $dueId)
+            ->limit(1)
+            ->get();
+
+        return $query->num_rows() > 0 ? $query->row() : null;
     }
 
     private function respondJson($payload)

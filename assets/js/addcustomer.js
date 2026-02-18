@@ -255,7 +255,7 @@ $(document).ready(() => {
 				$("#crf_finance_req_number").attr("readonly", true);
 			}
 
-			const $dueSelect = $("#crf_countmonthdeli");
+			const $dueSelect = $("#crf_arcustdueid");
 			if (data_addcus_dueid) {
 				let $dueOption = $dueSelect.find(`option[value="${data_addcus_dueid}"]`);
 				const dueLabelParts = [];

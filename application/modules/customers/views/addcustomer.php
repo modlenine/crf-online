@@ -404,8 +404,8 @@
 
                 <div class="row form-group">
                     <div class="col-md-6">
-                        <label for="crf_countmonthdeli">กำหนดวันชำระ</label>
-                        <select name="crf_countmonthdeli" id="crf_countmonthdeli" class="form-control" required>
+                        <label for="crf_arcustdueid">Customer Expected Date Payment Term</label>
+                        <select name="crf_arcustdueid" id="crf_arcustdueid" class="form-control" required>
                             <option value="">-- เลือกกำหนดวันชำระ --</option>
                             <?php if (!empty($dueOptions)) : ?>
                                 <?php foreach ($dueOptions as $due) : ?>
