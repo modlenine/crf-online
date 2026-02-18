@@ -446,6 +446,17 @@ class Customers_model extends CI_Model
         );
     }
 
+    public function getDueOptions()
+    {
+        $query = $this->db3
+            ->select(array('arcustdueid', 'duedescription', 'numsofdays'))
+            ->from('slc_arcustduetable')
+            ->order_by('arcustdueid', 'ASC')
+            ->get();
+
+        return $query->result();
+    }
+
     private function respondJson($payload)
     {
         if (!headers_sent()) {

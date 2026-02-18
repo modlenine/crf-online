@@ -33,6 +33,9 @@ const buildCustomerListMarkup = (customers = []) =>
 			const creditLimitRaw = escapeHtml(customer.credit_limit ?? "");
 			const creditLimitDisplay = escapeHtml(customer.credit_limit_display || "");
 			const salesgroupValue = escapeHtml(customer.salesgroup || "");
+			const dueIdValue = escapeHtml(customer.due_id || "");
+			const dueDescriptionValue = escapeHtml(customer.due_description || "");
+			const dueDaysValue = escapeHtml(customer.due_days || "");
 			const addressLine = addressValue
 				? `<div class="small text-muted">${addressValue}</div>`
 				: "";
@@ -75,6 +78,9 @@ const buildCustomerListMarkup = (customers = []) =>
 						data-addcus-creditlimit="${creditLimitRaw}"
 						data-addcus-firstname="${firstNameAttr}"
 						data-addcus-salesgroup="${salesgroupValue}"
+						data-addcus-due-id="${dueIdValue}"
+						data-addcus-due-description="${dueDescriptionValue}"
+						data-addcus-due-days="${dueDaysValue}"
 					>
 						<li class="list-group-item d-flex justify-content-between align-items-start">
 							<div class="me-3">
@@ -235,6 +241,9 @@ $(document).ready(() => {
 			const data_addcus_creditlimit = $(this).attr("data-addcus-creditlimit");
 			const data_addcus_firstname = $(this).attr("data-addcus-firstname");
 			const data_addcus_salesgroup = $(this).attr("data-addcus-salesgroup");
+			const data_addcus_dueid = $(this).attr("data-addcus-due-id");
+			const data_addcus_duedescription = $(this).attr("data-addcus-due-description");
+			const data_addcus_duedays = $(this).attr("data-addcus-due-days");
 
 			if (data_addcus_termname !== "") {
 				$("#addcus_creditterm").attr("style", "pointer-events: none;");
@@ -246,6 +255,31 @@ $(document).ready(() => {
 				$("#crf_finance_req_number").attr("readonly", true);
 			}
 
+			const $dueSelect = $("#crf_countmonthdeli");
+			if (data_addcus_dueid) {
+				let $dueOption = $dueSelect.find(`option[value="${data_addcus_dueid}"]`);
+				const dueLabelParts = [];
+				if (data_addcus_dueid) {
+					dueLabelParts.push(data_addcus_dueid);
+				}
+				if (data_addcus_duedescription) {
+					dueLabelParts.push(data_addcus_duedescription);
+				}
+				const dueDayText = data_addcus_duedays ? ` (${data_addcus_duedays} วัน)` : "";
+				const dueLabel = `${dueLabelParts.join(" | ")}${dueDayText}`;
+				if ($dueOption.length === 0) {
+					$dueOption = $("<option>", {
+						value: data_addcus_dueid,
+						text: dueLabel,
+					});
+					$dueSelect.append($dueOption);
+				} else {
+					$dueOption.text(dueLabel);
+				}
+				$dueSelect.val(data_addcus_dueid);
+			} else {
+				$dueSelect.val("");
+			}
 			const baseUrl = `${window.location.origin}/intsys/crf`;
 
 			$.ajax({

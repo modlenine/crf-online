@@ -23,7 +23,8 @@ class Customers extends MX_Controller {
       "title" => "หน้าเพิ่มข้อมูลลูกค้า",
       "getCusProcess" => getCusProcess(),
       "getCreditTerm" => getCreditTerm(),
-      "checkurl" => $this->uri->segment(2)
+      "checkurl" => $this->uri->segment(2),
+      "dueOptions" => $this->customer->getDueOptions()
       
     );
     getHead();
@@ -183,10 +184,20 @@ public function searchcustomerdatanameex()
     $this->customer->searchcustomerdatanameex();
 }
 
+public function fetchDueOptions()
+{
+  $options = $this->customer->getDueOptions();
+  $payload = array(
+    'status' => empty($options) ? 'empty' : 'success',
+    'results' => $options,
+    'message' => empty($options) ? 'ไม่พบข้อมูลกำหนดชำระ' : ''
+  );
 
+  $this->output
+    ->set_content_type('application/json', 'utf-8')
+    ->set_output(json_encode($payload, JSON_UNESCAPED_UNICODE));
 
-
-
+}
 
 }
 
