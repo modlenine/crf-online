@@ -117,36 +117,6 @@ function queryPrimanageUse(cusId) {
             cusId: cusId
         },
         success: function (data) {
-            $('#showPrimanage').html(data);
-            // $('.newPrimanage').remove();
-        }
-    });
-}
-
-function filterCreditTerm(oldCredit, creditMethod) {
-    $.ajax({
-        url: 'main/filterCreditTerm',
-        method: 'POST',
-        data: {
-            oldCredit: oldCredit,
-            creditMethod: creditMethod
-        },
-        success: function (data) {
-            $('#showNewCredit').html(data);
-        }
-    });
-}
-
-
-function checkDuplicateNameCustomer(cusName , comName) {
-    $.ajax({
-        url: 'main/checkDuplicateNameCustomer',
-        method: 'POST',
-        data: {
-            cusName: cusName,
-            comName: comName
-        },
-        success: function (data) {
             if (data == 11) {
                 var conF = confirm("พบชื่อลูกค้าที่คล้ายกันในระบบ คุณยืนยันที่จะดำเนินการต่อหรือไม่");
                 if (conF == false) {

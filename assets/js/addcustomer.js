@@ -2,6 +2,113 @@
 let searchTimeout = null;
 let currentRequest = null;
 
+const escapeHtml = (input = "") =>
+	String(input ?? "")
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#39;");
+
+const deriveContactName = (name = "") => {
+	const trimmed = String(name ?? "").trim();
+	return trimmed === "" ? "" : trimmed.split(/\s+/)[0];
+};
+
+const buildCustomerListMarkup = (customers = []) =>
+	customers
+		.map((customer) => {
+			const accountnum = escapeHtml(customer.accountnum || "");
+			const rawName = customer.name || "";
+			const name = escapeHtml(rawName);
+			const area = escapeHtml(customer.data_area_id || "");
+			const addressValue = escapeHtml(customer.address || "");
+			const phoneValue = escapeHtml(customer.phone || "");
+			const faxValue = escapeHtml(customer.telefax || "");
+			const emailValue = escapeHtml(customer.email || "");
+			const taxIdValue = escapeHtml(customer.tax_id || "");
+			const branchValue = escapeHtml(customer.branch || "");
+			const termIdValue = escapeHtml(customer.credit_term_id || "");
+			const termNameValue = escapeHtml(customer.credit_term_name || "");
+			const creditLimitRaw = escapeHtml(customer.credit_limit ?? "");
+			const creditLimitDisplay = escapeHtml(customer.credit_limit_display || "");
+			const salesgroupValue = escapeHtml(customer.salesgroup || "");
+			const addressLine = addressValue
+				? `<div class="small text-muted">${addressValue}</div>`
+				: "";
+			const contactParts = [];
+			if (phoneValue) contactParts.push(`โทร. ${phoneValue}`);
+			if (faxValue) contactParts.push(`แฟกซ์ ${faxValue}`);
+			if (emailValue) contactParts.push(emailValue);
+			const contactLine = contactParts.length
+				? `<div class="small text-secondary">${contactParts.join(" | ")}</div>`
+				: "";
+			const dueParts = [];
+			if (customer.due_description)
+				dueParts.push(escapeHtml(customer.due_description));
+			if (customer.due_days)
+				dueParts.push(`${escapeHtml(customer.due_days)} วัน`);
+			const dueLine = dueParts.length
+				? `<div class="small text-secondary">กำหนดชำระ: ${dueParts.join(
+					" | "
+				)}</div>`
+				: "";
+			const creditBadge = creditLimitDisplay
+				? `<span class="badge bg-light text-dark ms-3">${creditLimitDisplay}</span>`
+				: "";
+			const firstNameAttr = escapeHtml(deriveContactName(rawName));
+
+			return `
+				<ul class="list-group mb-1">
+					<a href="javascript:void(0)" class="selectCusCodeManualcode"
+						data-addcus-code="${accountnum}"
+						data-addcus-name="${name}"
+						data-addcus-address="${addressValue}"
+						data-addcus-phone="${phoneValue}"
+						data-addcus-fax="${faxValue}"
+						data-addcus-email="${emailValue}"
+						data-addcus-taxid="${taxIdValue}"
+						data-addcus-area="${area}"
+						data-addcus-branch="${branchValue}"
+						data-addcus-termid="${termIdValue}"
+						data-addcus-termname="${termNameValue}"
+						data-addcus-creditlimit="${creditLimitRaw}"
+						data-addcus-firstname="${firstNameAttr}"
+						data-addcus-salesgroup="${salesgroupValue}"
+					>
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+							<div class="me-3">
+								<div class="fw-bold">${accountnum} ${name} (${area})</div>
+								${addressLine}
+								${contactLine}
+								${dueLine}
+							</div>
+							${creditBadge}
+						</li>
+					</a>
+				</ul>
+			`;
+		})
+		.join("");
+
+const renderSearchResults = (payload, targetSelector) => {
+	const $target = $(targetSelector);
+	if (
+		payload &&
+		payload.status === "success" &&
+		Array.isArray(payload.results) &&
+		payload.results.length > 0
+	) {
+		$target.html(buildCustomerListMarkup(payload.results));
+		return;
+	}
+
+	const message = payload && payload.message ? payload.message : "ไม่พบข้อมูลที่ค้นหา";
+	$target.html(
+		`<div class="text-muted small p-2">${escapeHtml(message)}</div>`
+	);
+};
+
 // Function to lock customer fields after selection
 const lockCustomerFields = () => {
 	$("#addcus_customercode").prop("readonly", true).addClass("bg-light");
@@ -241,9 +348,10 @@ const autosearchCustomermanual = (cuscode) => {
 		url: `${baseUrl}/customers/searchcustomerdata`,
 		method: "POST",
 		data: { cuscode },
+		dataType: "json",
 		timeout: 10000, // 10 second timeout
 		success: (data) => {
-			$("#autocuscodemanual").html(data);
+			renderSearchResults(data, "#autocuscodemanual");
 			currentRequest = null;
 		},
 		error: (xhr, status, error) => {
@@ -268,9 +376,10 @@ const autosearchCustomermanualname = (cusname) => {
 		url: `${baseUrl}/customers/searchcustomerdataname`,
 		method: "POST",
 		data: { cusname },
+		dataType: "json",
 		timeout: 10000, // 10 second timeout
 		success: (data) => {
-			$("#autocuscodemanualname").html(data);
+			renderSearchResults(data, "#autocuscodemanualname");
 		},
 		error: (xhr, status, error) => {
 			$("#autocuscodemanualname").html(

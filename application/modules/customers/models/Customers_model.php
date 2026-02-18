@@ -335,6 +335,125 @@ class Customers_model extends CI_Model
         return isset($creditMap[$paymtermid]) ? $creditMap[$paymtermid] : array('id' => '', 'name' => '');
     }
 
+    private function fetchCustomerSearchRows($keyword, $field = 'accountnum')
+    {
+        $keyword = trim((string) $keyword);
+        if ($keyword === '') {
+            return array();
+        }
+
+        $field = ($field === 'name') ? 'name' : 'accountnum';
+        $escapedKeyword = $this->db3->escape_like_str($keyword);
+
+        $this->db3
+            ->select(array(
+                'scv.accountnum',
+                'scv.paymtermid',
+                'scv.name',
+                'scv.street as address',
+                'scv.phone',
+                'scv.telefax',
+                'scv.email',
+                'scv.bpc_tax_vatid',
+                'scv.dataAreaId',
+                'scv.salesgroup',
+                'scv.CreditMax',
+                'a.slc_arcustdueid',
+                'b.duedescription',
+                'b.numsofdays'
+            ))
+            ->from('slc_custview scv')
+            ->join('custpaymmodespec a', 'a.custaccount = scv.accountnum AND a.dataareaid = scv.dataAreaId', 'left')
+            ->join('slc_arcustduetable b', 'b.arcustdueid = a.slc_arcustdueid AND b.dataareaid = a.dataareaid', 'left')
+            ->like('scv.' . $field, $escapedKeyword, 'after')
+            ->not_like('scv.accountnum', 'EX', 'after')
+            ->not_like('scv.accountnum', 'BR', 'after')
+            ->limit(10);
+
+        $query = $this->db3->get();
+
+        if ($query->num_rows() === 0) {
+            $escapedKeyword2 = $this->db_applystd->escape_like_str($keyword);
+            $this->db_applystd
+                ->select(array(
+                    'accountnum',
+                    'paymtermid',
+                    'name',
+                    'street as address',
+                    'phone',
+                    'telefax',
+                    'email',
+                    'bpc_tax_vatid',
+                    'dataAreaId',
+                    'salesgroup',
+                    'CreditMax',
+                    'NULL as slc_arcustdueid',
+                    'NULL as duedescription',
+                    'NULL as numsofdays'
+                ))
+                ->from('slc_custview')
+                ->like($field, $escapedKeyword2, 'after')
+                ->not_like('accountnum', 'EX', 'after')
+                ->not_like('accountnum', 'BR', 'after')
+                ->limit(10);
+
+            $query = $this->db_applystd->get();
+        }
+
+        return $query->result();
+    }
+
+    private function buildCustomerSearchPayload($rows)
+    {
+        if (empty($rows)) {
+            return array(
+                'status'  => 'empty',
+                'message' => 'ไม่พบข้อมูลที่ค้นหา',
+                'results' => array()
+            );
+        }
+
+        $results = array();
+        foreach ($rows as $rs) {
+            $creditInfo = $this->getCreditTermInfo($rs->paymtermid);
+            $creditLimit = is_null($rs->CreditMax) ? 0 : (float) $rs->CreditMax;
+
+            $results[] = array(
+                'accountnum'            => (string) $rs->accountnum,
+                'name'                  => (string) $rs->name,
+                'address'               => (string) $rs->address,
+                'phone'                 => (string) $rs->phone,
+                'telefax'               => (string) $rs->telefax,
+                'email'                 => (string) $rs->email,
+                'tax_id'                => (string) $rs->bpc_tax_vatid,
+                'data_area_id'          => (string) $rs->dataAreaId,
+                'branch'                => '',
+                'salesgroup'            => (string) $rs->salesgroup,
+                'credit_term_id'        => $creditInfo['id'],
+                'credit_term_name'      => (string) $creditInfo['name'],
+                'credit_limit'          => $creditLimit,
+                'credit_limit_display'  => number_format($creditLimit, 2),
+                'due_id'                => (string) ($rs->slc_arcustdueid ?? ''),
+                'due_description'       => (string) ($rs->duedescription ?? ''),
+                'due_days'              => is_null($rs->numsofdays) ? '' : (string) $rs->numsofdays
+            );
+        }
+
+        return array(
+            'status'  => 'success',
+            'message' => '',
+            'results' => $results
+        );
+    }
+
+    private function respondJson($payload)
+    {
+        if (!headers_sent()) {
+            header('Content-Type: application/json; charset=utf-8');
+        }
+        echo json_encode($payload, JSON_UNESCAPED_UNICODE);
+    }
+
     public function checkCustomerCode()
     {
         $cuscode = $this->input->post("cuscode", true);
@@ -438,62 +557,9 @@ class Customers_model extends CI_Model
     public function searchcustomerdata()
     {
         $cuscode = $this->input->post("cuscode", true);
-        $cuscode_escaped = $this->db3->escape_like_str($cuscode);
-        
-        // ใช้ Query Builder เพื่อป้องกัน SQL Injection
-        $this->db3->select('accountnum, paymtermid, name, street as address, phone, telefax, email, bpc_tax_vatid, dataAreaId, salesgroup, CreditMax')
-                  ->from('slc_custview')
-                  ->like('accountnum', $cuscode_escaped, 'after')
-                  ->not_like('accountnum', 'EX', 'after')
-                  ->not_like('accountnum', 'BR', 'after')
-                  ->limit(10);
-        
-        $query = $this->db3->get();
-
-        // Fallback to second database if no results
-        if($query->num_rows() == 0){
-            $cuscode_escaped2 = $this->db_applystd->escape_like_str($cuscode);
-            $this->db_applystd->select('accountnum, paymtermid, name, street as address, phone, telefax, email, bpc_tax_vatid, dataAreaId, CreditMax')
-                              ->from('slc_custview')
-                              ->like('accountnum', $cuscode_escaped2, 'after')
-                              ->not_like('accountnum', 'EX', 'after')
-                              ->not_like('accountnum', 'BR', 'after')
-                              ->limit(10);
-            $query = $this->db_applystd->get();
-        }
-
-        if($query->num_rows() == 0){
-            echo '<div class="text-muted p-2">ไม่พบข้อมูลที่ค้นหา</div>';
-            return;
-        }
-
-        $output = "";
-        foreach ($query->result() as $rs) {
-            // Use helper function
-            $creditInfo = $this->getCreditTermInfo($rs->paymtermid);
-            $conCredit = number_format($rs->CreditMax, 2);
-            
-            // Escape output เพื่อป้องกัน XSS
-            $output .= "<ul class='list-group'>";
-            $output .= "<a href='javascript:void(0)' class='selectCusCodeManualcode'
-                data-addcus-code='" . htmlspecialchars($rs->accountnum, ENT_QUOTES, 'UTF-8') . "'
-                data-addcus-name='" . htmlspecialchars($rs->name, ENT_QUOTES, 'UTF-8') . "'
-                data-addcus-address='" . htmlspecialchars($rs->address, ENT_QUOTES, 'UTF-8') . "'
-                data-addcus-phone='" . htmlspecialchars($rs->phone, ENT_QUOTES, 'UTF-8') . "'
-                data-addcus-fax='" . htmlspecialchars($rs->telefax, ENT_QUOTES, 'UTF-8') . "'
-                data-addcus-email='" . htmlspecialchars($rs->email, ENT_QUOTES, 'UTF-8') . "'
-                data-addcus-taxid='" . htmlspecialchars($rs->bpc_tax_vatid, ENT_QUOTES, 'UTF-8') . "'
-                data-addcus-area='" . htmlspecialchars($rs->dataAreaId, ENT_QUOTES, 'UTF-8') . "'
-                data-addcus-branch=''
-                data-addcus-termid='" . $creditInfo['id'] . "'
-                data-addcus-termname='" . htmlspecialchars($creditInfo['name'], ENT_QUOTES, 'UTF-8') . "'
-                data-addcus-creditlimit='" . htmlspecialchars($conCredit, ENT_QUOTES, 'UTF-8') . "'
-                data-addcus-salesgroup='" . htmlspecialchars($rs->salesgroup, ENT_QUOTES, 'UTF-8') . "'
-            ><li class='list-group-item'>" . htmlspecialchars($rs->accountnum, ENT_QUOTES, 'UTF-8') . " " . htmlspecialchars($rs->name, ENT_QUOTES, 'UTF-8') . " (" . htmlspecialchars($rs->dataAreaId, ENT_QUOTES, 'UTF-8') . ")</li></a>";
-            $output .= "</ul>";
-        }
-
-        echo $output;
+        $rows = $this->fetchCustomerSearchRows($cuscode, 'accountnum');
+        $payload = $this->buildCustomerSearchPayload($rows);
+        $this->respondJson($payload);
     }
 
 
@@ -501,51 +567,9 @@ class Customers_model extends CI_Model
     public function searchcustomerdataname()
     {
         $cusname = $this->input->post("cusname", true);
-        $cusname_escaped = $this->db3->escape_like_str($cusname);
-        
-        // ใช้ Query Builder เพื่อป้องกัน SQL Injection
-        $this->db3->select('accountnum, paymtermid, name, address, phone, telefax, email, bpc_whtid, dataAreaId, salesgroup, slc_fname, CreditMax')
-                  ->from('custtable')
-                  ->like('name', $cusname_escaped, 'after')
-                  ->not_like('accountnum', 'EX', 'after')
-                  ->not_like('accountnum', 'BR', 'after')
-                  ->limit(10);
-        
-        $query = $this->db3->get();
-        
-        if($query->num_rows() == 0){
-            echo '<div class="text-muted p-2">ไม่พบข้อมูลที่ค้นหา</div>';
-            return;
-        }
-        
-        $output = "";
-        foreach ($query->result() as $rs) {
-            // Use helper function
-            $creditInfo = $this->getCreditTermInfo($rs->paymtermid);
-            $conCredit = number_format($rs->CreditMax, 2);
-            
-            // Escape output เพื่อป้องกัน XSS
-            $output .= "<ul class='list-group'>";
-            $output .= "<a href='javascript:void(0)' class='selectCusCodeManualcode'
-                data-addcus-code='" . htmlspecialchars($rs->accountnum, ENT_QUOTES, 'UTF-8') . "'
-                data-addcus-name='" . htmlspecialchars($rs->name, ENT_QUOTES, 'UTF-8') . "'
-                data-addcus-address='" . htmlspecialchars($rs->address, ENT_QUOTES, 'UTF-8') . "'
-                data-addcus-phone='" . htmlspecialchars($rs->phone, ENT_QUOTES, 'UTF-8') . "'
-                data-addcus-fax='" . htmlspecialchars($rs->telefax, ENT_QUOTES, 'UTF-8') . "'
-                data-addcus-email='" . htmlspecialchars($rs->email, ENT_QUOTES, 'UTF-8') . "'
-                data-addcus-taxid='" . htmlspecialchars($rs->bpc_whtid, ENT_QUOTES, 'UTF-8') . "'
-                data-addcus-area='" . htmlspecialchars($rs->dataAreaId, ENT_QUOTES, 'UTF-8') . "'
-                data-addcus-branch=''
-                data-addcus-termid='" . $creditInfo['id'] . "'
-                data-addcus-termname='" . htmlspecialchars($creditInfo['name'], ENT_QUOTES, 'UTF-8') . "'
-                data-addcus-creditlimit='" . htmlspecialchars($conCredit, ENT_QUOTES, 'UTF-8') . "'
-                data-addcus-fristname='" . htmlspecialchars($rs->slc_fname, ENT_QUOTES, 'UTF-8') . "'
-                data-addcus-salesgroup='" . htmlspecialchars($rs->salesgroup, ENT_QUOTES, 'UTF-8') . "'
-            ><li class='list-group-item'>" . htmlspecialchars($rs->accountnum, ENT_QUOTES, 'UTF-8') . " " . htmlspecialchars($rs->name, ENT_QUOTES, 'UTF-8') . " (" . htmlspecialchars($rs->dataAreaId, ENT_QUOTES, 'UTF-8') . ")</li></a>";
-            $output .= "</ul>";
-        }
-
-        echo $output;
+        $rows = $this->fetchCustomerSearchRows($cusname, 'name');
+        $payload = $this->buildCustomerSearchPayload($rows);
+        $this->respondJson($payload);
     }
 
 
