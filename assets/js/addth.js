@@ -2914,24 +2914,40 @@ $(document).ready(function () {
         queryProcessUse(data_crf_cusid);
         queryPrimanageUse(data_crf_cusid);
 
+        // Debug: ดูค่าที่ได้มา
+        console.log('=== DEBUG CONDITION VALUES ===');
+        console.log('data_crf_condition_bill:', data_crf_condition_bill);
+        console.log('data_crf_condition_money:', data_crf_condition_money);
+        console.log('data_crf_tablebill:', data_crf_tablebill);
+        console.log('data_crf_mapbill:', data_crf_mapbill);
+        console.log('data_crf_mapbill2:', data_crf_mapbill2);
+        console.log('data_crf_recive_cheuqetable:', data_crf_recive_cheuqetable);
 
         if (data_crf_condition_bill == 'ส่งของพร้อมวางบิล') {
             $('input:radio[class="crf_condition_billv1"]').prop('checked', true);
         } else if (data_crf_condition_bill == 'วางบิลตามตาราง') {
             $('input:radio[class="crf_condition_billv2"]').prop('checked', true);
             $('.crf_condition_bill2').css('display', '');
-            $('.oldcustomer1').css('display', '').val(data_crf_tablebill);
-            $('.oldcustomer1').prop('readonly', true);
-            $('.oldcustomer2').css('display', '').val(data_crf_mapbill);
-            $('.oldcustomer2').prop('readonly', true);
-            $('.newcustomer1').remove();
-            $('.newcustomer2').remove();
+            
+            // แสดงไฟล์เดิมเป็นลิงก์ใน span และเก็บค่าไว้ใน hidden input
+            if (data_crf_tablebill && data_crf_tablebill !== '' && data_crf_tablebill !== 'undefined') {
+                $('#crf_tablebill_filename').html('<br><a href="' + base_url + 'upload/' + data_crf_tablebill + '" target="_blank" style="color: #0066cc; font-weight: bold;">' + data_crf_tablebill + '</a>');
+                $('#editcusoldtablebill').val(data_crf_tablebill);
+            }
+            if (data_crf_mapbill && data_crf_mapbill !== '' && data_crf_mapbill !== 'undefined') {
+                $('#crf_mapbill_filename').html('<br><a href="' + base_url + 'upload/' + data_crf_mapbill + '" target="_blank" style="color: #0066cc; font-weight: bold;">' + data_crf_mapbill + '</a>');
+                $('#editcusoldmapbill').val(data_crf_mapbill);
+            }
         } else if (data_crf_condition_bill == 'วางบิลทุกวันที่') {
             $('input:radio[class="crf_condition_billv3"]').prop('checked', true);
             $('.crf_condition_bill3').css('display', '');
             $('#crf_datebill').val(data_crf_datebill);
-            $('.newcustomer3').remove();
-            $('.oldcustomer3').css('display', '').val(data_crf_mapbill2);
+            
+            // แสดงไฟล์เดิมเป็นลิงก์ใน span
+            if (data_crf_mapbill2 && data_crf_mapbill2 !== '' && data_crf_mapbill2 !== 'undefined') {
+                $('#crf_mapbill2_filename').html('<br><a href="' + base_url + 'upload/' + data_crf_mapbill2 + '" target="_blank" style="color: #0066cc; font-weight: bold;">' + data_crf_mapbill2 + '</a>');
+                $('#editcusoldmapbill2').val(data_crf_mapbill2);
+            }
         }
 
         if (data_crf_condition_money == "โอนเงิน") {
@@ -2939,9 +2955,13 @@ $(document).ready(function () {
         } else if (data_crf_condition_money == "รับเช็ค") {
             $('input:radio[class="crf_condition_moneyv2"]').prop('checked', true);
             $('.recive_cheuqe').css('display', '');
-            $('.newcustomer4').remove();
-            $('.oldcustomer4').css('display', '').val(data_crf_recive_cheuqetable);
-            $('.oldcustomer4').prop('readonly', true);
+            
+            // แสดงไฟล์เดิมเป็นลิงก์ใน span
+            if (data_crf_recive_cheuqetable && data_crf_recive_cheuqetable !== '' && data_crf_recive_cheuqetable !== 'undefined') {
+                $('#crf_recive_cheuqetable_filename').html('<br><a href="' + base_url + 'upload/' + data_crf_recive_cheuqetable + '" target="_blank" style="color: #0066cc; font-weight: bold;">' + data_crf_recive_cheuqetable + '</a>');
+                $('#editcusoldcheuqetable').val(data_crf_recive_cheuqetable);
+            }
+            
             $('#crf_recive_cheuqedetail').val(data_crf_recive_cheuqedetail);
             $('#crf_recive_cheuqedetail').prop('readonly', true);
         }

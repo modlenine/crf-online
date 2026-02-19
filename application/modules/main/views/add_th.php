@@ -621,12 +621,12 @@
                     <div class="col-md-6">
                         <label for="">ตารางวางบิล</label><br>
                         <input type="file" name="crf_tablebill" id="crf_tablebill" class="form-control form-control-sm newcustomer1" accept=".jpg,.png,.pdf">
-                        <input type="text" name="crf_tablebill" id="crf_tablebill" class="form-control form-control-sm oldcustomer1" style="display:none">
+                        <span id="crf_tablebill_filename" style="color: #0066cc; font-weight: bold;"></span>
                     </div>
                     <div class="col-md-6">
                         <label for="">แผนที่ ที่ไปวางบิล</label><br>
                         <input type="file" name="crf_mapbill" id="crf_mapbill" class="form-control form-control-sm newcustomer2" accept=".jpg,.png,.pdf">
-                        <input type="text" name="crf_mapbill" id="crf_mapbill" class="form-control form-control-sm oldcustomer2" style="display:none">
+                        <span id="crf_mapbill_filename" style="color: #0066cc; font-weight: bold;"></span>
                     </div>
                 </div>
 
@@ -638,7 +638,7 @@
                     <div class="col-md-6">
                         <label for="">แผนที่ ที่ไปวางบิล</label><br>
                         <input type="file" name="crf_mapbill2" id="crf_mapbill2" class="form-control form-control-sm newcustomer3" accept=".jpg,.png,.pdf">
-                        <input type="text" name="crf_mapbill2" id="crf_mapbill2" class="form-control form-control-sm oldcustomer3" style="display:none;">
+                        <span id="crf_mapbill2_filename" style="color: #0066cc; font-weight: bold;"></span>
                     </div>
                 </div><br>
 
@@ -666,7 +666,7 @@
                     <div class="col-md-6 form-group">
                         <label for="">แนบตารางวางบิล / รับเช็ค</label>
                         <input type="file" name="crf_recive_cheuqetable" id="crf_recive_cheuqetable" class="form-control form-control-sm newcustomer4" accept=".jpg,.png,.pdf">
-                        <input type="text" name="crf_recive_cheuqetable" id="crf_recive_cheuqetable" class="form-control form-control-sm oldcustomer4" style="display:none;">
+                        <span id="crf_recive_cheuqetable_filename" style="color: #0066cc; font-weight: bold;"></span>
                         <div id="alert_recive_cheuqetable"></div>
                     </div>
                     <div class="col-md-12 form-group">
@@ -800,6 +800,27 @@
 <script>
 $(document).ready(function(){
     
+    // แสดงชื่อไฟล์เมื่อเลือกไฟล์ - เงื่อนไขการวางบิล
+    $('#crf_tablebill').change(function() {
+        var fileName = $(this).val().split('\\').pop();
+        $('#crf_tablebill_filename').text(fileName);
+    });
+    
+    $('#crf_mapbill').change(function() {
+        var fileName = $(this).val().split('\\').pop();
+        $('#crf_mapbill_filename').text(fileName);
+    });
+    
+    $('#crf_mapbill2').change(function() {
+        var fileName = $(this).val().split('\\').pop();
+        $('#crf_mapbill2_filename').text(fileName);
+    });
+    
+    // แสดงชื่อไฟล์เมื่อเลือกไฟล์ - เงื่อนไขการรับชำระเงิน
+    $('#crf_recive_cheuqetable').change(function() {
+        var fileName = $(this).val().split('\\').pop();
+        $('#crf_recive_cheuqetable_filename').text(fileName);
+    });
 
 $(document).on('keyup' , '#crf_cuscompanycreate' , function(){
     let regex = /^(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[0-2])-\d{4}$/;

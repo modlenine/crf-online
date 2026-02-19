@@ -3657,7 +3657,7 @@ class Main_model extends CI_Model
                     "crfuserlog_ecode" => $this->input->post("crf_userecodepost")
                 );
                 $this->db->insert("crf_userlog", $aruserlog);
-                header("refresh:0; url=" . base_url('main/editdata/') . $this->input->post("getCrfid_edit") . "?success=true");
+                // header("refresh:0; url=" . base_url('main/editdata/') . $this->input->post("getCrfid_edit") . "?success=true");
             }
         }
     }
