@@ -49,6 +49,55 @@ class Main_model extends CI_Model
         return $file_name_date;
     }
 
+    /**
+     * Helper method สำหรับจัดการการอัพโหลดไฟล์เดี่ยว
+     * @param string $fileInputName ชื่อ input field
+     * @param string $fileType ประเภทไฟล์
+     * @param string $formNo เลขที่ฟอร์ม
+     * @param string $filetime เวลาที่อัพโหลด
+     * @param string $oldFile ไฟล์เดิม (กรณีแก้ไข)
+     * @param string $errorMessage ข้อความ error (optional)
+     * @return string ชื่อไฟล์ที่อัพโหลดหรือไฟล์เดิม
+     */
+    private function handleFileUpload($fileInputName, $fileType, $formNo, $filetime, $oldFile = '', $errorMessage = '')
+    {
+        if (isset($_FILES[$fileInputName]) && $_FILES[$fileInputName]['name'] != "") {
+            return $this->uploadFiles($fileInputName, $fileType, $formNo, $filetime);
+        } else {
+            if ($errorMessage != '' && $oldFile == '') {
+                echo $errorMessage . "<br>";
+            }
+            return $oldFile;
+        }
+    }
+
+    /**
+     * Helper method สำหรับจัดการการอัพโหลดหลายไฟล์พร้อมกัน
+     * @param array $fileConfigs รายการ config ของไฟล์ที่ต้องการอัพโหลด
+     * @param string $formNo เลขที่ฟอร์ม
+     * @param string $filetime เวลาที่อัพโหลด
+     * @param array $oldFiles ไฟล์เดิม (กรณีแก้ไข)
+     * @return array ผลลัพธ์การอัพโหลดทุกไฟล์
+     */
+    private function handleMultipleFileUploads($fileConfigs, $formNo, $filetime, $oldFiles = [])
+    {
+        $results = [];
+        foreach ($fileConfigs as $key => $config) {
+            $oldFile = isset($oldFiles[$key]) ? $oldFiles[$key] : '';
+            $errorMsg = isset($config['error']) ? $config['error'] : '';
+            
+            $results[$key] = $this->handleFileUpload(
+                $config['input'],
+                $config['type'],
+                $formNo,
+                $filetime,
+                $oldFile,
+                $errorMsg
+            );
+        }
+        return $results;
+    }
+
 
 
     public function savedata()
@@ -82,135 +131,50 @@ class Main_model extends CI_Model
         if ($this->input->post('crf_type') == 1) {
             // ถ้าเลือกประเภทลูกค้า = ลูกค้าใหม่
             if ($this->input->post("crf_person_type") == "natural") {
-                if ($_FILES["crf_file_person"]["name"] != "") {
-                    $fileperson = "crf_file_person";
-                    $fileTypeperson = "personalid";
-
-                    $this->uploadFiles($fileperson, $fileTypeperson, $getFormNo , $filetime);
-                    $resultFilePersonal = $this->uploadFiles($fileperson, $fileTypeperson, $getFormNo , $filetime);
-                } else {
-                    echo "ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ สำเนาบัตรประชาชน<br>";
-                }
+                // อัพโหลดไฟล์สำหรับบุคคลธรรมดา
+                $resultFilePersonal = $this->handleFileUpload(
+                    'crf_file_person',
+                    'personalid',
+                    $getFormNo,
+                    $filetime,
+                    '',
+                    'ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ สำเนาบัตรประชาชน'
+                );
             } else if ($this->input->post("crf_person_type") == "juristic") {
-                if ($_FILES["crf_file1"]["name"] != "") {
-                    $file1 = "crf_file1";
-                    $fileType1 = "ภพ20";
-
-                    $this->uploadFiles($file1, $fileType1, $getFormNo , $filetime);
-                    $resultFile1 = $this->uploadFiles($file1, $fileType1, $getFormNo , $filetime);
-                } else {
-                    echo "ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ ภพ.20<br>";
-                }
-
-                if ($_FILES["crf_file2"]["name"] != "") {
-                    $file2 = "crf_file2";
-                    $fileType2 = "หนังสือรับรอง";
-
-                    $this->uploadFiles($file2, $fileType2, $getFormNo , $filetime);
-                    $resultFile2 = $this->uploadFiles($file2, $fileType2, $getFormNo , $filetime);
-                } else {
-                    echo "ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ หนังสือรับรอง<br>";
-                }
-
-                if ($_FILES["crf_file3"]["name"] != "") {
-                    $file3 = "crf_file3";
-                    $fileType3 = "ข้อมูลทั่วไป";
-
-                    $this->uploadFiles($file3, $fileType3, $getFormNo , $filetime);
-                    $resultFile3 = $this->uploadFiles($file3, $fileType3, $getFormNo , $filetime);
-                } else {
-                    echo "ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ ข้อมูลทั่วไป<br>";
-                }
-
-                if ($_FILES["crf_file4"]["name"] != "") {
-                    $file4 = "crf_file4";
-                    $fileType4 = "งบดุล";
-
-                    $this->uploadFiles($file4, $fileType4, $getFormNo , $filetime);
-                    $resultFile4 = $this->uploadFiles($file4, $fileType4, $getFormNo , $filetime);
-                } else {
-                    echo "ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ งบดุล<br>";
-                }
-
-                if ($_FILES["crf_file5"]["name"] != "") {
-                    $file5 = "crf_file5";
-                    $fileType5 = "งบกำไรขาดทุน";
-
-                    $this->uploadFiles($file5, $fileType5, $getFormNo , $filetime);
-                    $resultFile5 = $this->uploadFiles($file5, $fileType5, $getFormNo , $filetime);
-                } else {
-                    echo "ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ งบกำไรขาดทุน<br>";
-                }
-
-                if ($_FILES["crf_file6"]["name"] != "") {
-                    $file6 = "crf_file6";
-                    $fileType6 = "วิเคราะห์ผลการดำเนินงาน";
-
-                    $this->uploadFiles($file6, $fileType6, $getFormNo , $filetime);
-                    $resultFile6 = $this->uploadFiles($file6, $fileType6, $getFormNo , $filetime);
-                } else {
-                    echo "ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ วิเคราะห์ผลการดำเนินงาน<br>";
-                }
+                // อัพโหลดไฟล์สำหรับนิติบุคคล (ใช้ helper method)
+                $juristicFileConfigs = [
+                    'file1' => ['input' => 'crf_file1', 'type' => 'ภพ20', 'error' => 'ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ ภพ.20'],
+                    'file2' => ['input' => 'crf_file2', 'type' => 'หนังสือรับรอง', 'error' => 'ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ หนังสือรับรอง'],
+                    'file3' => ['input' => 'crf_file3', 'type' => 'ข้อมูลทั่วไป', 'error' => 'ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ ข้อมูลทั่วไป'],
+                    'file4' => ['input' => 'crf_file4', 'type' => 'งบดุล', 'error' => 'ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ งบดุล'],
+                    'file5' => ['input' => 'crf_file5', 'type' => 'งบกำไรขาดทุน', 'error' => 'ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ งบกำไรขาดทุน'],
+                    'file6' => ['input' => 'crf_file6', 'type' => 'วิเคราะห์ผลการดำเนินงาน', 'error' => 'ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ วิเคราะห์ผลการดำเนินงาน']
+                ];
+                
+                $uploadedJuristicFiles = $this->handleMultipleFileUploads($juristicFileConfigs, $getFormNo, $filetime);
+                $resultFile1 = $uploadedJuristicFiles['file1'];
+                $resultFile2 = $uploadedJuristicFiles['file2'];
+                $resultFile3 = $uploadedJuristicFiles['file3'];
+                $resultFile4 = $uploadedJuristicFiles['file4'];
+                $resultFile5 = $uploadedJuristicFiles['file5'];
+                $resultFile6 = $uploadedJuristicFiles['file6'];
             }
 
-            // แนบไฟล์แผนที่วางบิล
-            $resulttablebill = "";
-            if ($_FILES["crf_tablebill"]["name"] != "") {
-                $tablebill = "crf_tablebill";
-                $tablebillname = "ตารางวางบิล";
-
-                $this->uploadFiles($tablebill, $tablebillname, $getFormNo , $filetime);
-                $resulttablebill = $this->uploadFiles($tablebill, $tablebillname, $getFormNo , $filetime);
-            } else {
-                echo "ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ ตารางวางบิล<br>";
-            }
-            $resultmapbill = "";
-            if ($_FILES["crf_mapbill"]["name"] != "") {
-                $mapbill = "crf_mapbill";
-                $mapbillname = "แผนที่ที่ไปวางบิล";
-
-                $this->uploadFiles($mapbill, $mapbillname, $getFormNo , $filetime);
-                $resultmapbill = $this->uploadFiles($mapbill, $mapbillname, $getFormNo , $filetime);
-            } else {
-                echo "ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ แผนที่ที่ไปวางบิล<br>";
-            }
-
-            $resultmapbill2 = "";
-            if ($_FILES["crf_mapbill2"]["name"] != "") {
-                $mapbill2 = "crf_mapbill2";
-                $mapbillname2 = "แผนที่ที่ไปวางบิล2";
-
-                $this->uploadFiles($mapbill2, $mapbillname2, $getFormNo , $filetime);
-                $resultmapbill2 = $this->uploadFiles($mapbill2, $mapbillname2, $getFormNo , $filetime);
-            } else {
-                echo "ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ แผนที่ที่ไปวางบิล<br>";
-            }
-            // แนบไฟล์แผนที่วางบิล
-
-
-            // แนบตารางวางบิลรับเช็ค
-            $result_recive_cheuqetable = "";
-            if ($_FILES["crf_recive_cheuqetable"]["name"] != "") {
-                $recive_cheuqetable = "crf_recive_cheuqetable";
-                $recive_cheuqetablename = "ตารางวางบิลรับเช็ค";
-
-                $this->uploadFiles($recive_cheuqetable, $recive_cheuqetablename, $getFormNo , $filetime);
-                $result_recive_cheuqetable = $this->uploadFiles($recive_cheuqetable, $recive_cheuqetablename, $getFormNo , $filetime);
-            } else {
-                echo "ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ ตารางวางบิลรับเช็ค<br>";
-            }
-
-            // แนบไฟล์แผนที่ลูกค้า
-            $customermapfile = "";
-            if ($_FILES["crf_mapfile"]["name"] != "") {
-                $crf_mapfile = "crf_mapfile";
-                $crf_mapfilename = "แผนที่ตั้งของลูกค้า";
-     
-                $this->uploadFiles($crf_mapfile, $crf_mapfilename, $getFormNo , $filetime);
-                $customermapfile = $this->uploadFiles($crf_mapfile, $crf_mapfilename, $getFormNo , $filetime);
-            } else {
-                echo "ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ แผนที่ตั้งของลูกค้า<br>";
-            }
+            // อัพโหลดไฟล์เงื่อนไขการวางบิล และแผนที่ต่างๆ
+            $billFileConfigs = [
+                'tablebill' => ['input' => 'crf_tablebill', 'type' => 'ตารางวางบิล', 'error' => 'ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ ตารางวางบิล'],
+                'mapbill' => ['input' => 'crf_mapbill', 'type' => 'แผนที่ที่ไปวางบิล', 'error' => 'ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ แผนที่ที่ไปวางบิล'],
+                'mapbill2' => ['input' => 'crf_mapbill2', 'type' => 'แผนที่ที่ไปวางบิล2', 'error' => 'ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ แผนที่ที่ไปวางบิล'],
+                'cheuqetable' => ['input' => 'crf_recive_cheuqetable', 'type' => 'ตารางวางบิลรับเช็ค', 'error' => 'ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ ตารางวางบิลรับเช็ค'],
+                'mapfile' => ['input' => 'crf_mapfile', 'type' => 'แผนที่ตั้งของลูกค้า', 'error' => 'ไม่พบการแนบไฟล์ในการอัพโหลดไฟล์ แผนที่ตั้งของลูกค้า']
+            ];
+            
+            $uploadedBillFiles = $this->handleMultipleFileUploads($billFileConfigs, $getFormNo, $filetime);
+            $resulttablebill = $uploadedBillFiles['tablebill'];
+            $resultmapbill = $uploadedBillFiles['mapbill'];
+            $resultmapbill2 = $uploadedBillFiles['mapbill2'];
+            $result_recive_cheuqetable = $uploadedBillFiles['cheuqetable'];
+            $customermapfile = $uploadedBillFiles['mapfile'];
 
 
 
@@ -521,25 +485,20 @@ class Main_model extends CI_Model
             if ($this->input->post("crf_sub_oldcus_changeaddress") == 2) {  //กรณีที่เลือกเปลี่ยนที่อยู่
 
                 if($this->input->post("crf_person_type")=="juristic"){
-                    if ($_FILES["crf_file1"]["name"] != "") {
-                        $file1 = "crf_file1";
-                        $fileType1 = "ภพ20";
-
-                        $this->uploadFiles($file1, $fileType1, $getFormNo , $filetime);
-                        $resultFile1 = $this->uploadFiles($file1, $fileType1, $getFormNo , $filetime);
-                    } else {
-                        $resultFile1 = "";
-                    }
+                    $resultFile1 = $this->handleFileUpload(
+                        'crf_file1',
+                        'ภพ20',
+                        $getFormNo,
+                        $filetime
+                    );
                 }else if($this->input->post("crf_person_type")=="natural"){
-                    if ($_FILES["crf_file_person"]["name"] != "") {
-                        $fileperson = "crf_file_person";
-                        $fileTypeperson = "personalid";
-
-                        $this->uploadFiles($fileperson, $fileTypeperson, $getFormNo , $filetime);
-                        $resultFilePersonal = $this->uploadFiles($fileperson, $fileTypeperson, $getFormNo , $filetime);
-                    } else {
-                        $resultFilePersonal = $this->input->post("editcusoldpersonal");
-                    }
+                    $resultFilePersonal = $this->handleFileUpload(
+                        'crf_file_person',
+                        'personalid',
+                        $getFormNo,
+                        $filetime,
+                        $this->input->post("editcusoldpersonal")
+                    );
                 }
                 
 
@@ -628,135 +587,73 @@ class Main_model extends CI_Model
 
             // กรณีเลือกแก้ไขข้อมูลลูกค้า
             if ($this->input->post("crf_sub_oldcus_editcustomer") == 5) {
-                if ($_FILES["crf_mapfile"]["name"] != "") {
-                    $crf_mapfile = "crf_mapfile";
-                    $crf_mapfilename = "แผนที่ตั้งของลูกค้า";
- 
-                    $this->uploadFiles($crf_mapfile, $crf_mapfilename, $getFormNo , $filetime);
-                    $customermapfile = $this->uploadFiles($crf_mapfile, $crf_mapfilename, $getFormNo , $filetime);
-                } else {
-                    $customermapfile = $this->input->post("getmapfile_addpage");
-                }
-
-
+                // อัพโหลดไฟล์แผนที่ลูกค้า
+                $customermapfile = $this->handleFileUpload(
+                    'crf_mapfile',
+                    'แผนที่ตั้งของลูกค้า',
+                    $getFormNo,
+                    $filetime,
+                    $this->input->post("getmapfile_addpage")
+                );
 
                 if ($this->input->post("crf_person_type") == "natural") {
-
-                    if ($_FILES["crf_file_person"]["name"] != "") {
-                        $fileperson = "crf_file_person";
-                        $fileTypeperson = "personalid";
-
-                        $this->uploadFiles($fileperson, $fileTypeperson, $getFormNo , $filetime);
-                        $resultFilePersonal = $this->uploadFiles($fileperson, $fileTypeperson, $getFormNo , $filetime);
-                    } else {
-                        $resultFilePersonal = $this->input->post("editcusoldpersonal");
-                    }
+                    // อัพโหลดไฟล์สำหรับบุคคลธรรมดา
+                    $resultFilePersonal = $this->handleFileUpload(
+                        'crf_file_person',
+                        'personalid',
+                        $getFormNo,
+                        $filetime,
+                        $this->input->post("editcusoldpersonal")
+                    );
                 } else if ($this->input->post("crf_person_type") == "juristic") {
-                    if ($_FILES["crf_file1"]["name"] != "") {
-                        $file1 = "crf_file1";
-                        $fileType1 = "ภพ20";
-
-                        $this->uploadFiles($file1, $fileType1, $getFormNo , $filetime);
-                        $resultFile1 = $this->uploadFiles($file1, $fileType1, $getFormNo , $filetime);
-                    } else {
-                        $resultFile1 = $this->input->post("editcusoldfile1");
-                    }
-
-                    if ($_FILES["crf_file2"]["name"] != "") {
-                        $file2 = "crf_file2";
-                        $fileType2 = "หนังสือรับรอง";
-
-                        $this->uploadFiles($file2, $fileType2, $getFormNo , $filetime);
-                        $resultFile2 = $this->uploadFiles($file2, $fileType2, $getFormNo , $filetime);
-                    } else {
-                        $resultFile2 = $this->input->post("editcusoldfile2");
-                    }
-
-                    if ($_FILES["crf_file3"]["name"] != "") {
-                        $file3 = "crf_file3";
-                        $fileType3 = "ข้อมูลทั่วไป";
-
-                        $this->uploadFiles($file3, $fileType3, $getFormNo , $filetime);
-                        $resultFile3 = $this->uploadFiles($file3, $fileType3, $getFormNo , $filetime);
-                    } else {
-                        $resultFile3 = $this->input->post("editcusoldfile3");
-                    }
-
-                    if ($_FILES["crf_file4"]["name"] != "") {
-                        $file4 = "crf_file4";
-                        $fileType4 = "งบดุล";
-
-                        $this->uploadFiles($file4, $fileType4, $getFormNo , $filetime);
-                        $resultFile4 = $this->uploadFiles($file4, $fileType4, $getFormNo , $filetime);
-                    } else {
-                        $resultFile4 = $this->input->post("editcusoldfile4");
-                    }
-
-                    if ($_FILES["crf_file5"]["name"] != "") {
-                        $file5 = "crf_file5";
-                        $fileType5 = "งบกำไรขาดทุน";
- 
-                        $this->uploadFiles($file5, $fileType5, $getFormNo , $filetime);
-                        $resultFile5 = $this->uploadFiles($file5, $fileType5, $getFormNo , $filetime);
-                    } else {
-                        $resultFile5 = $this->input->post("editcusoldfile5");
-                    }
-
-                    if ($_FILES["crf_file6"]["name"] != "") {
-                        $file6 = "crf_file6";
-                        $fileType6 = "วิเคราะห์ผลการดำเนินงาน";
-  
-                        $this->uploadFiles($file6, $fileType6, $getFormNo , $filetime);
-                        $resultFile6 = $this->uploadFiles($file6, $fileType6, $getFormNo , $filetime);
-                    } else {
-                        $resultFile6 = $this->input->post("editcusoldfile6");
-                    }
+                    // อัพโหลดไฟล์สำหรับนิติบุคคล (ใช้ helper method)
+                    $oldJuristicFiles = [
+                        'file1' => $this->input->post("editcusoldfile1"),
+                        'file2' => $this->input->post("editcusoldfile2"),
+                        'file3' => $this->input->post("editcusoldfile3"),
+                        'file4' => $this->input->post("editcusoldfile4"),
+                        'file5' => $this->input->post("editcusoldfile5"),
+                        'file6' => $this->input->post("editcusoldfile6")
+                    ];
+                    
+                    $juristicFileConfigs = [
+                        'file1' => ['input' => 'crf_file1', 'type' => 'ภพ20'],
+                        'file2' => ['input' => 'crf_file2', 'type' => 'หนังสือรับรอง'],
+                        'file3' => ['input' => 'crf_file3', 'type' => 'ข้อมูลทั่วไป'],
+                        'file4' => ['input' => 'crf_file4', 'type' => 'งบดุล'],
+                        'file5' => ['input' => 'crf_file5', 'type' => 'งบกำไรขาดทุน'],
+                        'file6' => ['input' => 'crf_file6', 'type' => 'วิเคราะห์ผลการดำเนินงาน']
+                    ];
+                    
+                    $uploadedJuristicFiles = $this->handleMultipleFileUploads($juristicFileConfigs, $getFormNo, $filetime, $oldJuristicFiles);
+                    $resultFile1 = $uploadedJuristicFiles['file1'];
+                    $resultFile2 = $uploadedJuristicFiles['file2'];
+                    $resultFile3 = $uploadedJuristicFiles['file3'];
+                    $resultFile4 = $uploadedJuristicFiles['file4'];
+                    $resultFile5 = $uploadedJuristicFiles['file5'];
+                    $resultFile6 = $uploadedJuristicFiles['file6'];
                 }
 
                 // จัดการการอัพโหลดไฟล์สำหรับเงื่อนไขการวางบิล
-                $resulttablebill = "";
-                if ($_FILES["crf_tablebill"]["name"] != "") {
-                    $tablebill = "crf_tablebill";
-                    $tablebillname = "ตารางวางบิล";
-
-                    $this->uploadFiles($tablebill, $tablebillname, $getFormNo , $filetime);
-                    $resulttablebill = $this->uploadFiles($tablebill, $tablebillname, $getFormNo , $filetime);
-                } else {
-                    $resulttablebill = $this->input->post("editcusoldtablebill");
-                }
-
-                $resultmapbill = "";
-                if ($_FILES["crf_mapbill"]["name"] != "") {
-                    $mapbill = "crf_mapbill";
-                    $mapbillname = "แผนที่ที่ไปวางบิล";
-                    
-                    $this->uploadFiles($mapbill, $mapbillname, $getFormNo , $filetime);
-                    $resultmapbill = $this->uploadFiles($mapbill, $mapbillname, $getFormNo , $filetime);
-                } else {
-                    $resultmapbill = $this->input->post("editcusoldmapbill");
-                }
-
-                $resultmapbill2 = "";
-                if ($_FILES["crf_mapbill2"]["name"] != "") {
-                    $mapbill2 = "crf_mapbill2";
-                    $mapbill2name = "แผนที่ที่ไปรับเช็ค";
-                    
-                    $this->uploadFiles($mapbill2, $mapbill2name, $getFormNo , $filetime);
-                    $resultmapbill2 = $this->uploadFiles($mapbill2, $mapbill2name, $getFormNo , $filetime);
-                } else {
-                    $resultmapbill2 = $this->input->post("editcusoldmapbill2");
-                }
-
-                $result_recive_cheuqetable = "";
-                if ($_FILES["crf_recive_cheuqetable"]["name"] != "") {
-                    $recive_cheuqetable = "crf_recive_cheuqetable";
-                    $recive_cheuqetablename = "ตารางรับเช็ค";
-                    
-                    $this->uploadFiles($recive_cheuqetable, $recive_cheuqetablename, $getFormNo , $filetime);
-                    $result_recive_cheuqetable = $this->uploadFiles($recive_cheuqetable, $recive_cheuqetablename, $getFormNo , $filetime);
-                } else {
-                    $result_recive_cheuqetable = $this->input->post("editcusoldcheuqetable");
-                }
+                $oldBillFiles = [
+                    'tablebill' => $this->input->post("editcusoldtablebill"),
+                    'mapbill' => $this->input->post("editcusoldmapbill"),
+                    'mapbill2' => $this->input->post("editcusoldmapbill2"),
+                    'cheuqetable' => $this->input->post("editcusoldcheuqetable")
+                ];
+                
+                $billFileConfigs = [
+                    'tablebill' => ['input' => 'crf_tablebill', 'type' => 'ตารางวางบิล'],
+                    'mapbill' => ['input' => 'crf_mapbill', 'type' => 'แผนที่ที่ไปวางบิล'],
+                    'mapbill2' => ['input' => 'crf_mapbill2', 'type' => 'แผนที่ที่ไปรับเช็ค'],
+                    'cheuqetable' => ['input' => 'crf_recive_cheuqetable', 'type' => 'ตารางรับเช็ค']
+                ];
+                
+                $uploadedBillFiles = $this->handleMultipleFileUploads($billFileConfigs, $getFormNo, $filetime, $oldBillFiles);
+                $resulttablebill = $uploadedBillFiles['tablebill'];
+                $resultmapbill = $uploadedBillFiles['mapbill'];
+                $resultmapbill2 = $uploadedBillFiles['mapbill2'];
+                $result_recive_cheuqetable = $uploadedBillFiles['cheuqetable'];
 
                 if ($this->input->post("crf_mapurl") != "") {
                     $mapurl = $this->input->post("crf_mapurl");
@@ -2535,15 +2432,14 @@ class Main_model extends CI_Model
 
         if ($this->input->post("crfex_custype") == 1) {
 
-            if ($_FILES["crfex_file"]["name"] != "") {
-                $file = "crfex_file";
-                $fileType = "Document";
-                $this->uploadFiles($file, $fileType, $getFormNo , $filetime);
-                $resultFile = $this->uploadFiles($file, $fileType, $getFormNo, $filetime);
-            } else {
-                $resultFile = "";
-                echo "Not found document !<br>";
-            }
+            $resultFile = $this->handleFileUpload(
+                'crfex_file',
+                'Document',
+                $getFormNo,
+                $filetime,
+                '',
+                'Not found document !'
+            );
 
 
             $arcustomer = array(
@@ -2659,15 +2555,14 @@ class Main_model extends CI_Model
 
                 if ($this->input->post("crfex_curcustopic1_add") != '') {
 
-                    if ($_FILES["crfex_file"]["name"] != "") {
-                        $file = "crfex_file";
-                        $fileType = "Document";
-                        $this->uploadFiles($file, $fileType , $getFormNo);
-                        $resultFile = $this->uploadFiles($file, $fileType , $getFormNo);
-                    } else {
-                        $resultFile = "";
-                        echo "Not found document !<br>";
-                    }
+                    $resultFile = $this->handleFileUpload(
+                        'crfex_file',
+                        'Document',
+                        $getFormNo,
+                        '',
+                        '',
+                        'Not found document !'
+                    );
 
 
                     $arUpdateCustomerTemp = array(
@@ -3335,128 +3230,56 @@ class Main_model extends CI_Model
 
         $editformno = $this->input->post("check_EditFormNo");
 
+        // อัพโหลดไฟล์สำหรับบุคคลธรรมดา
+        $resultFilePersonal = $this->handleFileUpload(
+            'crf_file_person',
+            'personalid',
+            $editformno,
+            $filetime,
+            $this->input->post("editcusoldpersonal")
+        );
 
-        if ($_FILES["crf_file_person"]["name"] != "") {
-            $fileperson = "crf_file_person";
-            $fileTypeperson = "personalid";
-            $this->uploadFiles($fileperson, $fileTypeperson, $editformno , $filetime);
-            $resultFilePersonal = $this->uploadFiles($fileperson, $fileTypeperson, $editformno , $filetime);
-        } else {
-            $resultFilePersonal = $this->input->post("editcusoldpersonal");
-        }
-
-
-        if ($_FILES["crf_file1"]["name"] != "") {
-            $file1 = "crf_file1";
-            $fileType1 = "ภพ20";
-
-            $this->uploadFiles($file1, $fileType1, $editformno , $filetime);
-            $resultFile1 = $this->uploadFiles($file1, $fileType1, $editformno , $filetime);
-        } else {
-            $resultFile1 = $this->input->post("get_crf_file1");
-        }
-
-        if ($_FILES["crf_file2"]["name"] != "") {
-            $file2 = "crf_file2";
-            $fileType2 = "หนังสือรับรอง";
-
-            $this->uploadFiles($file2, $fileType2, $editformno , $filetime);
-            $resultFile2 = $this->uploadFiles($file2, $fileType2, $editformno , $filetime);
-        } else {
-            $resultFile2 = $this->input->post("get_crf_file2");
-        }
-
-        if ($_FILES["crf_file3"]["name"] != "") {
-            $file3 = "crf_file3";
-            $fileType3 = "ข้อมูลทั่วไป";
-
-            $this->uploadFiles($file3, $fileType3, $editformno , $filetime);
-            $resultFile3 = $this->uploadFiles($file3, $fileType3, $editformno , $filetime);
-        } else {
-            $resultFile3 = $this->input->post("get_crf_file3");
-        }
-
-        if ($_FILES["crf_file4"]["name"] != "") {
-            $file4 = "crf_file4";
-            $fileType4 = "งบดุล";
-
-            $this->uploadFiles($file4, $fileType4, $editformno , $filetime);
-            $resultFile4 = $this->uploadFiles($file4, $fileType4, $editformno , $filetime);
-        } else {
-            $resultFile4 = $this->input->post("get_crf_file4");
-        }
-
-        if ($_FILES["crf_file5"]["name"] != "") {
-            $file5 = "crf_file5";
-            $fileType5 = "งบกำไรขาดทุน";
-
-            $this->uploadFiles($file5, $fileType5, $editformno , $filetime);
-            $resultFile5 = $this->uploadFiles($file5, $fileType5, $editformno , $filetime);
-        } else {
-            $resultFile5 = $this->input->post("get_crf_file5");
-        }
-
-        if ($_FILES["crf_file6"]["name"] != "") {
-            $file6 = "crf_file6";
-            $fileType6 = "วิเคราะห์ผลการดำเนินงาน";
-
-            $this->uploadFiles($file6, $fileType6, $editformno , $filetime);
-            $resultFile6 = $this->uploadFiles($file6, $fileType6, $editformno , $filetime);
-        } else {
-            $resultFile6 = $this->input->post("get_crf_file6");
-        }
-
-        if ($_FILES["crf_file7"]["name"] != "") {
-            $file7 = "crf_file7";
-            $fileType7 = "ตารางวางบิล";
-
-            $this->uploadFiles($file7, $fileType7, $editformno , $filetime);
-            $resultFile7 = $this->uploadFiles($file7, $fileType7, $editformno , $filetime);
-        } else {
-            $resultFile7 = $this->input->post("get_crf_file7");
-        }
-
-        if ($_FILES["crf_file8"]["name"] != "") {
-            $file8 = "crf_file8";
-            $fileType8 = "แผนที่ที่ไปวางบิล";
-
-            $this->uploadFiles($file8, $fileType8, $editformno , $filetime);
-            $resultFile8 = $this->uploadFiles($file8, $fileType8, $editformno , $filetime);
-        } else {
-            $resultFile8 = $this->input->post("get_crf_file8");
-        }
-
-        if ($_FILES["crf_file9"]["name"] != "") {
-            $file9 = "crf_file9";
-            $fileType9 = "แผนที่ที่ไปวางบิล2";
-
-            $this->uploadFiles($file9, $fileType9, $editformno , $filetime);
-            $resultFile9 = $this->uploadFiles($file9, $fileType9, $editformno , $filetime);
-        } else {
-            $resultFile9 = $this->input->post("get_crf_file9");
-        }
-
-        // Handle crf_recive_cheuqetable file upload for edit view
-        if ($_FILES["crf_recive_cheuqetable"]["name"] != "") {
-            $recive_cheuqetable = "crf_recive_cheuqetable";
-            $recive_cheuqetablename = "ตารางรับเช็ค";
-
-            $this->uploadFiles($recive_cheuqetable, $recive_cheuqetablename, $editformno , $filetime);
-            $result_recive_cheuqetable = $this->uploadFiles($recive_cheuqetable, $recive_cheuqetablename, $editformno , $filetime);
-        } else {
-            $result_recive_cheuqetable = $this->input->post("get_cheuqetable");
-        }
-
-
-        if ($_FILES["crf_mapfile_edit"]["name"] != "") {
-            $mapfile = "crf_mapfile_edit";
-            $mapfilename = "แผนที่ตั้งของลูกค้า";
-
-            $this->uploadFiles($mapfile, $mapfilename, $editformno , $filetime);
-            $resultMapFile = $this->uploadFiles($mapfile, $mapfilename, $editformno , $filetime);
-        } else {
-            $resultMapFile = $this->input->post("get_crf_mapfile_edit");
-        }
+        // อัพโหลดไฟล์เอกสารนิติบุคคล (file1-file6) และไฟล์อื่นๆ
+        $oldEditFiles = [
+            'file1' => $this->input->post("get_crf_file1"),
+            'file2' => $this->input->post("get_crf_file2"),
+            'file3' => $this->input->post("get_crf_file3"),
+            'file4' => $this->input->post("get_crf_file4"),
+            'file5' => $this->input->post("get_crf_file5"),
+            'file6' => $this->input->post("get_crf_file6"),
+            'file7' => $this->input->post("get_crf_file7"),
+            'file8' => $this->input->post("get_crf_file8"),
+            'file9' => $this->input->post("get_crf_file9"),
+            'cheuqetable' => $this->input->post("get_cheuqetable"),
+            'mapfile' => $this->input->post("get_crf_mapfile_edit")
+        ];
+        
+        $editFileConfigs = [
+            'file1' => ['input' => 'crf_file1', 'type' => 'ภพ20'],
+            'file2' => ['input' => 'crf_file2', 'type' => 'หนังสือรับรอง'],
+            'file3' => ['input' => 'crf_file3', 'type' => 'ข้อมูลทั่วไป'],
+            'file4' => ['input' => 'crf_file4', 'type' => 'งบดุล'],
+            'file5' => ['input' => 'crf_file5', 'type' => 'งบกำไรขาดทุน'],
+            'file6' => ['input' => 'crf_file6', 'type' => 'วิเคราะห์ผลการดำเนินงาน'],
+            'file7' => ['input' => 'crf_file7', 'type' => 'ตารางวางบิล'],
+            'file8' => ['input' => 'crf_file8', 'type' => 'แผนที่ที่ไปวางบิล'],
+            'file9' => ['input' => 'crf_file9', 'type' => 'แผนที่ที่ไปวางบิล2'],
+            'cheuqetable' => ['input' => 'crf_recive_cheuqetable', 'type' => 'ตารางรับเช็ค'],
+            'mapfile' => ['input' => 'crf_mapfile_edit', 'type' => 'แผนที่ตั้งของลูกค้า']
+        ];
+        
+        $uploadedEditFiles = $this->handleMultipleFileUploads($editFileConfigs, $editformno, $filetime, $oldEditFiles);
+        $resultFile1 = $uploadedEditFiles['file1'];
+        $resultFile2 = $uploadedEditFiles['file2'];
+        $resultFile3 = $uploadedEditFiles['file3'];
+        $resultFile4 = $uploadedEditFiles['file4'];
+        $resultFile5 = $uploadedEditFiles['file5'];
+        $resultFile6 = $uploadedEditFiles['file6'];
+        $resultFile7 = $uploadedEditFiles['file7'];
+        $resultFile8 = $uploadedEditFiles['file8'];
+        $resultFile9 = $uploadedEditFiles['file9'];
+        $result_recive_cheuqetable = $uploadedEditFiles['cheuqetable'];
+        $resultMapFile = $uploadedEditFiles['mapfile'];
 
         if ($this->input->post("crf_mapurl_edit") != "") {
             $mapUrl = $this->input->post("crf_mapurl_edit");
@@ -3917,14 +3740,13 @@ class Main_model extends CI_Model
             if ($this->input->post("checkEditCustype") == 1) {
 
                 // Check file Change or not
-                if ($_FILES["crfex_file"]["name"] != "") {
-                    $file = "crfex_file";
-                    $fileType = "Customer file";
-                    $this->uploadFiles($file, $fileType, $this->input->post("checkEditFormNo"));
-                    $resultFile = $this->uploadFiles($file, $fileType, $this->input->post("checkEditFormNo"));
-                } else {
-                    $resultFile = $this->input->post("crfex_fileShowOld");
-                }
+                $resultFile = $this->handleFileUpload(
+                    'crfex_file',
+                    'Customer file',
+                    $this->input->post("checkEditFormNo"),
+                    '',
+                    $this->input->post("crfex_fileShowOld")
+                );
 
 
 
@@ -3988,14 +3810,13 @@ class Main_model extends CI_Model
                 if ($this->input->post("crfex_curcustopic1") != "") {
 
                     // Check file Change or not
-                    if ($_FILES["crfex_file"]["name"] != "") {
-                        $file = "crfex_file";
-                        $fileType = "Customer file";
-                        $this->uploadFiles($file, $fileType, $this->input->post("checkEditFormNo"));
-                        $resultFile = $this->uploadFiles($file, $fileType, $this->input->post("checkEditFormNo"));
-                    } else {
-                        $resultFile = $this->input->post("crfex_fileShowOld");
-                    }
+                    $resultFile = $this->handleFileUpload(
+                        'crfex_file',
+                        'Customer file',
+                        $this->input->post("checkEditFormNo"),
+                        '',
+                        $this->input->post("crfex_fileShowOld")
+                    );
 
                     $arUpdateToTemp = array(
                         "crfexcus_salesreps" => $this->input->post("crfex_salesreps"),
