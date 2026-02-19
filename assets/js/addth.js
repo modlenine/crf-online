@@ -2840,6 +2840,19 @@ $(document).ready(function () {
         $('#autoCusname').html('');
         $('input:checkbox[id="crf_sub_oldcus"]').attr('onclick' , 'return false');
         
+        // Load customer payment term from AX database and auto-select
+        loadCustomerPaymentTerm(data_crf_customercode, data_crf_area, function(response) {
+            if (response.status === 'success' && response.data) {
+                // มีข้อมูล payment term จาก AX → auto select
+                $('#crf_arcustdueid').val(response.data.arcustdueid);
+                console.log('Payment term loaded:', response.data);
+            } else {
+                // ไม่มีข้อมูล payment term → ปล่อยว่าง (default option)
+                $('#crf_arcustdueid').val('');
+                console.log('No payment term found for customer:', data_crf_customercode);
+            }
+        });
+        
         // Lock customer fields after successful selection
         lockCustomerFieldsTH();
     }

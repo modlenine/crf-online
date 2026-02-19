@@ -434,6 +434,34 @@ class Main extends MX_Controller
         $this->main->searchCustomerDetailExName();
     }
 
+    public function getCustomerPaymentTerm()
+    {
+        $customercode = $this->input->post('customercode', true);
+        $dataareaid = $this->input->post('dataareaid', true);
+
+        $result = $this->main->getCustomerPaymentTerm($customercode, $dataareaid);
+
+        if ($result && !empty($result->arcustdueid)) {
+            $response = array(
+                'status' => 'success',
+                'data' => array(
+                    'arcustdueid' => $result->arcustdueid,
+                    'duedescription' => $result->duedescription,
+                    'numsofdays' => $result->numsofdays
+                )
+            );
+        } else {
+            $response = array(
+                'status' => 'empty',
+                'message' => 'ไม่พบข้อมูล Payment Term'
+            );
+        }
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($response, JSON_UNESCAPED_UNICODE));
+    }
+
     public function queryProcessUse()
     {
         $this->main->queryProcessUse();

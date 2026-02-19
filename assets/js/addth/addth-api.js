@@ -164,6 +164,42 @@ function queryPrimanageUse(cusId) {
 }
 
 // ============================================================================
+// Payment Term Functions
+// ============================================================================
+
+/**
+ * Load customer payment term from AX database
+ * @param {String} customercode - Customer account number
+ * @param {String} dataareaid - Data area ID (company identifier)
+ * @param {Function} callback - Callback function to handle response
+ */
+function loadCustomerPaymentTerm(customercode, dataareaid, callback) {
+	$.ajax({
+		url: 'main/getCustomerPaymentTerm',
+		method: 'POST',
+		data: {
+			customercode: customercode,
+			dataareaid: dataareaid
+		},
+		dataType: 'json',
+		success: function (response) {
+			if (typeof callback === 'function') {
+				callback(response);
+			}
+		},
+		error: function (xhr, status, error) {
+			console.error('Error loading payment term:', error);
+			if (typeof callback === 'function') {
+				callback({
+					status: 'error',
+					message: 'เกิดข้อผิดพลาดในการโหลดข้อมูล Payment Term'
+				});
+			}
+		}
+	});
+}
+
+// ============================================================================
 // Credit Term Functions
 // ============================================================================
 

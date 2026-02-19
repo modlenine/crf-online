@@ -2351,6 +2351,37 @@ class Main_model extends CI_Model
         return $query->num_rows() > 0 ? $query->row() : null;
     }
 
+    /**
+     * Get customer payment term from AX database (MSSQL)
+     * @param string $customercode - Customer account number
+     * @param string $dataareaid - Data area ID (company identifier)
+     * @return object|null - Payment term details or null if not found
+     */
+    public function getCustomerPaymentTerm($customercode, $dataareaid)
+    {
+        if (empty($customercode) || empty($dataareaid)) {
+            return null;
+        }
+
+        // Query from db3 (MSSQL AX database) with LEFT JOINs
+        $this->db3
+            ->select(array(
+                'a.slc_arcustdueid as arcustdueid',
+                'b.duedescription',
+                'b.numsofdays'
+            ))
+            ->from('slc_custview scv')
+            ->join('custpaymmodespec a', 'a.custaccount = scv.accountnum AND a.dataareaid = scv.dataAreaId', 'left')
+            ->join('slc_arcustduetable b', 'b.arcustdueid = a.slc_arcustdueid AND b.dataareaid = a.dataareaid', 'left')
+            ->where('scv.accountnum', $customercode)
+            ->where('scv.dataAreaId', $dataareaid)
+            ->limit(1);
+
+        $query = $this->db3->get();
+
+        return $query->num_rows() > 0 ? $query->row() : null;
+    }
+
 
     public function queryPrimanageUse()
     {
