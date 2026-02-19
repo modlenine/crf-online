@@ -176,7 +176,9 @@ class Main_model extends CI_Model
             $result_recive_cheuqetable = $uploadedBillFiles['cheuqetable'];
             $customermapfile = $uploadedBillFiles['mapfile'];
 
-
+            // Get due details from arcustdueid
+            $selectedDueId = $this->input->post("crf_arcustdueid");
+            $dueDetail = $this->getDueDetail($selectedDueId);
 
             $arcustomer = array(
                 "crfcus_id" => $getCustomerNumber,
@@ -229,10 +231,13 @@ class Main_model extends CI_Model
                 "crfcus_mapurl" => $this->input->post("crf_mapurl"), //update 12-05-2020
                 "crfcus_mapfile" => $customermapfile, //update 12-05-2020
                 "crfcus_products" => $this->input->post("crf_customer_product"), //update 12-05-2020
-
                 "crfcus_memo2" => $this->input->post("crfcus_memo2"),
-                "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli")
+                
+                "crfcus_slc_arcustdueid" => $dueDetail ? $dueDetail->arcustdueid : null,
+                "crfcus_duedescription" => $dueDetail ? $dueDetail->duedescription : null,
+                "crfcus_numsofdays" => ($dueDetail && $dueDetail->numsofdays !== null) ? $dueDetail->numsofdays : null
             );
+
 
 
             $arsavedata = array(
@@ -2310,6 +2315,42 @@ class Main_model extends CI_Model
         echo json_encode($output);
     }
 
+    /**
+     * Get due options from slc_arcustduetable
+     * Used for Customer Expected Date Payment Term dropdown
+     */
+    public function getDueOptions()
+    {
+        $query = $this->db3
+            ->select(array('arcustdueid', 'duedescription', 'numsofdays'))
+            ->from('slc_arcustduetable')
+            ->order_by('arcustdueid', 'ASC')
+            ->get();
+
+        return $query->result();
+    }
+
+    /**
+     * Get due detail by arcustdueid
+     * @param string $dueId
+     * @return object|null
+     */
+    public function getDueDetail($dueId)
+    {
+        if (empty($dueId)) {
+            return null;
+        }
+
+        $query = $this->db3
+            ->select(array('arcustdueid', 'duedescription', 'numsofdays'))
+            ->from('slc_arcustduetable')
+            ->where('arcustdueid', $dueId)
+            ->limit(1)
+            ->get();
+
+        return $query->num_rows() > 0 ? $query->row() : null;
+    }
+
 
     public function queryPrimanageUse()
     {
@@ -3349,9 +3390,18 @@ class Main_model extends CI_Model
                     "crfcus_mapurl" => $mapUrl,
                     "crfcus_mapfile" => $resultMapFile,
                     "crfcus_products" => $this->input->post("edit_crf_customer_products"),
-                    "crfcus_memo2" => $this->input->post("crfcus_memo2_edit"),
-                    "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli_edit")
+                    "crfcus_memo2" => $this->input->post("crfcus_memo2_edit")
                 );
+                
+                // Get due details from arcustdueid
+                $selectedDueId = $this->input->post("crf_arcustdueid_edit");
+                $dueDetail = $this->getDueDetail($selectedDueId);
+                
+                if ($dueDetail) {
+                    $arcustomer["crfcus_slc_arcustdueid"] = $dueDetail->arcustdueid;
+                    $arcustomer["crfcus_duedescription"] = $dueDetail->duedescription;
+                }
+                
                 $this->db->where("crfcus_formno", $this->input->post("check_EditFormNo"));
                 $this->db->update("crf_customers_temp", $arcustomer);
 
@@ -3460,9 +3510,18 @@ class Main_model extends CI_Model
                         "crfcus_usermodify_ecode" => $this->input->post("crf_userecodepost"),
                         "crfcus_usermodify_deptcode" => $this->input->post("crf_userdeptcodepost"),
                         "crfcus_usermodify_datetime" => date("Y-m-d H:i:s"),
-                        "crfcus_memo2" => $this->input->post("crfcus_memo2_edit"),
-                        "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli_edit")
+                        "crfcus_memo2" => $this->input->post("crfcus_memo2_edit")
                     );
+                    
+                    // Get due details from arcustdueid
+                    $selectedDueId = $this->input->post("crf_arcustdueid_edit");
+                    $dueDetail = $this->getDueDetail($selectedDueId);
+                    
+                    if ($dueDetail) {
+                        $arUpdateSalesReps["crfcus_slc_arcustdueid"] = $dueDetail->arcustdueid;
+                        $arUpdateSalesReps["crfcus_duedescription"] = $dueDetail->duedescription;
+                    }
+                    
                     $this->db->where("crfcus_formno", $this->input->post("check_EditFormNo"));
                     if ($this->db->update("crf_customers_temp", $arUpdateSalesReps)) {
                         $arUpdateMaindata = array(
@@ -3493,9 +3552,18 @@ class Main_model extends CI_Model
                         "crfcus_usermodify_ecode" => $this->input->post("crf_userecodepost"),
                         "crfcus_usermodify_deptcode" => $this->input->post("crf_userdeptcodepost"),
                         "crfcus_usermodify_datetime" => date("Y-m-d H:i:s"),
-                        "crfcus_memo2" => $this->input->post("crfcus_memo2_edit"),
-                    "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli_edit")
+                        "crfcus_memo2" => $this->input->post("crfcus_memo2_edit")
                     );
+                    
+                    // Get due details from arcustdueid
+                    $selectedDueId = $this->input->post("crf_arcustdueid_edit");
+                    $dueDetail = $this->getDueDetail($selectedDueId);
+                    
+                    if ($dueDetail) {
+                        $arUpdateAddress["crfcus_slc_arcustdueid"] = $dueDetail->arcustdueid;
+                        $arUpdateAddress["crfcus_duedescription"] = $dueDetail->duedescription;
+                    }
+                    
                     $this->db->where("crfcus_formno", $this->input->post("check_EditFormNo"));
                     if ($this->db->update("crf_customers_temp", $arUpdateAddress)) {
                         $arUpdateMaindata = array(
@@ -3547,9 +3615,18 @@ class Main_model extends CI_Model
                         "crfcus_usermodify_ecode" => $this->input->post("crf_userecodepost"),
                         "crfcus_usermodify_deptcode" => $this->input->post("crf_userdeptcodepost"),
                         "crfcus_usermodify_datetime" => date("Y-m-d H:i:s"),
-                        "crfcus_memo2" => $this->input->post("crfcus_memo2_edit"),
-                    "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli_edit")
+                        "crfcus_memo2" => $this->input->post("crfcus_memo2_edit")
                     );
+                    
+                    // Get due details from arcustdueid
+                    $selectedDueId = $this->input->post("crf_arcustdueid_edit");
+                    $dueDetail = $this->getDueDetail($selectedDueId);
+                    
+                    if ($dueDetail) {
+                        $arUpdateCustomer["crfcus_slc_arcustdueid"] = $dueDetail->arcustdueid;
+                        $arUpdateCustomer["crfcus_duedescription"] = $dueDetail->duedescription;
+                    }
+                    
                     $this->db->where("crfcus_formno", $this->input->post("check_EditFormNo"));
                     if ($this->db->update("crf_customers_temp", $arUpdateCustomer)) {
                         $arUpdateMaindata = array(
@@ -3583,9 +3660,18 @@ class Main_model extends CI_Model
                         "crfcus_usermodify_ecode" => $this->input->post("crf_userecodepost"),
                         "crfcus_usermodify_deptcode" => $this->input->post("crf_userdeptcodepost"),
                         "crfcus_usermodify_datetime" => date("Y-m-d H:i:s"),
-                        "crfcus_memo2" => $this->input->post("crfcus_memo2_edit"),
-                    "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli_edit")
+                        "crfcus_memo2" => $this->input->post("crfcus_memo2_edit")
                     );
+                    
+                    // Get due details from arcustdueid
+                    $selectedDueId = $this->input->post("crf_arcustdueid_edit");
+                    $dueDetail = $this->getDueDetail($selectedDueId);
+                    
+                    if ($dueDetail) {
+                        $arUpdateChangeCredit["crfcus_slc_arcustdueid"] = $dueDetail->arcustdueid;
+                        $arUpdateChangeCredit["crfcus_duedescription"] = $dueDetail->duedescription;
+                    }
+                    
                     $this->db->where("crfcus_formno", $this->input->post("check_EditFormNo"));
                     if ($this->db->update("crf_customers_temp", $arUpdateChangeCredit)) {
                         $arUpdateMaindata = array(
@@ -3620,9 +3706,18 @@ class Main_model extends CI_Model
                         "crfcus_usermodify_ecode" => $this->input->post("crf_userecodepost"),
                         "crfcus_usermodify_deptcode" => $this->input->post("crf_userdeptcodepost"),
                         "crfcus_usermodify_datetime" => date("Y-m-d H:i:s"),
-                        "crfcus_memo2" => $this->input->post("crfcus_memo2_edit"),
-                    "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli_edit")
+                        "crfcus_memo2" => $this->input->post("crfcus_memo2_edit")
                     );
+                    
+                    // Get due details from arcustdueid
+                    $selectedDueId = $this->input->post("crf_arcustdueid_edit");
+                    $dueDetail = $this->getDueDetail($selectedDueId);
+                    
+                    if ($dueDetail) {
+                        $arUpdateChangeFinance["crfcus_slc_arcustdueid"] = $dueDetail->arcustdueid;
+                        $arUpdateChangeFinance["crfcus_duedescription"] = $dueDetail->duedescription;
+                    }
+                    
                     $this->db->where("crfcus_formno", $this->input->post("check_EditFormNo"));
                     if ($this->db->update("crf_customers_temp", $arUpdateChangeFinance)) {
                         $arUpdateMaindata = array(

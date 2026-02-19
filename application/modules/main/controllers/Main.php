@@ -45,6 +45,7 @@ class Main extends MX_Controller
             $data['getFormCode'] = getFormCode();
             $data['getCusProcess'] = getCusProcess();
             $data['getCreditTerm'] = getCreditTerm();
+            $data['dueOptions'] = $this->main->getDueOptions();
             getHead();
             getContentData('add_th', $data);
             getFooter();
@@ -1058,7 +1059,9 @@ class Main extends MX_Controller
                 "crfcus_products" => getViewData($crf_id)->crfcus_products,
                 "crf_sub_oldcus_editcustomer" => getViewData($crf_id)->crf_sub_oldcus_editcustomer,
                 "crfcus_memo2" => getViewData($crf_id)->crfcus_memo2,
-                "crfcus_countmonthdeli" => getViewData($crf_id)->crfcus_countmonthdeli
+                "crfcus_slc_arcustdueid" => getViewData($crf_id)->crfcus_slc_arcustdueid,
+                "crfcus_duedescription" => getViewData($crf_id)->crfcus_duedescription,
+                "dueOptions" => $this->main->getDueOptions()
             );
     
     

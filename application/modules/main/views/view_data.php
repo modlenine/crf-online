@@ -677,24 +677,10 @@
                 </div>
             </div>
 
-
-            <?php
-                $checked1 = '';
-                $checked2 = '';
-                if ($result->crfcus_countmonthdeli == 'เดือนส่งของไม่นับ') {
-                    $checked1 = 'checked';
-                } elseif ($result->crfcus_countmonthdeli == 'นับเดือนส่งของ') {
-                    $checked2 = 'checked';
-                }
-            ?>
             <div class="row form-group">
-                <div class="col-md-4">
-                    <input type="radio" name="crfcus_countmonthdeli" id="crfcus_countmonthdeli1" value="เดือนส่งของไม่นับ" onclick="return false" class="crf_condition_moneyv1" <?php echo $checked1?>>
-                    <label for="">เดือนส่งของไม่นับ</label>
-                </div>
-                <div class="col-md-4">
-                    <input type="radio" name="crfcus_countmonthdeli" id="crfcus_countmonthdel2" value="นับเดือนส่งของ" onclick="return false" class="crf_condition_moneyv2" <?php echo $checked2?>>
-                    <label for="">นับเดือนส่งของ</label>
+                <div class="col-md-6">
+                    <label for="">Customer Expected Date Payment Term</label>
+                    <input type="text" name="crfcus_payment_term_view" id="crfcus_payment_term_view" class="form-control form-control-sm" readonly value="<?php echo $result->crfcus_slc_arcustdueid?> | <?php echo $result->crfcus_duedescription?>">
                 </div>
             </div>
             <hr>

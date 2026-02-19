@@ -453,11 +453,9 @@ $(document).ready(function () {
         $('input:radio[id="crf_condition_money2_view"]').prop('checked', true);
         $('.recive_cheuqe').css('display', '');
     }
-    if ($('#forcrf_countmonthdeli_view').val() == "เดือนส่งของไม่นับ") {
-        $('input[name="crfcus_countmonthdeli"][value="เดือนส่งของไม่นับ"]').prop('checked', true);
-    } else if ($('#forcrf_countmonthdeli_view').val() == "นับเดือนส่งของ") {
-        $('input[name="crfcus_countmonthdeli"][value="นับเดือนส่งของ"]').prop('checked', true);
-    }
+    
+    // Customer Expected Date Payment Term is now handled by standard dropdown (no JS needed)
+    
     previewAttachment('#recive_cheuqetable', 'data_recive_cheuqetable', '#embedshowfile10Img', '#embedshowfile10');
 
 

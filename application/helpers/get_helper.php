@@ -344,8 +344,10 @@ function getViewData($crf_id)
     crf_customers_temp.crfcus_personal,
     crf_customers_temp.crfcus_area,
     crf_customers_temp.crfcus_memo2,
-    crf_customers_temp.crfcus_countmonthdeli
-
+    crf_customers_temp.crfcus_countmonthdeli,
+    crf_customers_temp.crfcus_slc_arcustdueid,
+    crf_customers_temp.crfcus_duedescription,
+    crf_customers_temp.crfcus_numsofdays
     FROM
     crf_maindata
     INNER JOIN crf_customers_temp ON crf_customers_temp.crfcus_formno = crf_maindata.crf_formno
