@@ -879,4 +879,7 @@ $(document).on('keyup' , '#crf_cuscompanycreate' , function(){
 <!-- Load addth.js with versioning to prevent caching -->
 <script src="<?= base_url('assets/js/addth.js?v=') . filemtime('assets/js/addth.js') ?>"></script>
 
+<!-- Load oldcus_editcusdata.js - Refactored customer edit module -->
+<script src="<?= base_url('assets/js/addth/oldcus_editcusdata.js?v=') . filemtime('assets/js/addth/oldcus_editcusdata.js') ?>"></script>
+
 </html>
