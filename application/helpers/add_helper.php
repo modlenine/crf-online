@@ -678,16 +678,28 @@ function saveDirector2ChangeCredit($crfid)
         $obj->gci()->db->where("crfcus_formno", $obj->gci()->input->post("direc2FormNo"));
         if ($obj->gci()->db->update("crf_customers_temp", $arUpdateCusTemp)) {
 
-            $obj->gci()->db->select("crfcus_creditterm2");
+            $obj->gci()->db->select("crfcus_creditterm2, crfcus_slc_arcustdueid, crfcus_duedescription, crfcus_numsofdays");
             $obj->gci()->db->from("crf_customers_temp");
             $obj->gci()->db->where("crfcus_formno", $obj->gci()->input->post("direc2FormNo"));
             $queryTemp = $obj->gci()->db->get();
 
             foreach ($queryTemp->result() as $result) {
                 $arUpdateToCustomers = array(
-                    "crfcus_creditterm" => $result->crfcus_creditterm2,
                     "crfcus_usermodify_datetime" => date("Y-m-d H:i:s")
                 );
+
+                // ถ้าเลือก Credit Term ให้ update
+                if (!empty($result->crfcus_creditterm2)) {
+                    $arUpdateToCustomers["crfcus_creditterm"] = $result->crfcus_creditterm2;
+                }
+
+                // ถ้าเลือก Expected Date Payment (AX data) ให้ update
+                if (!empty($result->crfcus_slc_arcustdueid)) {
+                    $arUpdateToCustomers["crfcus_slc_arcustdueid"] = $result->crfcus_slc_arcustdueid;
+                    $arUpdateToCustomers["crfcus_duedescription"] = $result->crfcus_duedescription;
+                    $arUpdateToCustomers["crfcus_numsofdays"] = $result->crfcus_numsofdays;
+                }
+
                 $obj->gci()->db->where("crfcus_id", $obj->gci()->input->post("Director2Cuscode"));
                 $obj->gci()->db->update("crf_customers", $arUpdateToCustomers);
             }

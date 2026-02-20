@@ -326,6 +326,9 @@ class Main_model extends CI_Model
 
             // Get data From customers table to customers_temp table
             if ($this->input->post("crf_cusid") != "") {
+                // เช็กและบันทึกข้อมูล AX ลง crf_customers ก่อน (ถ้ายังไม่มี)
+                $this->syncAXDataToCustomers($this->input->post("crf_cusid"), $this->input->post("addThArea"));
+                
                 $this->db->select("*");
                 $this->db->from("crf_customers");
                 $this->db->where("crfcus_id", $this->input->post("crf_cusid"));
@@ -394,7 +397,12 @@ class Main_model extends CI_Model
                         "crfcus_tempstatus" => "Processing",
                         "crfcus_formno" => $getFormNo,
                         "crfcus_memo2" => $result->crfcus_memo2,
-                        "crfcus_countmonthdeli" => $result->crfcus_countmonthdeli
+                        "crfcus_countmonthdeli" => $result->crfcus_countmonthdeli,
+                        
+                        // เพิ่มฟิลด์ข้อมูล AX
+                        "crfcus_slc_arcustdueid" => $result->crfcus_slc_arcustdueid,
+                        "crfcus_duedescription" => $result->crfcus_duedescription,
+                        "crfcus_numsofdays" => $result->crfcus_numsofdays
 
                     );
                     $this->db->insert("crf_customers_temp", $arCopyToTempTable);
@@ -2349,6 +2357,69 @@ class Main_model extends CI_Model
             ->get();
 
         return $query->num_rows() > 0 ? $query->row() : null;
+    }
+
+    /**
+     * เช็กและบันทึกข้อมูล AX (arcustdueid, duedescription, numsofdays) 
+     * ลง crf_customers โดยดึงจาก AX ถ้ายังไม่มีข้อมูล
+     * @param string $cusId - Customer ID
+     * @param string $area - Customer Area (dataareaid)
+     * @return bool - true ถ้ามีการ update, false ถ้าไม่มี
+     */
+    private function syncAXDataToCustomers($cusId, $area)
+    {
+        if (empty($cusId) || empty($area)) {
+            return false;
+        }
+
+        // ดึงข้อมูลจาก crf_customers เพื่อเช็กว่ามีข้อมูล AX หรือยัง
+        $this->db->select('crfcus_code, crfcus_slc_arcustdueid, crfcus_duedescription, crfcus_numsofdays');
+        $this->db->from('crf_customers');
+        $this->db->where('crfcus_id', $cusId);
+        $this->db->where('crfcus_area', $area);
+        $customerQuery = $this->db->get();
+
+        if ($customerQuery->num_rows() == 0) {
+            return false;
+        }
+
+        $customerData = $customerQuery->row();
+
+        // เช็กว่าใน crf_customers มีข้อมูล AX แล้วหรือยัง
+        $hasAXDataInCustomers = !empty($customerData->crfcus_slc_arcustdueid) || 
+                                !empty($customerData->crfcus_duedescription) || 
+                                $customerData->crfcus_numsofdays !== null;
+
+        // ถ้ามีข้อมูล AX แล้ว ก็ข้ามไป
+        if ($hasAXDataInCustomers) {
+            return false;
+        }
+
+        // ถ้ายังไม่มีข้อมูล AX ให้ไปดึงจาก AX database
+        if (empty($customerData->crfcus_code)) {
+            return false;
+        }
+
+        // เรียก getCustomerPaymentTerm เพื่อดึงข้อมูลจาก AX
+        $axData = $this->getCustomerPaymentTerm($customerData->crfcus_code, $area);
+
+        // ถ้าดึงข้อมูลจาก AX ได้ ให้บันทึกลง crf_customers
+        if ($axData && !empty($axData->arcustdueid)) {
+            $arUpdateAXData = array(
+                "crfcus_slc_arcustdueid" => $axData->arcustdueid,
+                "crfcus_duedescription" => $axData->duedescription,
+                "crfcus_numsofdays" => $axData->numsofdays,
+                "crfcus_datemodify" => date("Y-m-d H:i:s")
+            );
+
+            $this->db->where('crfcus_id', $cusId);
+            $this->db->where('crfcus_area', $area);
+            $this->db->update('crf_customers', $arUpdateAXData);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
