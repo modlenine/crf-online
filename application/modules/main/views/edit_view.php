@@ -484,8 +484,8 @@
                         <span><a href="' . base_url("upload/") . $get_personal . '" target="_blank" style="cursor: pointer;"><b>' . $get_personal . '</b></a></span>
                         ';
                         } else {
-                        $output .='
-                        <span><a href="'.base_url("upload/").$get_personal.'" target="_blank" style="cursor: pointer;"><b>'.$get_personal.'</b></a></span>
+                            $output .= '
+                        <span><a id="edit_datafilePersonal" href="#" data-toggle="modal" data-target="#show_editfilePersonal" data_editfilepersonal="' . $get_personal . '" style="cursor: pointer;"><b>' . $get_personal . '</b></a></span>
                         ';
                         }
                         echo $output;
@@ -502,42 +502,84 @@
                         <label for="">ภพ.20 / ภธ.09</label><br>
                         <input hidden type="text" name="get_crf_file1" id="get_crf_file1" value="{get_file1}">
                         <input type="file" name="crf_file1" id="crf_file1" class="form-control form-control-sm crf_file1_edit" accept=".jpg,.png,.pdf">
-                        <a href="<?= base_url('upload/') ?>{get_file1}" target="_blank" style="cursor: pointer;"><label for=""><b>{get_file1}</b></label></a>
+                        <?php
+                        $file1 = $get_file1;
+                        if (substr($file1, -3) == "pdf" || substr($file1, -3) == "PDF") {
+                            echo '<a href="' . base_url('upload/') . $file1 . '" target="_blank" style="cursor: pointer;"><b>' . $file1 . '</b></a>';
+                        } else {
+                            echo '<a id="edit_datafile1" href="#" data-toggle="modal" data-target="#show_editfile1" data_editfile1="' . $file1 . '" style="cursor: pointer;"><b>' . $file1 . '</b></a>';
+                        }
+                        ?>
                         <div id="alert_file1"></div>
                     </div>
                     <div class="col-md-4 form-group crf_file2">
                         <label for="">หนังสือรับรอง</label><br>
                         <input hidden type="text" name="get_crf_file2" id="get_crf_file2" value="{get_file2}">
                         <input type="file" name="crf_file2" id="crf_file2" class="form-control form-control-sm crf_file2_edit" accept=".jpg,.png,.pdf">
-                        <a href="<?= base_url('upload/') ?>{get_file2}" target="_blank" style="cursor: pointer;"><label for=""><b>{get_file2}</b></label></a>
+                        <?php
+                        $file2 = $get_file2;
+                        if (substr($file2, -3) == "pdf" || substr($file2, -3) == "PDF") {
+                            echo '<a href="' . base_url('upload/') . $file2 . '" target="_blank" style="cursor: pointer;"><b>' . $file2 . '</b></a>';
+                        } else {
+                            echo '<a id="edit_datafile2" href="#" data-toggle="modal" data-target="#show_editfile2" data_editfile2="' . $file2 . '" style="cursor: pointer;"><b>' . $file2 . '</b></a>';
+                        }
+                        ?>
                         <div id="alert_file2"></div>
                     </div>
                     <div class="col-md-4 form-group crf_file3">
                         <label for="">ข้อมูลทั่วไป</label><br>
                         <input hidden type="text" name="get_crf_file3" id="get_crf_file3" value="{get_file3}">
                         <input type="file" name="crf_file3" id="crf_file3" class="form-control form-control-sm crf_file3_edit" accept=".jpg,.png,.pdf">
-                        <a href="<?= base_url('upload/') ?>{get_file3}" target="_blank" style="cursor: pointer;"><label for=""><b>{get_file3}</b></label></a>
+                        <?php
+                        $file3 = $get_file3;
+                        if (substr($file3, -3) == "pdf" || substr($file3, -3) == "PDF") {
+                            echo '<a href="' . base_url('upload/') . $file3 . '" target="_blank" style="cursor: pointer;"><b>' . $file3 . '</b></a>';
+                        } else {
+                            echo '<a id="edit_datafile3" href="#" data-toggle="modal" data-target="#show_editfile3" data_editfile3="' . $file3 . '" style="cursor: pointer;"><b>' . $file3 . '</b></a>';
+                        }
+                        ?>
                         <div id="alert_file3"></div>
                     </div>
                     <div class="col-md-4 form-group crf_file4">
                         <label for="">งบดุล</label><br>
                         <input hidden type="text" name="get_crf_file4" id="get_crf_file4" value="{get_file4}">
                         <input type="file" name="crf_file4" id="crf_file4" class="form-control form-control-sm crf_file4_edit" accept=".jpg,.png,.pdf">
-                        <a href="<?= base_url('upload/') ?>{get_file4}" target="_blank" style="cursor: pointer;"><label for=""><b>{get_file4}</b></label></a>
+                        <?php
+                        $file4 = $get_file4;
+                        if (substr($file4, -3) == "pdf" || substr($file4, -3) == "PDF") {
+                            echo '<a href="' . base_url('upload/') . $file4 . '" target="_blank" style="cursor: pointer;"><b>' . $file4 . '</b></a>';
+                        } else {
+                            echo '<a id="edit_datafile4" href="#" data-toggle="modal" data-target="#show_editfile4" data_editfile4="' . $file4 . '" style="cursor: pointer;"><b>' . $file4 . '</b></a>';
+                        }
+                        ?>
                         <div id="alert_file4"></div>
                     </div>
                     <div class="col-md-4 crf_file5">
                         <label for="">งบกำไรขาดทุน</label><br>
                         <input hidden type="text" name="get_crf_file5" id="get_crf_file5" value="{get_file5}">
                         <input type="file" name="crf_file5" id="crf_file5" class="form-control form-control-sm crf_file5_edit" accept=".jpg,.png,.pdf">
-                        <a href="<?= base_url('upload/') ?>{get_file5}" target="_blank" style="cursor: pointer;"><label for=""><b>{get_file5}</b></label></a>
+                        <?php
+                        $file5 = $get_file5;
+                        if (substr($file5, -3) == "pdf" || substr($file5, -3) == "PDF") {
+                            echo '<a href="' . base_url('upload/') . $file5 . '" target="_blank" style="cursor: pointer;"><b>' . $file5 . '</b></a>';
+                        } else {
+                            echo '<a id="edit_datafile5" href="#" data-toggle="modal" data-target="#show_editfile5" data_editfile5="' . $file5 . '" style="cursor: pointer;"><b>' . $file5 . '</b></a>';
+                        }
+                        ?>
                         <div id="alert_file5"></div>
                     </div>
                     <div class="col-md-4 crf_file6">
                         <label for="">วิเคราะห์ผลการดำเนินงาน</label>
                         <input hidden type="text" name="get_crf_file6" id="get_crf_file6" value="{get_file6}">
                         <input type="file" name="crf_file6" id="crf_file6" class="form-control form-control-sm crf_file6_edit" accept=".jpg,.png,.pdf">
-                        <a href="<?= base_url('upload/') ?>{get_file6}" target="_blank" style="cursor: pointer;"><label for=""><b>{get_file6}</b></label></a>
+                        <?php
+                        $file6 = $get_file6;
+                        if (substr($file6, -3) == "pdf" || substr($file6, -3) == "PDF") {
+                            echo '<a href="' . base_url('upload/') . $file6 . '" target="_blank" style="cursor: pointer;"><b>' . $file6 . '</b></a>';
+                        } else {
+                            echo '<a id="edit_datafile6" href="#" data-toggle="modal" data-target="#show_editfile6" data_editfile6="' . $file6 . '" style="cursor: pointer;"><b>' . $file6 . '</b></a>';
+                        }
+                        ?>
                         <div id="alert_file6"></div>
                     </div>
                 </div>
@@ -655,14 +697,28 @@
                     <div class="col-md-6">
                         <label for="">ตารางวางบิล</label><br>
                         <input hidden type="text" name="get_crf_file7" id="get_crf_file7" value="{get_file7}">
-                        <a href="<?= base_url('upload/') ?>{get_file7}" target="_blank" style="cursor: pointer;"><label for=""><b>{get_file7}</b></label></a>
+                        <?php
+                        $file7 = $get_file7;
+                        if (substr($file7, -3) == "pdf" || substr($file7, -3) == "PDF") {
+                            echo '<a href="' . base_url('upload/') . $file7 . '" target="_blank" style="cursor: pointer;"><b>' . $file7 . '</b></a>';
+                        } else {
+                            echo '<a id="edit_datafile7" href="#" data-toggle="modal" data-target="#show_editfile7" data_editfile7="' . $file7 . '" style="cursor: pointer;"><b>' . $file7 . '</b></a>';
+                        }
+                        ?>
                         <input type="file" name="crf_file7" id="crf_file7" class="form-control form-control-sm newcustomer1" accept=".jpg,.png,.pdf">
                         <!-- <input type="text" name="crf_tablebill" id="crf_tablebill" class="form-control form-control-sm oldcustomer1" style="display:none"> -->
                     </div>
                     <div class="col-md-6">
                         <label for="">แผนที่ ที่ไปวางบิล</label><br>
                         <input hidden type="text" name="get_crf_file8" id="get_crf_file8" value="{get_file8}">
-                        <a href="<?= base_url('upload/') ?>{get_file8}" target="_blank" style="cursor: pointer;"><label for=""><b>{get_file8}</b></label></a>
+                        <?php
+                        $file8 = $get_file8;
+                        if (substr($file8, -3) == "pdf" || substr($file8, -3) == "PDF") {
+                            echo '<a href="' . base_url('upload/') . $file8 . '" target="_blank" style="cursor: pointer;"><b>' . $file8 . '</b></a>';
+                        } else {
+                            echo '<a id="edit_datafile8" href="#" data-toggle="modal" data-target="#show_editfile8" data_editfile8="' . $file8 . '" style="cursor: pointer;"><b>' . $file8 . '</b></a>';
+                        }
+                        ?>
                         <input type="file" name="crf_file8" id="crf_file8" class="form-control form-control-sm newcustomer2" accept=".jpg,.png,.pdf">
                         <!-- <input type="text" name="crf_mapbill" id="crf_mapbill" class="form-control form-control-sm oldcustomer2" style="display:none"> -->
                     </div>
@@ -677,7 +733,14 @@
                         <label for="">แผนที่ ที่ไปวางบิล</label><br>
                         <input hidden type="text" name="get_crf_file9" id="get_crf_file9" value="{get_mapbill2}">
                         <input type="file" name="crf_file9" id="crf_file9" class="form-control form-control-sm newcustomer3" accept=".jpg,.png,.pdf">
-                        <a href="<?= base_url('upload/') ?>{get_mapbill2}" target="_blank" style="cursor: pointer;"><label for=""><b>{get_mapbill2}</b></label></a>
+                        <?php
+                        $file9 = $get_mapbill2;
+                        if (substr($file9, -3) == "pdf" || substr($file9, -3) == "PDF") {
+                            echo '<a href="' . base_url('upload/') . $file9 . '" target="_blank" style="cursor: pointer;"><b>' . $file9 . '</b></a>';
+                        } else {
+                            echo '<a id="edit_datafile9" href="#" data-toggle="modal" data-target="#show_editfile9" data_editfile9="' . $file9 . '" style="cursor: pointer;"><b>' . $file9 . '</b></a>';
+                        }
+                        ?>
                         <!-- <input type="text" name="crf_mapbill2" id="crf_mapbill2" class="form-control form-control-sm oldcustomer3" style="display:none;"> -->
                     </div>
                 </div><br>

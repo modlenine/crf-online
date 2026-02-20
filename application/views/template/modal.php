@@ -405,6 +405,38 @@
 
 
 
+<!-- Modal Show edit page ไฟล์แนบ Personal (บัตรประชาชน) -->
+<div class="modal fade" id="show_editfilePersonal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">
+					สำเนาบัตรประชาชน&nbsp;
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">
+						&times;
+					</span>
+				</button>
+			</div>
+			<div class="modal-body">
+
+				<div id="show_filePersonal" class="col-md-12">
+					<img id="embedshow_editfilePersonalImg" src="" width="100%" height="500px" />
+					<embed id="embedshow_editfilePersonal" src="" type="application/pdf" width="100%" height="500px" />
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">
+					Close
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
 <!-- Modal Show edit page ไฟล์แนบ1 -->
 <div class="modal fade" id="show_editfile1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
@@ -424,6 +456,262 @@
 				<div id="show_file1" class="col-md-12">
 					<img id="embedshow_editfile1Img" src="" width="100%" height="500px" />
 					<embed id="embedshow_editfile1" src="" type="application/pdf" width="100%" height="500px" />
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">
+					Close
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Modal Show edit page ไฟล์แนบ2 -->
+<div class="modal fade" id="show_editfile2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">
+					ไฟล์เอกสาร2&nbsp;
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">
+						&times;
+					</span>
+				</button>
+			</div>
+			<div class="modal-body">
+
+				<div id="show_file2" class="col-md-12">
+					<img id="embedshow_editfile2Img" src="" width="100%" height="500px" />
+					<embed id="embedshow_editfile2" src="" type="application/pdf" width="100%" height="500px" />
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">
+					Close
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Modal Show edit page ไฟล์แนบ3 -->
+<div class="modal fade" id="show_editfile3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">
+					ไฟล์เอกสาร3&nbsp;
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">
+						&times;
+					</span>
+				</button>
+			</div>
+			<div class="modal-body">
+
+				<div id="show_file3" class="col-md-12">
+					<img id="embedshow_editfile3Img" src="" width="100%" height="500px" />
+					<embed id="embedshow_editfile3" src="" type="application/pdf" width="100%" height="500px" />
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">
+					Close
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Modal Show edit page ไฟล์แนบ4 -->
+<div class="modal fade" id="show_editfile4" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">
+					ไฟล์เอกสาร4&nbsp;
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">
+						&times;
+					</span>
+				</button>
+			</div>
+			<div class="modal-body">
+
+				<div id="show_file4" class="col-md-12">
+					<img id="embedshow_editfile4Img" src="" width="100%" height="500px" />
+					<embed id="embedshow_editfile4" src="" type="application/pdf" width="100%" height="500px" />
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">
+					Close
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Modal Show edit page ไฟล์แนบ5 -->
+<div class="modal fade" id="show_editfile5" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">
+					ไฟล์เอกสาร5&nbsp;
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">
+						&times;
+					</span>
+				</button>
+			</div>
+			<div class="modal-body">
+
+				<div id="show_file5" class="col-md-12">
+					<img id="embedshow_editfile5Img" src="" width="100%" height="500px" />
+					<embed id="embedshow_editfile5" src="" type="application/pdf" width="100%" height="500px" />
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">
+					Close
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Modal Show edit page ไฟล์แนบ6 -->
+<div class="modal fade" id="show_editfile6" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">
+					ไฟล์เอกสาร6&nbsp;
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">
+						&times;
+					</span>
+				</button>
+			</div>
+			<div class="modal-body">
+
+				<div id="show_file6" class="col-md-12">
+					<img id="embedshow_editfile6Img" src="" width="100%" height="500px" />
+					<embed id="embedshow_editfile6" src="" type="application/pdf" width="100%" height="500px" />
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">
+					Close
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Modal Show edit page ไฟล์แนบ7 -->
+<div class="modal fade" id="show_editfile7" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">
+					ไฟล์เอกสาร7&nbsp;
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">
+						&times;
+					</span>
+				</button>
+			</div>
+			<div class="modal-body">
+
+				<div id="show_file7" class="col-md-12">
+					<img id="embedshow_editfile7Img" src="" width="100%" height="500px" />
+					<embed id="embedshow_editfile7" src="" type="application/pdf" width="100%" height="500px" />
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">
+					Close
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Modal Show edit page ไฟล์แนบ8 -->
+<div class="modal fade" id="show_editfile8" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">
+					ไฟล์เอกสาร8&nbsp;
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">
+						&times;
+					</span>
+				</button>
+			</div>
+			<div class="modal-body">
+
+				<div id="show_file8" class="col-md-12">
+					<img id="embedshow_editfile8Img" src="" width="100%" height="500px" />
+					<embed id="embedshow_editfile8" src="" type="application/pdf" width="100%" height="500px" />
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">
+					Close
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Modal Show edit page ไฟล์แนบ9 -->
+<div class="modal fade" id="show_editfile9" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">
+					ไฟล์เอกสาร9&nbsp;
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">
+						&times;
+					</span>
+				</button>
+			</div>
+			<div class="modal-body">
+
+				<div id="show_file9" class="col-md-12">
+					<img id="embedshow_editfile9Img" src="" width="100%" height="500px" />
+					<embed id="embedshow_editfile9" src="" type="application/pdf" width="100%" height="500px" />
 				</div>
 
 			</div>

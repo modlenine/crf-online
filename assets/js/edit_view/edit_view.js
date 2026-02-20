@@ -371,6 +371,56 @@
     }
     
     // ========================================================================
+    // PHASE 4: MODAL FILE DISPLAY HANDLERS
+    // ========================================================================
+    
+    console.log('Phase 4: Setting up modal file display handlers...');
+    setupEditFileModalHandlers();
+    
+    /**
+     * Setup modal handlers for all edit page file displays
+     * Handles image/PDF selection and modal population
+     */
+    function setupEditFileModalHandlers() {
+        var base_url = $('body').data('base-url') || window.location.origin + '/intsys/crf/';
+        var uploadUrl = base_url + 'upload/';
+        
+        // Personal file modal handler
+        $('#edit_datafilePersonal').click(function() {
+            var dataFile = $(this).attr('data_editfilepersonal');
+            var fileExt = dataFile.substr(-3, 4).toLowerCase();
+            
+            if (fileExt == 'jpg' || fileExt == 'png') {
+                $('#embedshow_editfilePersonalImg').attr('src', uploadUrl + dataFile).show();
+                $('#embedshow_editfilePersonal').hide();
+            } else {
+                $('#embedshow_editfilePersonal').attr('src', uploadUrl + dataFile).show();
+                $('#embedshow_editfilePersonalImg').hide();
+            }
+        });
+        
+        // File 1-9 modal handlers (loop through for efficiency)
+        for (var i = 1; i <= 9; i++) {
+            (function(fileNum) {
+                $('#edit_datafile' + fileNum).click(function() {
+                    var dataFile = $(this).attr('data_editfile' + fileNum);
+                    var fileExt = dataFile.substr(-3, 4).toLowerCase();
+                    
+                    if (fileExt == 'jpg' || fileExt == 'png') {
+                        $('#embedshow_editfile' + fileNum + 'Img').attr('src', uploadUrl + dataFile).show();
+                        $('#embedshow_editfile' + fileNum).hide();
+                    } else {
+                        $('#embedshow_editfile' + fileNum).attr('src', uploadUrl + dataFile).show();
+                        $('#embedshow_editfile' + fileNum + 'Img').hide();
+                    }
+                });
+            })(i);
+        }
+        
+        console.log('    ✓ Modal file display handlers configured');
+    }
+    
+    // ========================================================================
     // Expose functions globally for other modules if needed
     // ========================================================================
     
