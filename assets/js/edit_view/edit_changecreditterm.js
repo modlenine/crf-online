@@ -2,10 +2,16 @@
  * edit_changecreditterm.js
  * 
  * Specialized module for Credit Term section in Edit View
- * - Handles credit term checkbox logic
+ * - Handles credit term checkbox logic with DISABLED/ENABLED pattern (like add_th)
  * - Handles expected date payment checkbox logic
  * - AJAX for filtering credit terms
  * - Validation for credit term changes
+ * 
+ * Pattern (same as add_th):
+ * - Initial State: All fields DISABLED
+ * - Checkbox checked: ENABLE related fields
+ * - Checkbox unchecked: DISABLE related fields
+ * - Section visibility controlled by edit_view.js
  * 
  * Dependencies:
  * - edit_view.js (main controller - MUST load first)
@@ -54,21 +60,34 @@ $(document).ready(function () {
 
     console.log('=== Edit Credit Term Module Loaded ===');
     
-    // Note: Main field locking and section enabling is done by edit_view.js
-    // This module only handles credit term checkbox behavior
+    // ========================================================================
+    // Initial State - Disable fields on page load (like add_th)
+    // ========================================================================
+    
+    // Disable credit term fields initially (until checkbox is checked)
+    // Note: edit_view.js already disables these, but we ensure consistency
+    $('#crf_creditterm').prop('disabled', true);
+    $('#crf_condition_credit').prop('disabled', true);
+    $('#showcredit2').prop('disabled', true);
+    
+    // Disable expected date payment field initially (until checkbox is checked)
+    $('#crf_arcustdueid_edit').prop('disabled', true);
+    
+    console.log('  ✓ Initial state: All credit term fields disabled');
     
     // ========================================================================
-    // Credit Term Checkbox Control
+    // Credit Term Checkbox Control (Disabled/Enabled - like add_th)
     // ========================================================================
     
     // Control credit term checkbox (เปลี่ยน Credit term)
+    // Pattern: Keep sections visible, disable/enable fields only
     $(document).on('change', '#crf_change_creditterm', function () {
         if ($(this).is(':checked')) {
-            $('.change_credit_detail').show();
+            // Enable condition fields only (keep crf_creditterm disabled - value from DB)
             $('#crf_condition_credit').prop('disabled', false);
-            // showcredit2 will be enabled after condition is selected
+            $('#showcredit2').prop('disabled', false);
         } else {
-            $('.change_credit_detail').hide();
+            // Disable all credit term fields when unchecked
             $('#crf_condition_credit').prop('disabled', true).val('');
             $('#showcredit2').prop('disabled', true).val('');
         }
@@ -76,31 +95,38 @@ $(document).ready(function () {
     });
     
     // Control expected date checkbox
+    // Pattern: Disable/enable field only (section visibility controlled by edit_view.js)
     $(document).on('change', '#crf_change_expected_payment', function () {
         if ($(this).is(':checked')) {
-            $('.expected_payment_section').show();
+            // Enable expected date field when checked
             $('#crf_arcustdueid_edit').prop('disabled', false);
         } else {
-            $('.expected_payment_section').hide();
+            // Disable expected date field when unchecked
             $('#crf_arcustdueid_edit').prop('disabled', true);
         }
         checkAndUpdateEditButton();
     });
     
     // ========================================================================
-    // Page Load Initialization - Show sections if data exists
+    // Page Load Initialization - Enable fields if checkboxes are checked
     // ========================================================================
     
-    // Initialize Expected Date Payment section visibility
+    // Initialize Expected Date Payment field state
+    // Section visibility is controlled by edit_view.js based on main checkbox
     if ($('#crf_change_expected_payment').is(':checked')) {
-        $('.expected_payment_section').show();
         $('#crf_arcustdueid_edit').prop('disabled', false);
+    } else {
+        $('#crf_arcustdueid_edit').prop('disabled', true);
     }
     
-    // Initialize Credit Term Change section visibility
+    // Initialize Credit Term Change field state
+    // Section visibility is controlled by edit_view.js based on main checkbox
     if ($('#crf_change_creditterm').is(':checked')) {
-        $('.change_credit_detail').show();
         $('#crf_condition_credit').prop('disabled', false);
+        // showcredit2 will be enabled after selecting condition
+    } else {
+        $('#crf_condition_credit').prop('disabled', true);
+        $('#showcredit2').prop('disabled', true);
     }
     
     // Monitor condition credit changes
@@ -118,7 +144,9 @@ $(document).ready(function () {
                 },
                 success: function(data) {
                     $('#showcredit2').html(data);
-                    $('#showcredit2').prop('disabled', false);
+                    // Enable showcredit2 only if checkbox is checked
+                    var isChecked = $('#crf_change_creditterm').is(':checked');
+                    $('#showcredit2').prop('disabled', !isChecked);
                 }
             });
         }
