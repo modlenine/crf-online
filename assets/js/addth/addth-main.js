@@ -365,12 +365,7 @@ $(document).ready(function () {
 	
 	// ========================================================================
 	// Credit Term Change Handler
-	// ========================================================================
-	
-	$(document).on('click', 'input[name=crf_change_creditterm]', function () {
-		$('.change_credit_detail').toggle();
-	});
-	
+	// >>> MOVED TO: assets/js/addth/oldcus_changecreditterm.js <<<
 	// ========================================================================
 	// Main Customer Type Handler (Both NEW and OLD Customer Logic)
 	// ========================================================================

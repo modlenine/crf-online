@@ -525,6 +525,10 @@
                         <input type="checkbox" name="crf_change_creditterm" id="crf_change_creditterm" value="1">
                         <label for="">ปรับ Credit term</label>
                     </div>
+                    <div class="col-md-6 form-group change_credit">
+                        <input type="checkbox" name="crf_change_expected_date" id="crf_change_expected_date" value="1">
+                        <label for="">ปรับ Expected Date Payment</label>
+                    </div>
                 </div>
 
                 <div class="row form-group">
@@ -590,6 +594,7 @@
                 <!-- Customer Expected Date Payment Term -->
                 <div class="row form-group">
                     <div class="col-md-6">
+                        <input hidden type="text" name="oldExpectedDate" id="oldExpectedDate">
                         <label for="crf_arcustdueid">Customer Expected Date Payment Term</label>
                         <select name="crf_arcustdueid" id="crf_arcustdueid" class="form-control" required>
                             <option value="">-- เลือกกำหนดวันชำระ --</option>
@@ -603,6 +608,23 @@
                                 <option value="">ไม่พบข้อมูลกำหนดชำระ</option>
                             <?php endif; ?>
                         </select>
+                    </div>
+
+                    <div class="col-md-6 form-group change_expected_detail" style="display:none">
+                        <label for="crf_new_arcustdueid">โปรดเลือกรายการใหม่</label>
+                        <select name="crf_new_arcustdueid" id="crf_new_arcustdueid" class="form-control">
+                            <option value="">-- เลือกกำหนดวันชำระใหม่ --</option>
+                            <?php if (!empty($dueOptions)) : ?>
+                                <?php foreach ($dueOptions as $due) : ?>
+                                    <option value="<?= $due->arcustdueid ?>">
+                                        <?= $due->arcustdueid ?> | <?= $due->duedescription ?><?= $due->numsofdays !== null ? ' (' . (int) $due->numsofdays . ' วัน)' : '' ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            <?php else : ?>
+                                <option value="">ไม่พบข้อมูลกำหนดชำระ</option>
+                            <?php endif; ?>
+                        </select>
+                        <div id="alert_new_arcustdueid"></div>
                     </div>
                 </div>
 
@@ -893,5 +915,8 @@ $(document).on('keyup' , '#crf_cuscompanycreate' , function(){
 
 <!-- Load oldcus_editcusdata.js - Refactored customer edit module -->
 <script src="<?= base_url('assets/js/addth/oldcus_editcusdata.js?v=') . filemtime('assets/js/addth/oldcus_editcusdata.js') ?>"></script>
+
+<!-- Load oldcus_changecreditterm.js - Credit term change handler -->
+<script src="<?= base_url('assets/js/addth/oldcus_changecreditterm.js?v=') . filemtime('assets/js/addth/oldcus_changecreditterm.js') ?>"></script>
 
 </html>

@@ -232,44 +232,8 @@ function initializeOldCustomerCheckboxHandlers() {
 	
 	// ========================================================================
 	// ปรับ Credit Term Checkbox Handler
+	// >>> MOVED TO: assets/js/addth/oldcus_changecreditterm.js <<<
 	// ========================================================================
-	$('input:checkbox[name="crf_sub_oldcus_changecredit"]').change(function () {
-		if ($(this).prop("checked") == true) {
-			$(".change_credit").css("display", "");
-			$("input[name=crf_change_creditterm]").prop("checked", true);
-			$(".change_credit_detail").css("display", "");
-			$("#crf_condition_credit").attr("required", "");
-			$("#crf_creditterm").prop("readonly", true);
-			
-			if ($("#crf_condition_credit").val() == "") {
-				$("#user_submit").prop("disabled", true);
-			} else {
-				$("#user_submit").prop("disabled", false);
-			}
-			
-			// ไม่ disable crf_file1 หากมีการเลือก "เปลี่ยนที่อยู่" หรือ "แก้ไขข้อมูลลูกค้า"
-			if (!$('input:checkbox[name="crf_sub_oldcus_changeaddress"]').prop("checked") && 
-				!$('input:checkbox[name="crf_sub_oldcus_editcustomer"]').prop("checked")) {
-				$("#crf_file1").prop("disabled", true);
-			}
-		} else {
-			$(".change_credit").css("display", "none");
-			$("input[name=crf_change_creditterm]").prop("checked", false);
-			$(".change_credit_detail").css("display", "none");
-		}
-		
-		$("#crf_condition_credit").change(function () {
-			$(".showcredit2").remove();
-			var creditMethod = $(this).val();
-			var oldCredit = $("#oldCreditTerm").val();
-			filterCreditTerm(oldCredit, creditMethod);
-			if ($(this).val() != "") {
-				$("#user_submit").prop("disabled", false);
-			} else {
-				$("#user_submit").prop("disabled", true);
-			}
-		});
-	});
 	
 	// ========================================================================
 	// ปรับวงเงิน (Change Finance) Checkbox Handler
@@ -797,8 +761,8 @@ function initializeOldCustomerSubmitValidation() {
 			}
 		}
 		
-		// Check change credit
-		if ($('input:checkbox[name="crf_sub_oldcus_changecredit"]').prop("checked")) {
+// Check change credit term (แยกจาก expected date)
+		if ($('input:checkbox[name="crf_change_creditterm"]').prop("checked")) {
 			if (!$("#crf_condition_credit").val()) {
 				alert("กรุณาเลือกเงื่อนไขการขอปรับ Credit term ด้วยค่ะ");
 				$("#alert_crf_condition_credit").html(
@@ -807,7 +771,11 @@ function initializeOldCustomerSubmitValidation() {
 				return false;
 			}
 			
-			if (!$("#showcredit2").val()) {
+			// เช็ค showcredit2 หรือ crf_creditterm2 (dynamic)
+			var hasShowCredit2 = $("#showcredit2").length > 0 && $("#showcredit2").val() != "";
+			var hasCreditTerm2 = $("#crf_creditterm2").length > 0 && $("#crf_creditterm2").val() != "";
+			
+			if (!hasShowCredit2 && !hasCreditTerm2) {
 				alert("กรุณาเลือก Credit term ที่ต้องการด้วยค่ะ");
 				$("#alert_showcredit2").html(
 					'<div class="alert alert-danger" role="alert">กรุณาเลือก Credit term ที่ต้องการด้วยค่ะ</div>'
@@ -815,6 +783,9 @@ function initializeOldCustomerSubmitValidation() {
 				return false;
 			}
 		}
+		
+		// Check change expected date payment (แยกจาก credit term)
+		// Note: ไม่ต้อง validate เพราะใช้ crf_arcustdueid ที่มีอยู่แล้ว แค่ติ๊ก checkbox พอ
 		
 		// Check change finance
 		if ($('input:checkbox[name="crf_sub_oldcus_changefinance"]').prop("checked")) {

@@ -60,10 +60,7 @@ $(document).ready(function () {
 
 
 
-    //Control if change credit term is clicked
-    $(document).on('click', 'input[name=crf_change_creditterm]', function () {
-        $('.change_credit_detail').toggle();
-    });
+    // Credit term change control has been moved to oldcus_changecreditterm.js
 
 
 
@@ -2894,15 +2891,8 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
             }
         });
 
-        $('input:checkbox[name="crf_sub_oldcus_changecredit"]').click(function () {
-            if ($(this).prop('checked') == true) {
-                $('.change_credit , .change_credit_detail').css('display', '');
-                $('#crf_change_creditterm').prop('checked', true);
-            } else {
-                $('.change_credit').css('display', 'none');
-                $('.change_credit , .change_credit_detail').css('display', 'none');
-            }
-        });
+        // Note: crf_sub_oldcus_changecredit handler has been moved to oldcus_changecreditterm.js
+        // for better separation of concerns and to avoid duplicate handlers
 
         $('input:checkbox[name="crf_sub_oldcus_changefinance"]').click(function () {
             if ($(this).prop('checked') == true) {
