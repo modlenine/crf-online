@@ -812,14 +812,25 @@ class Main_model extends CI_Model
                     $this->db->insert("crf_maindata", $arsavedata);
                 }
 
+                // ดึงข้อมูล Expected Date Payment จาก AX (ถ้ามีการเลือก)
+                $selectedDueId = $this->input->post("crf_arcustdueid");
+                $dueDetail = null;
+                if (!empty($selectedDueId)) {
+                    $dueDetail = $this->getDueDetail($selectedDueId);
+                }
 
                 $arUpdateTemp = array(
                     "crfcus_creditterm2" => $this->input->post("crf_creditterm2"),
-                    "crfcus_conditionbill" => $this->input->post("crf_condition_bill"),
-                    "crfcus_conditionmoney" => $this->input->post("crf_condition_money"),
                     "crfcus_memo2" => $this->input->post("crfcus_memo2"),
-                    "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli")
                 );
+
+                // ถ้ามีการเลือก Expected Date Payment ให้เพิ่มข้อมูล AX
+                if ($dueDetail) {
+                    $arUpdateTemp["crfcus_slc_arcustdueid"] = $dueDetail->arcustdueid;
+                    $arUpdateTemp["crfcus_duedescription"] = $dueDetail->duedescription;
+                    $arUpdateTemp["crfcus_numsofdays"] = $dueDetail->numsofdays;
+                }
+
                 $this->db->where("crfcus_formno", $getFormNo);
                 $this->db->update("crf_customers_temp", $arUpdateTemp);
 
@@ -880,10 +891,7 @@ class Main_model extends CI_Model
 
                 $arUpdateTemp = array(
                     "crfcus_moneylimit2" => conPrice($this->input->post("crf_finance_change_total")),
-                    "crfcus_conditionbill" => $this->input->post("crf_condition_bill"),
-                    "crfcus_conditionmoney" => $this->input->post("crf_condition_money"),
-                    "crfcus_memo2" => $this->input->post("crfcus_memo2"),
-                    "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli")
+                    "crfcus_memo2" => $this->input->post("crfcus_memo2")
                 );
                 $this->db->where("crfcus_formno", $getFormNo);
                 $this->db->update("crf_customers_temp", $arUpdateTemp);

@@ -548,9 +548,21 @@
                 </label>
 
                 <div class="row change_credit" style="display:none">
-                    <div class="col-md-6 form-group change_credit">
-                        <input type="checkbox" name="crf_change_creditterm" id="crf_change_creditterm" value="1">
+                    <div class="col-md-6 form-group">
+                        <?php
+                            // เช็กว่ามี creditterm2 หรือไม่
+                            $hasCreditTerm = !empty($crfcus_creditterm2);
+                        ?>
+                        <input type="checkbox" name="crf_change_creditterm" id="crf_change_creditterm" value="1" <?php echo $hasCreditTerm ? 'checked' : ''; ?>>
                         <label for="">ปรับ Credit term</label>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <?php
+                            // เช็กว่ามี Expected Date Payment หรือไม่
+                            $hasExpectedPayment = !empty($crfcus_slc_arcustdueid);
+                        ?>
+                        <input type="checkbox" name="crf_change_expected_payment" id="crf_change_expected_payment" value="1" <?php echo $hasExpectedPayment ? 'checked' : ''; ?>>
+                        <label for="">Expected Date Payment</label>
                     </div>
                 </div>
 
@@ -594,8 +606,12 @@
             <!-- Customer Expected Date Payment Term -->
             <div class="row form-group">
                 <div class="col-md-6">
+                    <?php
+                        // เช็กว่าควร disabled หรือไม่
+                        $isDisabled = empty($crfcus_slc_arcustdueid) ? 'disabled' : '';
+                    ?>
                     <label for="crf_arcustdueid_edit">Customer Expected Date Payment Term</label>
-                    <select name="crf_arcustdueid_edit" id="crf_arcustdueid_edit" class="form-control" required>
+                    <select name="crf_arcustdueid_edit" id="crf_arcustdueid_edit" class="form-control" <?php echo $isDisabled; ?>>
                         <option value="">-- เลือกกำหนดวันชำระ --</option>
                         <?php if (!empty($dueOptions)) : ?>
                             <?php foreach ($dueOptions as $due) : ?>

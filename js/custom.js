@@ -2849,10 +2849,10 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
         if ($('#check_changecredit').val() == 3) {
             $('input[name="crf_sub_oldcus_changecredit"]').prop('checked', true);
             $('.change_credit , .change_credit_detail').css('display', '');
-            $('#crf_change_creditterm').prop('checked', true);
+            // ลบบรรทัดที่ force-check ออก - ให้ PHP ใน edit_view.php เป็นผู้กำหนดสถานะ checkbox ตามข้อมูล
         } else {
             $('.change_credit , .change_credit_detail').css('display', 'none');
-            $('#crf_change_creditterm').prop('checked', false);
+            // ลบบรรทัดที่ uncheck ออก - ให้ PHP ใน edit_view.php เป็นผู้กำหนดสถานะ checkbox ตามข้อมูล
         }
 
         if ($('#check_changefinance').val() == 4) {

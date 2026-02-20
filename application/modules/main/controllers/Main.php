@@ -1089,6 +1089,7 @@ class Main extends MX_Controller
                 "crfcus_memo2" => getViewData($crf_id)->crfcus_memo2,
                 "crfcus_slc_arcustdueid" => getViewData($crf_id)->crfcus_slc_arcustdueid,
                 "crfcus_duedescription" => getViewData($crf_id)->crfcus_duedescription,
+                "crfcus_creditterm2" => getViewData($crf_id)->crfcus_creditterm2,
                 "dueOptions" => $this->main->getDueOptions()
             );
     

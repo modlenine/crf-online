@@ -620,8 +620,20 @@
 
             <div class="row change_credit" style="display:none">
                 <div class="col-md-6 form-group">
-                    <input type="checkbox" name="crf_change_creditterm" id="crf_change_creditterm" value="1" checked disabled>
+                    <?php
+                        // เช็กว่ามี creditterm2 หรือไม่
+                        $hasCreditTerm = !empty($result->crfcus_creditterm2);
+                    ?>
+                    <input type="checkbox" name="crf_change_creditterm" id="crf_change_creditterm" value="1" <?php echo $hasCreditTerm ? 'checked' : ''; ?> disabled>
                     <label for="">ปรับ Credit term</label>
+                </div>
+                <div class="col-md-6 form-group">
+                    <?php
+                        // เช็กว่ามี Expected Date Payment หรือไม่
+                        $hasExpectedPayment = !empty($result->crfcus_slc_arcustdueid);
+                    ?>
+                    <input type="checkbox" name="crf_change_expected_payment" id="crf_change_expected_payment" value="1" <?php echo $hasExpectedPayment ? 'checked' : ''; ?> disabled>
+                    <label for="">Expected Date Payment</label>
                 </div>
             </div>
 
@@ -678,10 +690,12 @@
             </div>
 
             <div class="row form-group">
+                <?php if (!empty($result->crfcus_slc_arcustdueid)): ?>
                 <div class="col-md-6">
                     <label for="">Customer Expected Date Payment Term</label>
                     <input type="text" name="crfcus_payment_term_view" id="crfcus_payment_term_view" class="form-control form-control-sm" readonly value="<?php echo $result->crfcus_slc_arcustdueid?> | <?php echo $result->crfcus_duedescription?>">
                 </div>
+                <?php endif; ?>
             </div>
             <hr>
 
