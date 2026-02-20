@@ -2816,13 +2816,27 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
             $('.crf_financev2').prop('checked', true);
         }
 
+        // ========================================================================
+        // NOTE: Edit page logic has been moved to assets/js/edit_view/edit_view.js
+        // ========================================================================
+        // 
+        // All field locking, checkbox checking, and enable/disable logic for edit page
+        // is now handled by the dedicated edit_view.js module for better maintainability
+        // and to prevent code duplication.
+        //
+        // Load order:
+        // 1. custom.js (this file) - runs first, sets view page initial state
+        // 2. edit_view.js - locks all fields, enables selected sections
+        // 3. edit_changecreditterm.js - handles credit term specific logic
+        //
+        // ========================================================================
 
+        /*
+        // OLD CODE - Now handled by edit_view.js
+        
         $('.edit_salesrepsCur').remove();
         $('#crf_customername , #crf_cuscompanycreate , #crf_addressname , #crf_namecontact , #crf_telcontact , #crf_faxcontact , #crf_emailcontact  ,  #crf_forecast , #crf_recive_cheuqedetail , #crf_finance_req_number , #crf_salesreps').prop('readonly', true);
         $('#crf_file1 , #crf_file2 , #crf_file3 , #crf_file4 , #crf_file5 , #crf_file6 , #crf_file7 , #crf_file8 , #crf_file9 , #crf_recive_cheuqetable').css('display', 'none');
-        // $('#add_more_primanage').css('display', 'none');
-        // $('input:radio').attr('onclick', 'return false');
-        // $('input:checkbox[id="crf_process"]').attr('onclick', 'return false');
         $('#crf_creditterm').hide();
         $('#showCreditname').css('display', '');
 
@@ -2849,10 +2863,8 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
         if ($('#check_changecredit').val() == 3) {
             $('input[name="crf_sub_oldcus_changecredit"]').prop('checked', true);
             $('.change_credit , .change_credit_detail').css('display', '');
-            // ลบบรรทัดที่ force-check ออก - ให้ PHP ใน edit_view.php เป็นผู้กำหนดสถานะ checkbox ตามข้อมูล
         } else {
             $('.change_credit , .change_credit_detail').css('display', 'none');
-            // ลบบรรทัดที่ uncheck ออก - ให้ PHP ใน edit_view.php เป็นผู้กำหนดสถานะ checkbox ตามข้อมูล
         }
 
         if ($('#check_changefinance').val() == 4) {
@@ -2868,9 +2880,25 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
             $('#edit_namecontact , #edit_telcontact , #edit_faxcontact , #edit_emailcontact').prop('readonly' , false);
             $('#edit_customername').prop('readonly', false);
         }
+        */
 
 
+        // ========================================================================
+        // NOTE: Checkbox event handlers have been moved to edit_changecreditterm.js
+        // for better control and strict mode editing (edit only selected sections)
+        // ========================================================================
+        
+        // The following handlers are now handled by assets/js/edit_view/edit_changecreditterm.js:
+        // - crf_sub_oldcus_changearea
+        // - crf_sub_oldcus_changeaddress
+        // - crf_sub_oldcus_changecredit
+        // - crf_sub_oldcus_changefinance
+        // - crf_sub_oldcus_editcustomer
+        
+        // Custom.js now only sets initial state on page load.
+        // Module edit_changecreditterm.js handles dynamic enable/disable based on user actions.
 
+        /*
         $('input:checkbox[name="crf_sub_oldcus_changearea"]').click(function () {
             if ($(this).prop('checked') == true) {
                 $('#crf_salesreps').prop('readonly', false);
@@ -2919,6 +2947,7 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
                 $('#crf_namecontact , #crf_telcontact , #crf_faxcontact , #crf_emailcontact').prop('readonly' , true);
             }
         });
+        */
 
         // Note: Finance change calculation function has been moved to addth.js
         // to avoid duplication and maintain consistency

@@ -985,127 +985,158 @@ class Main extends MX_Controller
 
     public function editdata($crf_id)
     {
-        // Check Status 
-        if(getViewData($crf_id)->crf_status == "Open" || getViewData($crf_id)->crf_status == "Edited"){
-            $crfcus_id = getViewData($crf_id)->crfcus_id;
-
-            if (getViewData($crf_id)->crfcus_creditterm2 == '') {
-                $creditterm1 = getViewData($crf_id)->crfcus_creditterm;
-                $creditname1 = conCreditTerm($creditterm1);
-    
-                $creditterm2 = "";
-                $creditname2 = "";
-            } else {
-                $creditterm1 = getViewData($crf_id)->crfcus_creditterm;
-                $creditname1 = conCreditTerm($creditterm1);
-    
-                $creditterm2 = getViewData($crf_id)->crfcus_creditterm2;
-                $creditname2 = conCreditTerm($creditterm2);
-            }
-
-
-            // Get money limit on ax
-            // $creditmaxOnAx =  floatval(getCreditMax(getViewData($crf_id)->crfcus_code , getViewData($crf_id)->crfcus_area));
-            // if($creditmaxOnAx != $rs->crfcus_moneylimit){
-            //     $creditmaxOnAx = $creditmaxOnAx;
-            // }else{
-            //     $creditmaxOnAx = $rs->crfcus_moneylimit;
-            // }
-            // check money limit with ax
-    
-            $data = array(
-                "getFormCode" => getFormCode(),
-                "getCusProcess" => getCusProcess(),
-                "getCreditTerm" => getCreditTerm(),
-                "edit_company" => getViewData($crf_id)->crf_company,
-                "edit_custype" => getViewData($crf_id)->crf_type,
-                "edit_personal_type" => getViewData($crf_id)->crf_personal_type,
-                "edit_datecreate" => conDateFromDb(getViewData($crf_id)->crf_datecreate),
-                "edit_salesreps" => getViewData($crf_id)->crfcus_salesreps,
-                "edit_cusname" => getViewData($crf_id)->crfcus_name,
-                "edit_comcreate" => getViewData($crf_id)->crfcus_comdatecreate,
-                "edit_ivoicetype" => getViewData($crf_id)->crfcus_addresstype,
-                "edit_address" => getViewData($crf_id)->crfcus_address,
-                "edit_contactname" => getViewData($crf_id)->crfcus_contactname,
-                "edit_contacttel" => getViewData($crf_id)->crfcus_phone,
-                "edit_contactfax" => getViewData($crf_id)->crfcus_fax,
-                "edit_contactemail" => getViewData($crf_id)->crfcus_email,
-                "edit_etax_contactemail" => getViewData($crf_id)->crfcus_etax_email,
-                "edit_regiscapital" => getViewData($crf_id)->crfcus_regiscapital,
-                "edit_comtype" => getViewData($crf_id)->crfcus_companytype,
-                "editprimanage" => getPrimanageEdit(getViewData($crf_id)->crfcus_formno),
-                "edit_busitype" => getViewData($crf_id)->crfcus_typebussi,
-                "crfcus_id" => getViewData($crf_id)->crfcus_id,
-                "edit_forecast" => getViewData($crf_id)->crfcus_forecast,
-                "edit_textmemo" => getViewData($crf_id)->crfcus_textmemo,
-                "edit_creditterm" =>  $creditterm1,
-                "edit_creditname" => $creditname1,
-                "edit_conditionbill" => getViewData($crf_id)->crfcus_conditionbill,
-                "edit_conditionmoney" => getViewData($crf_id)->crfcus_conditionmoney,
-                "edit_finance" => getViewData($crf_id)->crf_finance,
-                "datenow" => date("d-m-Y"),
-                "edit_moneylimit" => getViewData($crf_id)->crfcus_moneylimit,
-                "get_personal" => getViewData($crf_id)->crfcus_personal,
-                "get_file1" => getViewData($crf_id)->crfcus_file1,
-                "get_file2" => getViewData($crf_id)->crfcus_file2,
-                "get_file3" => getViewData($crf_id)->crfcus_file3,
-                "get_file4" => getViewData($crf_id)->crfcus_file4,
-                "get_file5" => getViewData($crf_id)->crfcus_file5,
-                "get_file6" => getViewData($crf_id)->crfcus_file6,
-                "get_crfid" => getViewData($crf_id)->crf_id,
-                "get_changearea" => getViewData($crf_id)->crf_sub_oldcus_changearea,
-                "get_changeaddress" => getViewData($crf_id)->crf_sub_oldcus_changeaddress,
-                "get_changecredit" => getViewData($crf_id)->crf_sub_oldcus_changecredit,
-                "get_changefinance" => getViewData($crf_id)->crf_sub_oldcus_changefinance,
-                "get_cuscode" => getViewData($crf_id)->crfcus_code,
-                "get_file7" => getViewData($crf_id)->crfcus_tablebill,
-                "get_file8" => getViewData($crf_id)->crfcus_mapbill,
-                "get_datebill" => getViewData($crf_id)->crfcus_datebill,
-                "get_mapbill2" => getViewData($crf_id)->crfcus_mapbill2,
-                "get_cheuqetable" => getViewData($crf_id)->crfcus_cheuqetable,
-                "get_cheuqedetail" => getViewData($crf_id)->crfcus_cheuqedetail,
-                "geturl" => $this->uri->segment(2),
-                "get_comtype2" => getViewData($crf_id)->crfcus_comtype2,
-                "get_formno" => getViewData($crf_id)->crfcus_formno,
-                "get_comtype31" => getViewData($crf_id)->crfcus_comtype31,
-                "get_comtype32" => getViewData($crf_id)->crfcus_comtype32,
-                "get_comtype33" => getViewData($crf_id)->crfcus_comtype33,
-                "get_comtype34" => getViewData($crf_id)->crfcus_comtype34,
-                "get_condition_credit" => getViewData($crf_id)->crf_condition_credit,
-                "get_creditterm2code" => $creditterm2,
-                "get_creditterm2name" => $creditname2,
-    
-                "edit_crf_finance_status" => getViewData($crf_id)->crf_finance_status,
-                "edit_crf_finance_change_status" => getViewData($crf_id)->crf_finance_change_status,
-                "edit_crf_finance_change_number" => getViewData($crf_id)->crf_finance_change_number,
-                "edit_crf_finance_change_total" => getViewData($crf_id)->crf_finance_change_total,
-                "edit_crf_finance_change_detail" => getViewData($crf_id)->crf_finance_change_detail,
-                "crfcus_mapurl" => getViewData($crf_id)->crfcus_mapurl,
-                "crfcus_mapfile" => getViewData($crf_id)->crfcus_mapfile,
-                "crfcus_taxid" => getViewData($crf_id)->crfcus_taxid,
-                "crfcus_branch" => getViewData($crf_id)->crfcus_branch,
-                "crfcus_products" => getViewData($crf_id)->crfcus_products,
-                "crf_sub_oldcus_editcustomer" => getViewData($crf_id)->crf_sub_oldcus_editcustomer,
-                "crfcus_memo2" => getViewData($crf_id)->crfcus_memo2,
-                "crfcus_slc_arcustdueid" => getViewData($crf_id)->crfcus_slc_arcustdueid,
-                "crfcus_duedescription" => getViewData($crf_id)->crfcus_duedescription,
-                "crfcus_creditterm2" => getViewData($crf_id)->crfcus_creditterm2,
-                "dueOptions" => $this->main->getDueOptions()
-            );
-    
-    
-    
-            getHead();
-            getContentData("edit_view", $data);
-            getFooter();
-        }else{
-            $data = array(
-                "title" => "ไม่สามารถเข้าใช้งานหน้านี้ได้"
-            );
+        // ========================================================================
+        // Get data once for performance (avoid multiple DB calls)
+        // ========================================================================
+        $viewData = getViewData($crf_id);
+        
+        // Check Status - only allow editing if Open or Edited
+        if ($viewData->crf_status !== "Open" && $viewData->crf_status !== "Edited") {
+            $data = array("title" => "ไม่สามารถเข้าใช้งานหน้านี้ได้");
             getHead();
             getContentData("testpage", $data);
             getFooter();
+            return;
         }
+
+        // ========================================================================
+        // Process Credit Term (handle primary and secondary terms)
+        // ========================================================================
+        $creditterm1 = $viewData->crfcus_creditterm ?? '';
+        $creditname1 = !empty($creditterm1) ? conCreditTerm($creditterm1) : '';
+        
+        $creditterm2 = $viewData->crfcus_creditterm2 ?? '';
+        $creditname2 = !empty($creditterm2) ? conCreditTerm($creditterm2) : '';
+
+        // ========================================================================
+        // Normalize checkbox states (ensure consistency for JavaScript)
+        // Values: '1','2','3','4','5' or empty string
+        // ========================================================================
+        $checkboxStates = [
+            'changearea'    => (string)($viewData->crf_sub_oldcus_changearea ?? ''),
+            'changeaddress' => (string)($viewData->crf_sub_oldcus_changeaddress ?? ''),
+            'changecredit'  => (string)($viewData->crf_sub_oldcus_changecredit ?? ''),
+            'changefinance' => (string)($viewData->crf_sub_oldcus_changefinance ?? ''),
+            'editcustomer'  => (string)($viewData->crf_sub_oldcus_editcustomer ?? '')
+        ];
+
+        // ========================================================================
+        // Prepare data array for view
+        // ========================================================================
+        $data = array(
+            // Form metadata
+            "getFormCode"     => getFormCode(),
+            "getCusProcess"   => getCusProcess(),
+            "getCreditTerm"   => getCreditTerm(),
+            "dueOptions"      => $this->main->getDueOptions(),
+            "geturl"          => $this->uri->segment(2),
+            "datenow"         => date("d-m-Y"),
+            
+            // Edit page identifiers (for JavaScript)
+            "get_formno"      => $viewData->crfcus_formno ?? '',
+            "get_crfid"       => $viewData->crf_id ?? '',
+            "crfcus_id"       => $viewData->crfcus_id ?? '',
+            
+            // Checkbox states (for edit_view.js to determine which sections to enable)
+            "get_changearea"        => $checkboxStates['changearea'],
+            "get_changeaddress"     => $checkboxStates['changeaddress'],
+            "get_changecredit"      => $checkboxStates['changecredit'],
+            "get_changefinance"     => $checkboxStates['changefinance'],
+            "crf_sub_oldcus_editcustomer" => $checkboxStates['editcustomer'],
+            
+            // Company & Customer Basic Info
+            "edit_company"      => $viewData->crf_company ?? '',
+            "edit_custype"      => $viewData->crf_type ?? '',
+            "edit_personal_type"=> $viewData->crf_personal_type ?? '',
+            "edit_datecreate"   => conDateFromDb($viewData->crf_datecreate ?? ''),
+            "edit_cusname"      => $viewData->crfcus_name ?? '',
+            "get_cuscode"       => $viewData->crfcus_code ?? '',
+            "get_personal"      => $viewData->crfcus_personal ?? '',
+            
+            // Sales & Area
+            "edit_salesreps"    => $viewData->crfcus_salesreps ?? '',
+            
+            // Company Details
+            "edit_comcreate"    => $viewData->crfcus_comdatecreate ?? '',
+            "edit_regiscapital" => $viewData->crfcus_regiscapital ?? '',
+            "edit_comtype"      => $viewData->crfcus_companytype ?? '',
+            "get_comtype2"      => $viewData->crfcus_comtype2 ?? '',
+            "get_comtype31"     => $viewData->crfcus_comtype31 ?? '',
+            "get_comtype32"     => $viewData->crfcus_comtype32 ?? '',
+            "get_comtype33"     => $viewData->crfcus_comtype33 ?? '',
+            "get_comtype34"     => $viewData->crfcus_comtype34 ?? '',
+            "edit_busitype"     => $viewData->crfcus_typebussi ?? '',
+            "editprimanage"     => getPrimanageEdit($viewData->crfcus_formno ?? ''),
+            "crfcus_taxid"      => $viewData->crfcus_taxid ?? '',
+            "crfcus_branch"     => $viewData->crfcus_branch ?? '',
+            
+            // Address & Contact
+            "edit_ivoicetype"       => $viewData->crfcus_addresstype ?? '',
+            "edit_address"          => $viewData->crfcus_address ?? '',
+            "edit_contactname"      => $viewData->crfcus_contactname ?? '',
+            "edit_contacttel"       => $viewData->crfcus_phone ?? '',
+            "edit_contactfax"       => $viewData->crfcus_fax ?? '',
+            "edit_contactemail"     => $viewData->crfcus_email ?? '',
+            "edit_etax_contactemail"=> $viewData->crfcus_etax_email ?? '',
+            
+            // Products & Forecast
+            "crfcus_products"   => $viewData->crfcus_products ?? '',
+            "edit_forecast"     => $viewData->crfcus_forecast ?? '',
+            "edit_textmemo"     => $viewData->crfcus_textmemo ?? '',
+            "crfcus_memo2"      => $viewData->crfcus_memo2 ?? '',
+            
+            // Credit Terms
+            "edit_creditterm"       => $creditterm1,
+            "edit_creditname"       => $creditname1,
+            "get_creditterm2code"   => $creditterm2,
+            "get_creditterm2name"   => $creditname2,
+            "get_condition_credit"  => $viewData->crf_condition_credit ?? '',
+            "crfcus_creditterm2"    => $creditterm2,
+            
+            // Expected Payment Terms
+            "crfcus_slc_arcustdueid"  => $viewData->crfcus_slc_arcustdueid ?? '',
+            "crfcus_duedescription"   => $viewData->crfcus_duedescription ?? '',
+            
+            // Billing Conditions
+            "edit_conditionbill"  => $viewData->crfcus_conditionbill ?? '',
+            "get_datebill"        => $viewData->crfcus_datebill ?? '',
+            
+            // Payment Conditions
+            "edit_conditionmoney" => $viewData->crfcus_conditionmoney ?? '',
+            "get_cheuqedetail"    => $viewData->crfcus_cheuqedetail ?? '',
+            
+            // Finance
+            "edit_finance"                  => $viewData->crf_finance ?? '',
+            "edit_moneylimit"               => $viewData->crfcus_moneylimit ?? '',
+            "edit_crf_finance_status"       => $viewData->crf_finance_status ?? '',
+            "edit_crf_finance_change_status"=> $viewData->crf_finance_change_status ?? '',
+            "edit_crf_finance_change_number"=> $viewData->crf_finance_change_number ?? '',
+            "edit_crf_finance_change_total" => $viewData->crf_finance_change_total ?? '',
+            "edit_crf_finance_change_detail"=> $viewData->crf_finance_change_detail ?? '',
+            
+            // Files
+            "get_file1"         => $viewData->crfcus_file1 ?? '',
+            "get_file2"         => $viewData->crfcus_file2 ?? '',
+            "get_file3"         => $viewData->crfcus_file3 ?? '',
+            "get_file4"         => $viewData->crfcus_file4 ?? '',
+            "get_file5"         => $viewData->crfcus_file5 ?? '',
+            "get_file6"         => $viewData->crfcus_file6 ?? '',
+            "get_file7"         => $viewData->crfcus_tablebill ?? '',
+            "get_file8"         => $viewData->crfcus_mapbill ?? '',
+            "get_mapbill2"      => $viewData->crfcus_mapbill2 ?? '',
+            "get_cheuqetable"   => $viewData->crfcus_cheuqetable ?? '',
+            
+            // Map
+            "crfcus_mapurl"     => $viewData->crfcus_mapurl ?? '',
+            "crfcus_mapfile"    => $viewData->crfcus_mapfile ?? ''
+        );
+
+        // ========================================================================
+        // Render view
+        // ========================================================================
+        getHead();
+        getContentData("edit_view", $data);
+        getFooter();
     }
 
     public function save_editdata()

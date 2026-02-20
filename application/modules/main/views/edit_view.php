@@ -120,31 +120,31 @@
                 <div class="row form-group p-2 suboldcustomer">
                     <div class="col-md-3 form-group">
                         <div class="form-check">
-                            <input class="form-check-input " type="checkbox" name="crf_sub_oldcus_changearea" id="crf_sub_oldcus" value="1">
+                            <input class="form-check-input " type="checkbox" name="crf_sub_oldcus_changearea" id="crf_sub_oldcus" value="1" <?= ($get_changearea == '1') ? 'checked' : '' ?>>
                             <label for="my-input" class="form-check-label">เปลี่ยนเขตการขาย</label>
                         </div>
                     </div>
                     <div class="col-md-3 form-group">
                         <div class="form-check">
-                            <input class="form-check-input " type="checkbox" name="crf_sub_oldcus_changeaddress" id="crf_sub_oldcus" value="2">
+                            <input class="form-check-input " type="checkbox" name="crf_sub_oldcus_changeaddress" id="crf_sub_oldcus" value="2" <?= ($get_changeaddress == '2') ? 'checked' : '' ?>>
                             <label for="my-input" class="form-check-label">เปลี่ยนที่อยู่</label>
                         </div>
                     </div>
                     <div class="col-md-3 form-group">
                         <div class="form-check">
-                            <input class="form-check-input " type="checkbox" name="crf_sub_oldcus_editcustomer" id="crf_sub_oldcus" value="5">
+                            <input class="form-check-input " type="checkbox" name="crf_sub_oldcus_editcustomer" id="crf_sub_oldcus" value="5" <?= ($crf_sub_oldcus_editcustomer == '5') ? 'checked' : '' ?>>
                             <label for="my-input" class="form-check-label">แก้ไขข้อมูลลูกค้า</label>
                         </div>
                     </div>
                     <div class="col-md-3 form-group">
                         <div class="form-check">
-                            <input class="form-check-input " type="checkbox" name="crf_sub_oldcus_changecredit" id="crf_sub_oldcus" value="3">
+                            <input class="form-check-input " type="checkbox" name="crf_sub_oldcus_changecredit" id="crf_sub_oldcus" value="3" <?= ($get_changecredit == '3') ? 'checked' : '' ?>>
                             <label for="my-input" class="form-check-label">ปรับ Credit term. เพิ่ม / ลด</label>
                         </div>
                     </div>
                     <div class="col-md-3 form-group">
                         <div class="form-check">
-                            <input class="form-check-input " type="checkbox" name="crf_sub_oldcus_changefinance" id="crf_sub_oldcus" value="4">
+                            <input class="form-check-input " type="checkbox" name="crf_sub_oldcus_changefinance" id="crf_sub_oldcus" value="4" <?= ($get_changefinance == '4') ? 'checked' : '' ?>>
                             <label for="my-input" class="form-check-label">ปรับวงเงิน เพิ่ม / ลด</label>
                         </div>
                     </div>
@@ -551,10 +551,10 @@
                     <div class="col-md-6 form-group">
                         <?php
                             // เช็กว่ามี creditterm2 หรือไม่
-                            $hasCreditTerm = !empty($crfcus_creditterm2);
+                            $hasCreditTerm2 = !empty($crfcus_creditterm2);
                         ?>
-                        <input type="checkbox" name="crf_change_creditterm" id="crf_change_creditterm" value="1" <?php echo $hasCreditTerm ? 'checked' : ''; ?>>
-                        <label for="">ปรับ Credit term</label>
+                        <input type="checkbox" name="crf_change_creditterm" id="crf_change_creditterm" value="1" <?php echo $hasCreditTerm2 ? 'checked' : ''; ?>>
+                        <label for="crf_change_creditterm">ปรับ Credit term</label>
                     </div>
                     <div class="col-md-6 form-group">
                         <?php
@@ -562,7 +562,7 @@
                             $hasExpectedPayment = !empty($crfcus_slc_arcustdueid);
                         ?>
                         <input type="checkbox" name="crf_change_expected_payment" id="crf_change_expected_payment" value="1" <?php echo $hasExpectedPayment ? 'checked' : ''; ?>>
-                        <label for="">Expected Date Payment</label>
+                        <label for="crf_change_expected_payment">Expected Date Payment</label>
                     </div>
                 </div>
 
@@ -604,10 +604,10 @@
                 <div id="alert_creditterm"></div>
 
             <!-- Customer Expected Date Payment Term -->
-            <div class="row form-group">
+            <div class="row form-group expected_payment_section" style="display:none">
                 <div class="col-md-6">
                     <?php
-                        // เช็กว่าควร disabled หรือไม่
+                        // เช็กว่าควร disabled หรือไม่ - เริ่มต้น disabled ถ้าไม่มีค่า
                         $isDisabled = empty($crfcus_slc_arcustdueid) ? 'disabled' : '';
                     ?>
                     <label for="crf_arcustdueid_edit">Customer Expected Date Payment Term</label>
@@ -623,6 +623,7 @@
                             <option value="">ไม่พบข้อมูลกำหนดชำระ</option>
                         <?php endif; ?>
                     </select>
+                    <div id="alert_crf_arcustdueid_edit"></div>
                 </div>
             </div>
 
@@ -1098,3 +1099,10 @@
             });
         });
     </script>
+
+    <!-- Load Edit View Control Modules -->
+    <!-- IMPORTANT: Load order matters! -->
+    <!-- 1. Main controller locks everything and enables sections -->
+    <script src="<?= base_url('assets/js/edit_view/edit_view.js?v=') . filemtime('assets/js/edit_view/edit_view.js') ?>"></script>
+    <!-- 2. Specialized modules handle section-specific logic -->
+    <script src="<?= base_url('assets/js/edit_view/edit_changecreditterm.js?v=') . filemtime('assets/js/edit_view/edit_changecreditterm.js') ?>"></script>
