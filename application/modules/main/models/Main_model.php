@@ -3694,7 +3694,7 @@ class Main_model extends CI_Model
                 }
 
 
-                if ($this->input->post("crf_sub_oldcus_editcustomer") != "") {
+                if ($this->input->post("crf_sub_oldcus_editcustomer_check") != "") {
                     $arUpdateCustomer = array(
                         "crfcus_name" => $this->input->post("edit_customername"),
                         "crfcus_taxid" => $this->input->post("edit_customertaxid"),
@@ -3794,7 +3794,7 @@ class Main_model extends CI_Model
                             "crf_usermodify" => $this->input->post("crf_userpost"),
                             "crf_ecodemodify" => $this->input->post("crf_userecodepost"),
                             "crf_deptcodemodify" => $this->input->post("crf_userdeptcodepost"),
-                            "crf_change_expected_date" => $this->input->post("edit_crf_change_expected_date"),
+                            "crf_change_expected_date" => $this->input->post("edit_crf_change_expected_payment"),
                             "crf_slc_arcustdueid" => $dueDetail->arcustdueid,
                             "crf_duedescription" => $dueDetail->duedescription,
                             "crf_numsofdays" => $dueDetail->numsofdays,

@@ -27,9 +27,9 @@
 
                 <!-- Chose Company -->
                 <input hidden type="text" name="check_editcom" id="check_editcom" value="{edit_company}">
-                <input type="text" name="check_EditFormNo" id="check_EditFormNo" value="{get_formno}">
-                <input type="text" name="check_crf_id" id="check_crf_id" value="<?=$get_crfid?>">
-                <input type="text" name="check_crfcus_tempid" id="check_crfcus_tempid" value="<?=$crfcus_tempid?>">
+                <input hidden type="text" name="check_EditFormNo" id="check_EditFormNo" value="{get_formno}">
+                <input hidden type="text" name="check_crf_id" id="check_crf_id" value="<?=$get_crfid?>">
+                <input hidden type="text" name="check_crfcus_tempid" id="check_crfcus_tempid" value="<?=$crfcus_tempid?>">
                 <div id="alert_company"></div>
                 <div class="row form-group mt-3 p-2">
                     <div class="col-md-4 form-group">
@@ -121,9 +121,9 @@
                 <!-- These ensure Model receives checkbox values even when checkboxes are disabled -->
                 <input type="hidden" name="crf_sub_oldcus_changearea" value="<?= ($get_changearea == '1') ? '1' : '' ?>">
                 <input type="hidden" name="crf_sub_oldcus_changeaddress" value="<?= ($get_changeaddress == '2') ? '2' : '' ?>">
-                <input type="" name="crf_sub_oldcus_changecredit_check" value="<?= ($get_changecredit == '3') ? '3' : '' ?>">
+                <input type="hidden" name="crf_sub_oldcus_changecredit_check" value="<?= ($get_changecredit == '3') ? '3' : '' ?>">
                 <input type="hidden" name="crf_sub_oldcus_changefinance" value="<?= ($get_changefinance == '4') ? '4' : '' ?>">
-                <input type="hidden" name="crf_sub_oldcus_editcustomer" value="<?= ($crf_sub_oldcus_editcustomer == '5') ? '5' : '' ?>">
+                <input type="hidden" name="crf_sub_oldcus_editcustomer_check" value="<?= ($crf_sub_oldcus_editcustomer == '5') ? '5' : '' ?>">
 
                 <div id="alert_crf_sub_oldcus"></div>
                 <div class="row form-group p-2 suboldcustomer">
@@ -621,7 +621,7 @@
                     <div class="col-md-4 form-group">
 
                         <!-- For Change CreditTerm method -->
-                        <input  type="text" name="oldCreditTerm" id="edit_oldCreditTerm" value="{edit_creditterm}">
+                        <input hidden type="text" name="oldCreditTerm" id="edit_oldCreditTerm" value="{edit_creditterm}">
 
                         <label for="">รายการปัจจุบัน</label>
                         <input type="text" name="showCreditname" id="edit_showCreditname" value="{edit_creditname}" class="form-control" style="display:none;">
