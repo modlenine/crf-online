@@ -89,16 +89,15 @@ $(document).ready(function () {
     
     // Control credit term checkbox (เปลี่ยน Credit term)
     // Pattern: Keep sections visible, disable/enable fields only
-    // Same as add_th: Main dropdown enabled only when checkbox is ticked
+    // NOTE: edit_crf_creditterm (รายการปัจจุบัน) is always disabled - never toggle it
+    // Only toggle edit_crf_condition_credit and edit_showcredit2
     $(document).on('change', '#edit_crf_change_creditterm', function () {
         if ($(this).is(':checked')) {
-            // Enable all credit term fields when checked
-            $('#edit_crf_creditterm').prop('disabled', false);
+            // Enable condition and new credit fields only (not main dropdown)
             $('#edit_crf_condition_credit').prop('disabled', false);
             $('#edit_showcredit2').prop('disabled', false);
         } else {
-            // Disable all credit term fields when unchecked
-            $('#edit_crf_creditterm').prop('disabled', true);
+            // Disable condition and new credit fields
             $('#edit_crf_condition_credit').prop('disabled', true).val('');
             $('#edit_showcredit2').prop('disabled', true).val('');
         }
@@ -135,15 +134,14 @@ $(document).ready(function () {
         }
         
         // Initialize Credit Term Change field state
+        // NOTE: edit_crf_creditterm always remains disabled
         if ($('#edit_crf_change_creditterm').is(':checked')) {
-            // Enable main dropdown + condition/showcredit2
-            $('#edit_crf_creditterm').prop('disabled', false);
+            // Enable condition + showcredit2 only (not main dropdown)
             $('#edit_crf_condition_credit').prop('disabled', false);
             $('#edit_showcredit2').prop('disabled', false);
             console.log('  ✓ Credit term change enabled (checkbox checked)');
         } else {
-            // Keep main dropdown disabled when checkbox not checked
-            $('#edit_crf_creditterm').prop('disabled', true);
+            // Disable condition + showcredit2 (main dropdown always disabled)
             $('#edit_crf_condition_credit').prop('disabled', true);
             $('#edit_showcredit2').prop('disabled', true);
         }

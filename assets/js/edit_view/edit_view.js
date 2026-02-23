@@ -170,10 +170,8 @@
         // NOTE: Expected Date Payment section is always visible (controlled by disabled state)
         // No need to hide/show section - JavaScript only controls dropdown enabled state
         
-        // NOTE: Keep credit term dropdown visible and editable
-        // It will be enabled/disabled based on checkbox selection
-        $('#edit_crf_creditterm').show();
-        $('#edit_showCreditname').hide();
+        // NOTE: Credit term dropdown is always visible in HTML (controlled by disabled state)
+        // No need to show/hide - JavaScript only controls enabled state
         
         // Disable primanage add button
         $('#add_more_primanage').prop('disabled', true);
@@ -312,9 +310,8 @@
         // Show credit term section
         $('.change_credit').show();
         
-        // Show main dropdown but keep disabled (will be enabled by checkbox)
-        $('#edit_crf_creditterm').show();
-        $('#edit_showCreditname').hide(); // Hide readonly text field
+        // NOTE: Main dropdown is always visible in HTML - no need to show/hide
+        // Only controlled by disabled/enabled state via checkbox
         
         // Enable credit term sub-checkboxes
         // Note: These will be further controlled by edit_changecreditterm.js
@@ -322,9 +319,9 @@
         $('#edit_crf_change_expected_payment').prop('disabled', false);
         
         // If checkbox is already checked, enable dropdowns
+        // NOTE: edit_crf_creditterm always remains disabled - never enable it
         // Otherwise, edit_changecreditterm.js will handle enabling when checkbox is ticked
         if ($('#edit_crf_change_creditterm').is(':checked')) {
-            $('#edit_crf_creditterm').prop('disabled', false);
             $('#edit_crf_condition_credit').prop('disabled', false);
             $('#edit_showcredit2').prop('disabled', false);
         }

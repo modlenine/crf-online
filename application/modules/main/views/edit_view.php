@@ -612,7 +612,7 @@
                             // เช็กว่ามี Expected Date Payment หรือไม่
                             $hasExpectedPayment = !empty($crf_change_expected_date);
                         ?>
-                        <input type="checkbox" name="crf_change_expected_payment" id="edit_crf_change_expected_payment" value="1" <?php echo $hasExpectedPayment ? 'checked' : ''; ?>>
+                        <input type="checkbox" name="edit_crf_change_expected_payment" id="edit_crf_change_expected_payment" value="1" <?php echo $hasExpectedPayment ? 'checked' : ''; ?>>
                         <label for="edit_crf_change_expected_payment">Expected Date Payment</label>
                     </div>
                 </div>
@@ -621,10 +621,10 @@
                     <div class="col-md-4 form-group">
 
                         <!-- For Change CreditTerm method -->
-                        <input hidden type="text" name="oldCreditTerm" id="edit_oldCreditTerm" value="{edit_creditterm}">
+                        <input  type="text" name="oldCreditTerm" id="edit_oldCreditTerm" value="{edit_creditterm}">
 
                         <label for="">รายการปัจจุบัน</label>
-                        <input readonly type="text" name="showCreditname" id="edit_showCreditname" value="{edit_creditname}" class="form-control" style="display:none;">
+                        <input type="text" name="showCreditname" id="edit_showCreditname" value="{edit_creditname}" class="form-control" style="display:none;">
                         <select name="edit_crf_creditterm" id="edit_crf_creditterm" class="form-control">
                             <option value="{edit_creditterm}">{edit_creditname}</option>
                             {getCreditTerm}

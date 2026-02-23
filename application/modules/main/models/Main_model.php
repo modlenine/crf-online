@@ -3788,12 +3788,16 @@ class Main_model extends CI_Model
                             // "crf_topic3" => "ปรับ Credit term. เพิ่ม - ลด",
                             "crf_status" => "Edited",
                             "crf_creditterm" => $this->input->post("oldCreditTerm"),
-                            "crf_change_creditterm" => $this->input->post("crf_change_creditterm"),
-                            "crf_condition_credit" => $this->input->post("crf_condition_credit"),
+                            "crf_change_creditterm" => $this->input->post("edit_crf_change_creditterm"),
+                            "crf_condition_credit" => $this->input->post("edit_crf_condition_credit"),
                             "crf_creditterm2" => $this->input->post("showcredit2"),
                             "crf_usermodify" => $this->input->post("crf_userpost"),
                             "crf_ecodemodify" => $this->input->post("crf_userecodepost"),
                             "crf_deptcodemodify" => $this->input->post("crf_userdeptcodepost"),
+                            "crf_change_expected_date" => $this->input->post("edit_crf_change_expected_date"),
+                            "crf_slc_arcustdueid" => $dueDetail->arcustdueid,
+                            "crf_duedescription" => $dueDetail->duedescription,
+                            "crf_numsofdays" => $dueDetail->numsofdays,
                             "crf_datetimemodify" => date("Y-m-d H:i:s")
                         );
                         $this->db->where("crf_id", $this->input->post("check_crf_id"));
