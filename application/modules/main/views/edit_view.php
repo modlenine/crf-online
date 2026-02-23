@@ -120,7 +120,7 @@
                 <!-- Hidden inputs to preserve checkbox values when disabled by JavaScript -->
                 <!-- These ensure Model receives checkbox values even when checkboxes are disabled -->
                 <input type="hidden" name="crf_sub_oldcus_changearea" value="<?= ($get_changearea == '1') ? '1' : '' ?>">
-                <input type="hidden" name="crf_sub_oldcus_changeaddress" value="<?= ($get_changeaddress == '2') ? '2' : '' ?>">
+                <input type="hidden" name="crf_sub_oldcus_changeaddress_check" value="<?= ($get_changeaddress == '2') ? '2' : '' ?>">
                 <input type="hidden" name="crf_sub_oldcus_changecredit_check" value="<?= ($get_changecredit == '3') ? '3' : '' ?>">
                 <input type="hidden" name="crf_sub_oldcus_changefinance" value="<?= ($get_changefinance == '4') ? '4' : '' ?>">
                 <input type="hidden" name="crf_sub_oldcus_editcustomer_check" value="<?= ($crf_sub_oldcus_editcustomer == '5') ? '5' : '' ?>">

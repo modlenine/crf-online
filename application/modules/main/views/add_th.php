@@ -534,7 +534,7 @@
                 <div class="row form-group">
                     <div class="col-md-4 form-group">
                         <!-- For Change CreditTerm method -->
-                        <input type="text" name="oldCreditTerm" id="oldCreditTerm" >
+                        <input hidden type="text" name="oldCreditTerm" id="oldCreditTerm" >
                         <label for="">โปรดเลือกรายการ</label>
                         <select name="crf_creditterm" id="crf_creditterm" class="form-control">
                             <option value=""></option>

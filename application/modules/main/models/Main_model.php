@@ -3655,7 +3655,7 @@ class Main_model extends CI_Model
                 }
 
 
-                if ($this->input->post("crf_sub_oldcus_changeaddress") != "") {
+                if ($this->input->post("crf_sub_oldcus_changeaddress_check") != "") {
                     $arUpdateAddress = array(
                         "crfcus_addresstype" => $this->input->post("edit_addresstype"),
                         "crfcus_textmemo" => $this->input->post("edit_crf_textmemo"),
@@ -3680,8 +3680,8 @@ class Main_model extends CI_Model
                     $this->db->where("crfcus_formno", $this->input->post("check_EditFormNo"));
                     if ($this->db->update("crf_customers_temp", $arUpdateAddress)) {
                         $arUpdateMaindata = array(
-                            "crf_sub_oldcus_changeaddress" => $this->input->post("crf_sub_oldcus_changeaddress"),
-                            "crf_topic2" => "เปลี่ยนที่อยู่",
+                            // "crf_sub_oldcus_changeaddress" => $this->input->post("crf_sub_oldcus_changeaddress"),
+                            // "crf_topic2" => "เปลี่ยนที่อยู่",
                             "crf_status" => "Edited",
                             "crf_usermodify" => $this->input->post("crf_userpost"),
                             "crf_ecodemodify" => $this->input->post("crf_userecodepost"),
@@ -3743,8 +3743,8 @@ class Main_model extends CI_Model
                     $this->db->where("crfcus_formno", $this->input->post("check_EditFormNo"));
                     if ($this->db->update("crf_customers_temp", $arUpdateCustomer)) {
                         $arUpdateMaindata = array(
-                            "crf_sub_oldcus_editcustomer" => $this->input->post("crf_sub_oldcus_editcustomer"),
-                            "crf_topic5" => "แก้ไขข้อมูลลูกค้า",
+                            // "crf_sub_oldcus_editcustomer" => $this->input->post("crf_sub_oldcus_editcustomer"),
+                            // "crf_topic5" => "แก้ไขข้อมูลลูกค้า",
                             "crf_status" => "Edited",
                             "crf_usermodify" => $this->input->post("crf_userpost"),
                             "crf_ecodemodify" => $this->input->post("crf_userecodepost"),

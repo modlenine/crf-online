@@ -127,14 +127,21 @@ $(document).ready(function () {
             $('#showcredit2').prop('disabled', false);
             $('#crf_creditterm2').prop('disabled', false); // Dynamic element
             
+            // ปิดการอัพโหลดไฟล์ทั้งหมด (เพราะเรื่อง Credit term ไม่ยุ่งเรื่องไฟล์)
+            $("#crf_file1").prop("disabled", true);
+            $("#crf_file2").prop("disabled", true);
+            $("#crf_file3").prop("disabled", true);
+            $("#crf_file4").prop("disabled", true);
+            $("#crf_file5").prop("disabled", true);
+            $("#crf_file6").prop("disabled", true);
+            
+            // ปิดช่องอื่นๆ ที่ไม่เกี่ยวข้อง
+            $("#crf_datebill").prop("disabled", true);
+            $("#crf_mapbill2").prop("disabled", true);
+            $("#crf_recive_cheuqetable").prop("disabled", true);
+            
             // Check submit button availability
             checkAndUpdateSubmitButton();
-            
-            // ไม่ disable crf_file1 หากมีการเลือก "เปลี่ยนที่อยู่" หรือ "แก้ไขข้อมูลลูกค้า"
-            if (!$('input:checkbox[name="crf_sub_oldcus_changeaddress"]').prop("checked") && 
-                !$('input:checkbox[name="crf_sub_oldcus_editcustomer"]').prop("checked")) {
-                $("#crf_file1").prop("disabled", true);
-            }
         } else {
             // ซ่อนส่วนของการเปลี่ยน Credit term
             $(".change_credit").css("display", "none");
