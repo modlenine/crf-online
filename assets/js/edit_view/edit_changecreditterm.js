@@ -33,8 +33,8 @@ function checkAndUpdateEditButton() {
     var creditTermChecked = $('input[name=crf_change_creditterm]').is(':checked');
     var expectedDateChecked = $('input[name=crf_change_expected_payment]').is(':checked');
     
-    var hasCreditCondition = $("#crf_condition_credit").val() != "";
-    var hasNewCreditTerm = $("#showcredit2").val() != "";
+    var hasCreditCondition = $("#edit_crf_condition_credit").val() != "";
+    var hasNewCreditTerm = $("#edit_showcredit2").val() != "";
     
     // Enable if:
     // 1. Credit term checked AND has condition AND has new term selected
@@ -61,19 +61,27 @@ $(document).ready(function () {
     console.log('=== Edit Credit Term Module Loaded ===');
     
     // ========================================================================
-    // Initial State - Disable fields on page load (like add_th)
+    // Initial State - Check main checkbox status
     // ========================================================================
     
-    // Disable credit term fields initially (until checkbox is checked)
-    // Note: edit_view.js already disables these, but we ensure consistency
-    $('#crf_creditterm').prop('disabled', true);
-    $('#crf_condition_credit').prop('disabled', true);
-    $('#showcredit2').prop('disabled', true);
+    // Check if main "ปรับ Credit term" checkbox is selected
+    // If selected, edit_view.js already enabled the fields - don't disable them!
+    var isChangeCreditSelected = $('#check_changecredit').val() == '3';
     
-    // Disable expected date payment field initially (until checkbox is checked)
-    $('#crf_arcustdueid_edit').prop('disabled', true);
-    
-    console.log('  ✓ Initial state: All credit term fields disabled');
+    if (!isChangeCreditSelected) {
+        // Only disable if main checkbox is NOT selected
+        $('#edit_crf_creditterm').prop('disabled', true);
+        $('#edit_crf_condition_credit').prop('disabled', true);
+        $('#edit_showcredit2').prop('disabled', true);
+        $('#crf_arcustdueid_edit').prop('disabled', true);
+        console.log('  ✓ Initial state: Credit term fields disabled (main checkbox not selected)');
+    } else {
+        // Main checkbox IS selected
+        // But fields should still be disabled until sub-checkbox is ticked (same as add_th)
+        // edit_view.js will handle based on sub-checkbox checked state
+        console.log('  ✓ Initial state: Credit term section enabled (main checkbox selected)');
+        console.log('  ℹ Main dropdown controlled by "ปรับ Credit term" checkbox');
+    }
     
     // ========================================================================
     // Credit Term Checkbox Control (Disabled/Enabled - like add_th)
@@ -81,22 +89,25 @@ $(document).ready(function () {
     
     // Control credit term checkbox (เปลี่ยน Credit term)
     // Pattern: Keep sections visible, disable/enable fields only
-    $(document).on('change', '#crf_change_creditterm', function () {
+    // Same as add_th: Main dropdown enabled only when checkbox is ticked
+    $(document).on('change', '#edit_crf_change_creditterm', function () {
         if ($(this).is(':checked')) {
-            // Enable condition fields only (keep crf_creditterm disabled - value from DB)
-            $('#crf_condition_credit').prop('disabled', false);
-            $('#showcredit2').prop('disabled', false);
+            // Enable all credit term fields when checked
+            $('#edit_crf_creditterm').prop('disabled', false);
+            $('#edit_crf_condition_credit').prop('disabled', false);
+            $('#edit_showcredit2').prop('disabled', false);
         } else {
             // Disable all credit term fields when unchecked
-            $('#crf_condition_credit').prop('disabled', true).val('');
-            $('#showcredit2').prop('disabled', true).val('');
+            $('#edit_crf_creditterm').prop('disabled', true);
+            $('#edit_crf_condition_credit').prop('disabled', true).val('');
+            $('#edit_showcredit2').prop('disabled', true).val('');
         }
         checkAndUpdateEditButton();
     });
     
     // Control expected date checkbox
     // Pattern: Disable/enable field only (section visibility controlled by edit_view.js)
-    $(document).on('change', '#crf_change_expected_payment', function () {
+    $(document).on('change', '#edit_crf_change_expected_payment', function () {
         if ($(this).is(':checked')) {
             // Enable expected date field when checked
             $('#crf_arcustdueid_edit').prop('disabled', false);
@@ -111,28 +122,37 @@ $(document).ready(function () {
     // Page Load Initialization - Enable fields if checkboxes are checked
     // ========================================================================
     
-    // Initialize Expected Date Payment field state
-    // Section visibility is controlled by edit_view.js based on main checkbox
-    if ($('#crf_change_expected_payment').is(':checked')) {
-        $('#crf_arcustdueid_edit').prop('disabled', false);
-    } else {
-        $('#crf_arcustdueid_edit').prop('disabled', true);
-    }
+    // Only initialize if main checkbox (changecredit) is selected
+    var isChangeCreditSelected = $('#check_changecredit').val() == '3';
     
-    // Initialize Credit Term Change field state
-    // Section visibility is controlled by edit_view.js based on main checkbox
-    if ($('#crf_change_creditterm').is(':checked')) {
-        $('#crf_condition_credit').prop('disabled', false);
-        // showcredit2 will be enabled after selecting condition
-    } else {
-        $('#crf_condition_credit').prop('disabled', true);
-        $('#showcredit2').prop('disabled', true);
+    if (isChangeCreditSelected) {
+        // Initialize Expected Date Payment field state
+        if ($('#edit_crf_change_expected_payment').is(':checked')) {
+            $('#crf_arcustdueid_edit').prop('disabled', false);
+            console.log('  ✓ Expected date payment enabled (checkbox checked)');
+        } else {
+            $('#crf_arcustdueid_edit').prop('disabled', true);
+        }
+        
+        // Initialize Credit Term Change field state
+        if ($('#edit_crf_change_creditterm').is(':checked')) {
+            // Enable main dropdown + condition/showcredit2
+            $('#edit_crf_creditterm').prop('disabled', false);
+            $('#edit_crf_condition_credit').prop('disabled', false);
+            $('#edit_showcredit2').prop('disabled', false);
+            console.log('  ✓ Credit term change enabled (checkbox checked)');
+        } else {
+            // Keep main dropdown disabled when checkbox not checked
+            $('#edit_crf_creditterm').prop('disabled', true);
+            $('#edit_crf_condition_credit').prop('disabled', true);
+            $('#edit_showcredit2').prop('disabled', true);
+        }
     }
     
     // Monitor condition credit changes
-    $(document).on('change', '#crf_condition_credit', function () {
+    $(document).on('change', '#edit_crf_condition_credit', function () {
         var creditMethod = $(this).val();
-        var oldCredit = $("#oldCreditTerm").val();
+        var oldCredit = $("#edit_oldCreditTerm").val();
         
         if (oldCredit != '' && creditMethod != '') {
             $.ajax({
@@ -143,10 +163,10 @@ $(document).ready(function () {
                     creditMethod: creditMethod
                 },
                 success: function(data) {
-                    $('#showcredit2').html(data);
-                    // Enable showcredit2 only if checkbox is checked
-                    var isChecked = $('#crf_change_creditterm').is(':checked');
-                    $('#showcredit2').prop('disabled', !isChecked);
+                    $('#edit_showcredit2').html(data);
+                    // Enable edit_showcredit2 only if checkbox is checked
+                    var isChecked = $('#edit_crf_change_creditterm').is(':checked');
+                    $('#edit_showcredit2').prop('disabled', !isChecked);
                 }
             });
         }
@@ -154,8 +174,8 @@ $(document).ready(function () {
         checkAndUpdateEditButton();
     });
     
-    // Monitor showcredit2 changes
-    $(document).on('change', '#showcredit2', function () {
+    // Monitor edit_showcredit2 changes
+    $(document).on('change', '#edit_showcredit2', function () {
         checkAndUpdateEditButton();
     });
     
@@ -204,24 +224,24 @@ $(document).ready(function () {
         if ($('input[name="crf_sub_oldcus_changecredit"]').is(':checked')) {
             
             // Check if credit term checkbox is checked
-            if ($('#crf_change_creditterm').is(':checked')) {
-                if (!$('#crf_condition_credit').val()) {
+            if ($('#edit_crf_change_creditterm').is(':checked')) {
+                if (!$('#edit_crf_condition_credit').val()) {
                     alert('กรุณาเลือกเงื่อนไข เพิ่ม หรือ ลด Credit term');
-                    $('#alert_crf_condition_credit').html('<div class="alert alert-danger">กรุณาเลือกเงื่อนไข</div>');
+                    $('#alert_edit_crf_condition_credit').html('<div class="alert alert-danger">กรุณาเลือกเงื่อนไข</div>');
                     e.preventDefault();
                     return false;
                 }
                 
-                if (!$('#showcredit2').val()) {
+                if (!$('#edit_showcredit2').val()) {
                     alert('กรุณาเลือก Credit term ใหม่');
-                    $('#alert_showcredit2').html('<div class="alert alert-danger">กรุณาเลือก Credit term ใหม่</div>');
+                    $('#alert_edit_showcredit2').html('<div class="alert alert-danger">กรุณาเลือก Credit term ใหม่</div>');
                     e.preventDefault();
                     return false;
                 }
             }
             
             // If neither checkbox is checked, alert
-            if (!$('#crf_change_creditterm').is(':checked') && !$('#crf_change_expected_payment').is(':checked')) {
+            if (!$('#edit_crf_change_creditterm').is(':checked') && !$('#edit_crf_change_expected_payment').is(':checked')) {
                 alert('กรุณาเลือก ปรับ Credit term หรือ Expected Date Payment');
                 e.preventDefault();
                 return false;

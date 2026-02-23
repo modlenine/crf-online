@@ -1036,6 +1036,7 @@ class Main extends MX_Controller
             "get_formno"      => $viewData->crfcus_formno ?? '',
             "get_crfid"       => $viewData->crf_id ?? '',
             "crfcus_id"       => $viewData->crfcus_id ?? '',
+            "crfcus_tempid"    => $viewData->crfcus_tempid ?? '',
             
             // Checkbox states (for edit_view.js to determine which sections to enable)
             "get_changearea"        => $checkboxStates['changearea'],
@@ -1096,6 +1097,7 @@ class Main extends MX_Controller
             // Expected Payment Terms
             "crfcus_slc_arcustdueid"  => $viewData->crfcus_slc_arcustdueid ?? '',
             "crfcus_duedescription"   => $viewData->crfcus_duedescription ?? '',
+            "crf_change_expected_date" => $viewData->crf_change_expected_date ?? '',
             
             // Billing Conditions
             "edit_conditionbill"  => $viewData->crfcus_conditionbill ?? '',
@@ -1128,7 +1130,7 @@ class Main extends MX_Controller
             
             // Map
             "crfcus_mapurl"     => $viewData->crfcus_mapurl ?? '',
-            "crfcus_mapfile"    => $viewData->crfcus_mapfile ?? ''
+            "crfcus_mapfile"    => $viewData->crfcus_mapfile ?? '',
         );
 
         // ========================================================================

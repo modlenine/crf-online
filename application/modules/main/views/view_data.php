@@ -630,7 +630,7 @@
                 <div class="col-md-6 form-group">
                     <?php
                         // เช็กว่ามี Expected Date Payment หรือไม่
-                        $hasExpectedPayment = !empty($result->crfcus_slc_arcustdueid);
+                        $hasExpectedPayment = !empty($result->crf_change_expected_date);
                     ?>
                     <input type="checkbox" name="crf_change_expected_payment" id="crf_change_expected_payment" value="1" <?php echo $hasExpectedPayment ? 'checked' : ''; ?> disabled>
                     <label for="">Expected Date Payment</label>

@@ -778,6 +778,13 @@ class Main_model extends CI_Model
 
             if ($this->input->post("crf_sub_oldcus_changecredit") == 3) {  //กรณีที่เลือกปรับ Credit Term
 
+                // ดึงข้อมูล Expected Date Payment จาก AX (ถ้ามีการเลือก)
+                $selectedDueId = $this->input->post("crf_arcustdueid");
+                $dueDetail = null;
+                if (!empty($selectedDueId)) {
+                    $dueDetail = $this->getDueDetail($selectedDueId);
+                }
+
                 $arsavedata = array(
                     "crf_formno" => $getFormNo,
                     "crf_cuscode" => $this->input->post("crf_cusid"),
@@ -789,6 +796,10 @@ class Main_model extends CI_Model
                     "crf_condition_credit" => $this->input->post("crf_condition_credit"),
                     "crf_creditterm" => $this->input->post("oldCreditTerm"),
                     "crf_creditterm2" => $this->input->post("crf_creditterm2"),
+                    "crf_change_expected_date" => $this->input->post("crf_change_expected_date"),
+                    "crf_slc_arcustdueid" => $dueDetail ? $dueDetail->arcustdueid : null,
+                    "crf_duedescription" => $dueDetail ? $dueDetail->duedescription : null,
+                    "crf_numsofdays" => $dueDetail ? $dueDetail->numsofdays : null,
                     "crf_finance" => $this->input->post("crf_finance"),
                     "crf_userpost" => $this->input->post("crf_userpost"),
                     "crf_userecodepost" => $this->input->post("crf_userecodepost"),
@@ -812,12 +823,7 @@ class Main_model extends CI_Model
                     $this->db->insert("crf_maindata", $arsavedata);
                 }
 
-                // ดึงข้อมูล Expected Date Payment จาก AX (ถ้ามีการเลือก)
-                $selectedDueId = $this->input->post("crf_arcustdueid");
-                $dueDetail = null;
-                if (!empty($selectedDueId)) {
-                    $dueDetail = $this->getDueDetail($selectedDueId);
-                }
+
 
                 $arUpdateTemp = array(
                     "crfcus_creditterm2" => $this->input->post("crf_creditterm2"),
@@ -3356,7 +3362,7 @@ class Main_model extends CI_Model
 
     public function save_editdata()
     {
-
+        $arUpdateChangeCredit = array();
         $report_date = "";
         $report_month = "";
         $report_year = "";
@@ -3649,9 +3655,6 @@ class Main_model extends CI_Model
                 }
 
 
-
-
-
                 if ($this->input->post("crf_sub_oldcus_changeaddress") != "") {
                     $arUpdateAddress = array(
                         "crfcus_addresstype" => $this->input->post("edit_addresstype"),
@@ -3754,13 +3757,7 @@ class Main_model extends CI_Model
                 }
 
 
-
-
-
-
-
-
-                if ($this->input->post("crf_sub_oldcus_changecredit") != "") {
+                if ($this->input->post("crf_sub_oldcus_changecredit_check") != "") {
 
                     $arUpdateChangeCredit = array(
                         "crfcus_creditterm" => $this->input->post("oldCreditTerm"),
@@ -3780,13 +3777,15 @@ class Main_model extends CI_Model
                     if ($dueDetail) {
                         $arUpdateChangeCredit["crfcus_slc_arcustdueid"] = $dueDetail->arcustdueid;
                         $arUpdateChangeCredit["crfcus_duedescription"] = $dueDetail->duedescription;
+                        $arUpdateChangeCredit["crfcus_numsofdays"] = $dueDetail->numsofdays;
                     }
                     
-                    $this->db->where("crfcus_formno", $this->input->post("check_EditFormNo"));
-                    if ($this->db->update("crf_customers_temp", $arUpdateChangeCredit)) {
+                    $this->db->where("crfcus_tempid", $this->input->post("check_crfcus_tempid"));
+                    $this->db->update("crf_customers_temp", $arUpdateChangeCredit);
+                  
                         $arUpdateMaindata = array(
-                            "crf_sub_oldcus_changecredit" => $this->input->post("crf_sub_oldcus_changecredit"),
-                            "crf_topic3" => "ปรับ Credit term. เพิ่ม - ลด",
+                            // "crf_sub_oldcus_changecredit" => $this->input->post("crf_sub_oldcus_changecredit"),
+                            // "crf_topic3" => "ปรับ Credit term. เพิ่ม - ลด",
                             "crf_status" => "Edited",
                             "crf_creditterm" => $this->input->post("oldCreditTerm"),
                             "crf_change_creditterm" => $this->input->post("crf_change_creditterm"),
@@ -3797,9 +3796,9 @@ class Main_model extends CI_Model
                             "crf_deptcodemodify" => $this->input->post("crf_userdeptcodepost"),
                             "crf_datetimemodify" => date("Y-m-d H:i:s")
                         );
-                        $this->db->where("crf_id", $this->input->post("getCrfid_edit"));
+                        $this->db->where("crf_id", $this->input->post("check_crf_id"));
                         $this->db->update("crf_maindata", $arUpdateMaindata);
-                    }
+                    
                 }
 
 
@@ -3862,7 +3861,8 @@ class Main_model extends CI_Model
                     "crfuserlog_ecode" => $this->input->post("crf_userecodepost")
                 );
                 $this->db->insert("crf_userlog", $aruserlog);
-                // header("refresh:0; url=" . base_url('main/editdata/') . $this->input->post("getCrfid_edit") . "?success=true");
+                // Redirect to view page after successful update
+                header("refresh:0; url=" . base_url('main/viewdata/') . $this->input->post("getCrfid_edit") . "?edited=1");
             }
         }
     }

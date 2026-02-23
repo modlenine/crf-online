@@ -2831,9 +2831,8 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
         //
         // ========================================================================
 
+        // OLD CODE - FULLY DISABLED - All functionality moved to edit_view.js
         /*
-        // OLD CODE - Now handled by edit_view.js
-        
         $('.edit_salesrepsCur').remove();
         $('#crf_customername , #crf_cuscompanycreate , #crf_addressname , #crf_namecontact , #crf_telcontact , #crf_faxcontact , #crf_emailcontact  ,  #crf_forecast , #crf_recive_cheuqedetail , #crf_finance_req_number , #crf_salesreps').prop('readonly', true);
         $('#crf_file1 , #crf_file2 , #crf_file3 , #crf_file4 , #crf_file5 , #crf_file6 , #crf_file7 , #crf_file8 , #crf_file9 , #crf_recive_cheuqetable').css('display', 'none');
@@ -2884,11 +2883,12 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
 
 
         // ========================================================================
-        // NOTE: Checkbox event handlers have been moved to edit_changecreditterm.js
+        // NOTE: Checkbox event handlers have been moved to edit_view.js
         // for better control and strict mode editing (edit only selected sections)
         // ========================================================================
         
-        // The following handlers are now handled by assets/js/edit_view/edit_changecreditterm.js:
+        // The following handlers are now handled by assets/js/edit_view/edit_view.js
+        // and assets/js/edit_view/edit_changecreditterm.js:
         // - crf_sub_oldcus_changearea
         // - crf_sub_oldcus_changeaddress
         // - crf_sub_oldcus_changecredit
@@ -2896,8 +2896,9 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
         // - crf_sub_oldcus_editcustomer
         
         // Custom.js now only sets initial state on page load.
-        // Module edit_changecreditterm.js handles dynamic enable/disable based on user actions.
+        // Module edit_view.js and edit_changecreditterm.js handle dynamic enable/disable based on user actions.
 
+        // ALL OLD EVENT HANDLERS DISABLED - Functionality moved to edit_view.js
         /*
         $('input:checkbox[name="crf_sub_oldcus_changearea"]').click(function () {
             if ($(this).prop('checked') == true) {

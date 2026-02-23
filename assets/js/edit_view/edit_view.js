@@ -110,7 +110,7 @@
         
         // Billing Condition
         $('input[name="crf_condition_bill"]').prop('disabled', true);
-        $('#crf_datebill').prop('readonly', true);
+        // Note: crf_datebill is NOT readonly - it's always editable when section is visible (same as add_th.php)
         
         // Payment Condition
         $('input[name="edit_condition_money"]').prop('disabled', true);
@@ -133,17 +133,17 @@
         $('input[name="crf_process[]"]').prop('disabled', true);
         
         // Credit Term Sub-Checkboxes (will be controlled by changecreditterm.js)
-        $('#crf_change_creditterm').prop('disabled', true);
-        $('#crf_change_expected_payment').prop('disabled', true);
+        $('#edit_crf_change_creditterm').prop('disabled', true);
+        $('#edit_crf_change_expected_payment').prop('disabled', true);
         
         // =====================================================================
         // 4. Dropdowns/Selects → disabled
         // =====================================================================
         
         // Credit Term Dropdowns
-        $('#crf_creditterm').prop('disabled', true);
-        $('#crf_condition_credit').prop('disabled', true);
-        $('#showcredit2').prop('disabled', true);
+        $('#edit_crf_creditterm').prop('disabled', true);
+        $('#edit_crf_condition_credit').prop('disabled', true);
+        $('#edit_showcredit2').prop('disabled', true);
         $('#crf_arcustdueid_edit').prop('disabled', true);
         
         // =====================================================================
@@ -167,12 +167,13 @@
         // 6. Special Controls
         // =====================================================================
         
-        // Hide Expected Date Payment section (will be shown if checkbox is checked)
-        $('.expected_payment_section').hide();
+        // NOTE: Expected Date Payment section is always visible (controlled by disabled state)
+        // No need to hide/show section - JavaScript only controls dropdown enabled state
         
-        // Hide credit term display (show readonly instead)
-        $('#crf_creditterm').hide();
-        $('#showCreditname').show();
+        // NOTE: Keep credit term dropdown visible and editable
+        // It will be enabled/disabled based on checkbox selection
+        $('#edit_crf_creditterm').show();
+        $('#edit_showCreditname').hide();
         
         // Disable primanage add button
         $('#add_more_primanage').prop('disabled', true);
@@ -218,6 +219,13 @@
             editcustomer: check_editcustomerdetail
         });
         
+        // =================================================================
+        // ALWAYS ENABLE: textmemo & memo2 (all checkboxes need memo access)
+        // =================================================================
+        $('#edit_crf_textmemo').prop('readonly', false);
+        $('#crfcus_memo2_edit').prop('readonly', false);
+        console.log('  ✓ Memos always enabled');
+        
         // Enable fields based on selected topics
         
         // 1. เปลี่ยนเขตการขาย (Change Area)
@@ -253,49 +261,187 @@
     // Enable Functions for Each Section
     // ========================================================================
     
+    /**
+     * Enable Area Fields (Checkbox 1: เปลี่ยนเขตการขาย)
+     * - Sales Reps only
+     * - textmemo, memo2 (already enabled globally)
+     */
     function enableAreaFields() {
         // Sales Rep field
-        $('#edit_salesreps, #crf_salesreps').prop('readonly', false);
-        console.log('    ✓ Area fields enabled');
+        $('#edit_salesreps').prop('readonly', false);
+        console.log('    ✓ Area fields enabled (Sales Reps only)');
     }
     
+    /**
+     * Enable Address Fields (Checkbox 2: เปลี่ยนที่อยู่)
+     * - Address type radios
+     * - Address textarea
+     * - All contact fields (name, tel, fax, email, e-tax email)
+     * - ภพ.20 file (crf_file1) only
+     * - textmemo, memo2 (already enabled globally)
+     */
     function enableAddressFields() {
-        // Address Type - Enable radio buttons and unlock onclick
-        $('input[name="edit_addresstype"], input[name="crf_addresstype"]').prop('disabled', false);
-        $('input[name="edit_addresstype"], input[name="crf_addresstype"]').attr('onclick', ''); // Remove onclick=false
+        // Address Type - Enable radio buttons
+        $('input[name="edit_addresstype"]').prop('disabled', false);
         
         // Address & Contact Fields
-        $('#edit_addressname, #crf_addressname').prop('readonly', false);
-        $('#edit_namecontact, #crf_namecontact').prop('readonly', false);
-        $('#edit_telcontact, #crf_telcontact').prop('readonly', false);
-        $('#edit_faxcontact, #crf_faxcontact').prop('readonly', false);
-        $('#edit_emailcontact, #crf_emailcontact').prop('readonly', false);
-        $('#edit_etax_emailcontact, #crf_etax_emailcontact').prop('readonly', false);
+        $('#edit_addressname').prop('readonly', false);
+        $('#edit_namecontact').prop('readonly', false);
+        $('#edit_telcontact').prop('readonly', false);
+        $('#edit_faxcontact').prop('readonly', false);
+        $('#edit_emailcontact').prop('readonly', false);
+        $('#edit_etax_emailcontact').prop('readonly', false);
         
-        // File Upload
+        // File Upload - ภพ.20 only
         $('#crf_file1').show();
         
         console.log('    ✓ Address fields enabled');
     }
     
+    /**
+     * Enable Credit Section (Checkbox 3: ปรับ Credit term)
+     * - Credit term dropdown
+     * - Credit change checkbox + condition dropdown + new credit dropdown
+     * - Expected payment checkbox + dropdown
+     * - textmemo, memo2 (already enabled globally)
+     * 
+     * NOTE: Billing & payment conditions are ONLY enabled in editcustomer (checkbox 5)
+     * NOTE: Detailed credit term logic is handled by edit_changecreditterm.js
+     */
     function enableCreditSection() {
         // Show credit term section
         $('.change_credit').show();
-        $('.change_credit_detail').show();
+        
+        // Show main dropdown but keep disabled (will be enabled by checkbox)
+        $('#edit_crf_creditterm').show();
+        $('#edit_showCreditname').hide(); // Hide readonly text field
         
         // Enable credit term sub-checkboxes
         // Note: These will be further controlled by edit_changecreditterm.js
-        $('#crf_change_creditterm').prop('disabled', false);
-        $('#crf_change_expected_payment').prop('disabled', false);
+        $('#edit_crf_change_creditterm').prop('disabled', false);
+        $('#edit_crf_change_expected_payment').prop('disabled', false);
         
-        // Show expected payment section if checkbox is already checked
-        if ($('#crf_change_expected_payment').is(':checked')) {
-            $('.expected_payment_section').show();
+        // If checkbox is already checked, enable dropdowns
+        // Otherwise, edit_changecreditterm.js will handle enabling when checkbox is ticked
+        if ($('#edit_crf_change_creditterm').is(':checked')) {
+            $('#edit_crf_creditterm').prop('disabled', false);
+            $('#edit_crf_condition_credit').prop('disabled', false);
+            $('#edit_showcredit2').prop('disabled', false);
         }
         
-        // Enable billing & payment conditions (always needed for credit)
+        // If expected payment checkbox is already checked, enable dropdown
+        // Section is always visible - no need to show/hide
+        if ($('#edit_crf_change_expected_payment').is(':checked')) {
+            $('#crf_arcustdueid_edit').prop('disabled', false);
+        }
+        
+        console.log('    ✓ Credit section enabled');
+    }
+    
+    /**
+     * Enable Finance Fields (Checkbox 4: ปรับวงเงิน)
+     * - Finance type radios
+     * - Finance request number (if ขอวงเงิน)
+     * - Finance change controls (if ปรับวงเงิน)
+     * - textmemo, memo2 (already enabled globally)
+     */
+    function enableFinanceFields() {
+        // Finance Type Radio
+        $('input[name="crf_finance"]').prop('disabled', false);
+        
+        // Check selected type and enable accordingly
+        var selectedFinance = $('input[name="crf_finance"]:checked').val();
+        
+        if (selectedFinance == 'ขอวงเงิน') {
+            // Show finance request section
+            $('.finance_request_detail').show();
+            $('#crf_finance_req_number').prop('readonly', false);
+            $('#crf_finance_req_number_calc').prop('readonly', false);
+        } else if (selectedFinance == 'ปรับวงเงิน') {
+            // Show finance change section
+            $('.finance_change_detail').show();
+            $('#crf_finance_status').prop('disabled', false);
+            $('#crf_finance_change_status').prop('disabled', false);
+            $('#crf_finance_change_number').prop('readonly', false);
+            $('#crf_finance_change_detail').prop('readonly', false);
+            // Note: crf_finance_change_total is readonly (auto-calculated)
+        }
+        
+        console.log('    ✓ Finance fields enabled');
+    }
+    
+    /**
+     * Enable Customer Data Fields (Checkbox 5: แก้ไขข้อมูลลูกค้า)
+     * - Full customer profile (name, tax, branch, etc.)
+     * - Address & contact fields
+     * - Company type & business type
+     * - Primanage section (add button)
+     * - All document files (file1-6)
+     * - Map URL/File edit buttons (ONLY for editcustomer)
+     * - Billing condition section (ONLY for editcustomer)
+     * - Payment condition section (ONLY for editcustomer)
+     * - Product & forecast
+     * - textmemo, memo2 (already enabled globally)
+     */
+    function enableCustomerDataFields() {
+        // =================================================================
+        // Customer Profile Section
+        // =================================================================
+        $('#edit_customername').prop('readonly', false);
+        $('#edit_cuscompanycreate').prop('readonly', false);
+        $('#edit_customertaxid').prop('readonly', false);
+        $('#edit_customerbranch').prop('readonly', false);
+        $('#edit_regiscost').prop('readonly', false);
+        
+        // =================================================================
+        // Address & Contact Section
+        // =================================================================
+        $('input[name="edit_addresstype"]').prop('disabled', false);
+        $('#edit_addressname').prop('readonly', false);
+        $('#edit_namecontact').prop('readonly', false);
+        $('#edit_telcontact').prop('readonly', false);
+        $('#edit_faxcontact').prop('readonly', false);
+        $('#edit_emailcontact').prop('readonly', false);
+        $('#edit_etax_emailcontact').prop('readonly', false);
+        
+        // =================================================================
+        // Map Edit Buttons (ONLY for editcustomer)
+        // =================================================================
+        $('.canEdit1, .canEdit2').show();
+        
+        // =================================================================
+        // Company Type & Business Type
+        // =================================================================
+        $('input[name="crf_companytype"]').prop('disabled', false);
+        $('#crf_companytype2').prop('readonly', false);
+        $('#crf_companytype3_1_1, #crf_companytype3_1_2, #crf_companytype3_2_1, #crf_companytype3_2_2').prop('readonly', false);
+        $('input[name="edit_typeofbussi"]').prop('disabled', false);
+        
+        // =================================================================
+        // Primanage Section
+        // =================================================================
+        $('input[name="crf_primanage_dept[]"]').prop('readonly', false);
+        $('input[name="crf_primanage_name[]"]').prop('readonly', false);
+        $('input[name="crf_primanage_posi[]"]').prop('readonly', false);
+        $('input[name="crf_primanage_email[]"]').prop('readonly', false);
+        $('#add_more_primanage').prop('disabled', false);
+        
+        // =================================================================
+        // Product & Forecast
+        // =================================================================
+        $('#edit_crf_customer_products').prop('readonly', false);
+        $('#edit_forecast').prop('readonly', false);
+        
+        // =================================================================
+        // Document Files (file1-6)
+        // =================================================================
+        $('#crf_file_person').show(); // For natural person
+        $('#crf_file1, #crf_file2, #crf_file3, #crf_file4, #crf_file5, #crf_file6').show();
+        
+        // =================================================================
+        // Billing Condition Section (ONLY for editcustomer)
+        // =================================================================
         $('input[name="crf_condition_bill"]').prop('disabled', false);
-        $('input[name="edit_condition_money"]').prop('disabled', false);
         
         // Show condition detail sections if already selected
         var selectedBilling = $('input[name="crf_condition_bill"]:checked').val();
@@ -304,9 +450,14 @@
             $('#crf_file7, #crf_file8').show();
         } else if (selectedBilling == 'วางบิลทุกวันที่') {
             $('.crf_condition_bill3').show();
-            $('#crf_datebill').prop('readonly', false);
             $('#crf_file9').show();
+            // Note: crf_datebill is always editable when section is visible
         }
+        
+        // =================================================================
+        // Payment Condition Section (ONLY for editcustomer)
+        // =================================================================
+        $('input[name="edit_condition_money"]').prop('disabled', false);
         
         var selectedPayment = $('input[name="edit_condition_money"]:checked').val();
         if (selectedPayment == 'รับเช็ค') {
@@ -315,59 +466,7 @@
             $('#crf_recive_cheuqedetail').prop('readonly', false);
         }
         
-        console.log('    ✓ Credit section enabled');
-    }
-    
-    function enableFinanceFields() {
-        // Finance Type Radio
-        $('input[name="crf_finance"]').prop('disabled', false);
-        
-        // Finance Request Number
-        $('#crf_finance_req_number').prop('readonly', false);
-        $('#crf_finance_req_number_calc').prop('readonly', false);
-        
-        // Check selected type and enable accordingly
-        var selectedFinance = $('input[name="crf_finance"]:checked').val();
-        
-        if (selectedFinance == 'ขอวงเงิน') {
-            $('.finance_request_detail').show();
-        } else if (selectedFinance == 'ปรับวงเงิน') {
-            $('.finance_change_detail').show();
-            $('#crf_finance_status').prop('disabled', false);
-            $('#crf_finance_change_status').prop('disabled', false);
-            $('#crf_finance_change_number').prop('readonly', false);
-            $('#crf_finance_change_detail').prop('readonly', false);
-        }
-        
-        console.log('    ✓ Finance fields enabled');
-    }
-    
-    function enableCustomerDataFields() {
-        // Customer Name
-        $('#edit_customername, #crf_customername').prop('readonly', false);
-        
-        // Contact Info
-        $('#edit_namecontact, #crf_namecontact').prop('readonly', false);
-        $('#edit_telcontact, #crf_telcontact').prop('readonly', false);
-        $('#edit_faxcontact, #crf_faxcontact').prop('readonly', false);
-        $('#edit_emailcontact, #crf_emailcontact').prop('readonly', false);
-        $('#edit_etax_emailcontact, #crf_etax_emailcontact').prop('readonly', false);
-        
-        // Files (including billing/payment files for edit customer data)
-        $('#crf_file1, #crf_file2, #crf_file3, #crf_file4, #crf_file5, #crf_file6').show();
-        $('#crf_file7, #crf_file8, #crf_file9').show();
-        $('#crf_recive_cheuqetable').show();
-        
-        // Company Data
-        $('#edit_regiscost, #crf_regiscost').prop('readonly', false);
-        
-        // Map Edit
-        $('.canEdit1, .canEdit2').show();
-        
-        // Primanage
-        $('#add_more_primanage').prop('disabled', false);
-        
-        console.log('    ✓ Customer data fields enabled');
+        console.log('    ✓ Customer data fields enabled (full access)');
     }
     
     // ========================================================================

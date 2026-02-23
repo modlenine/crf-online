@@ -27,8 +27,9 @@
 
                 <!-- Chose Company -->
                 <input hidden type="text" name="check_editcom" id="check_editcom" value="{edit_company}">
-                <input hidden type="text" name="check_EditFormNo" id="check_EditFormNo" value="{get_formno}">
-
+                <input type="text" name="check_EditFormNo" id="check_EditFormNo" value="{get_formno}">
+                <input type="text" name="check_crf_id" id="check_crf_id" value="<?=$get_crfid?>">
+                <input type="text" name="check_crfcus_tempid" id="check_crfcus_tempid" value="<?=$crfcus_tempid?>">
                 <div id="alert_company"></div>
                 <div class="row form-group mt-3 p-2">
                     <div class="col-md-4 form-group">
@@ -115,6 +116,14 @@
                 <input hidden type="text" name="check_changecredit" id="check_changecredit" value="{get_changecredit}">
                 <input hidden type="text" name="check_changefinance" id="check_changefinance" value="{get_changefinance}">
                 <input hidden type="text" name="check_editcustomerdetail" id="check_editcustomerdetail" value="{crf_sub_oldcus_editcustomer}">
+
+                <!-- Hidden inputs to preserve checkbox values when disabled by JavaScript -->
+                <!-- These ensure Model receives checkbox values even when checkboxes are disabled -->
+                <input type="hidden" name="crf_sub_oldcus_changearea" value="<?= ($get_changearea == '1') ? '1' : '' ?>">
+                <input type="hidden" name="crf_sub_oldcus_changeaddress" value="<?= ($get_changeaddress == '2') ? '2' : '' ?>">
+                <input type="" name="crf_sub_oldcus_changecredit_check" value="<?= ($get_changecredit == '3') ? '3' : '' ?>">
+                <input type="hidden" name="crf_sub_oldcus_changefinance" value="<?= ($get_changefinance == '4') ? '4' : '' ?>">
+                <input type="hidden" name="crf_sub_oldcus_editcustomer" value="<?= ($crf_sub_oldcus_editcustomer == '5') ? '5' : '' ?>">
 
                 <div id="alert_crf_sub_oldcus"></div>
                 <div class="row form-group p-2 suboldcustomer">
@@ -595,16 +604,16 @@
                             // เช็กว่ามี creditterm2 หรือไม่
                             $hasCreditTerm2 = !empty($crfcus_creditterm2);
                         ?>
-                        <input type="checkbox" name="crf_change_creditterm" id="crf_change_creditterm" value="1" <?php echo $hasCreditTerm2 ? 'checked' : ''; ?>>
-                        <label for="crf_change_creditterm">ปรับ Credit term</label>
+                        <input type="checkbox" name="edit_crf_change_creditterm" id="edit_crf_change_creditterm" value="1" <?php echo $hasCreditTerm2 ? 'checked' : ''; ?>>
+                        <label for="edit_crf_change_creditterm">ปรับ Credit term</label>
                     </div>
                     <div class="col-md-6 form-group">
                         <?php
                             // เช็กว่ามี Expected Date Payment หรือไม่
-                            $hasExpectedPayment = !empty($crfcus_slc_arcustdueid);
+                            $hasExpectedPayment = !empty($crf_change_expected_date);
                         ?>
-                        <input type="checkbox" name="crf_change_expected_payment" id="crf_change_expected_payment" value="1" <?php echo $hasExpectedPayment ? 'checked' : ''; ?>>
-                        <label for="crf_change_expected_payment">Expected Date Payment</label>
+                        <input type="checkbox" name="crf_change_expected_payment" id="edit_crf_change_expected_payment" value="1" <?php echo $hasExpectedPayment ? 'checked' : ''; ?>>
+                        <label for="edit_crf_change_expected_payment">Expected Date Payment</label>
                     </div>
                 </div>
 
@@ -612,11 +621,11 @@
                     <div class="col-md-4 form-group">
 
                         <!-- For Change CreditTerm method -->
-                        <input hidden type="text" name="oldCreditTerm" id="oldCreditTerm" value="{edit_creditterm}">
+                        <input hidden type="text" name="oldCreditTerm" id="edit_oldCreditTerm" value="{edit_creditterm}">
 
-                        <label for="">โปรดเลือกรายการ</label>
-                        <input readonly type="text" name="showCreditname" id="showCreditname" value="{edit_creditname}" class="form-control" style="display:none;">
-                        <select name="crf_creditterm" id="crf_creditterm" class="form-control">
+                        <label for="">รายการปัจจุบัน</label>
+                        <input readonly type="text" name="showCreditname" id="edit_showCreditname" value="{edit_creditname}" class="form-control" style="display:none;">
+                        <select name="edit_crf_creditterm" id="edit_crf_creditterm" class="form-control">
                             <option value="{edit_creditterm}">{edit_creditname}</option>
                             {getCreditTerm}
                             <option value="{credit_id}">{credit_name}</option>
@@ -624,33 +633,33 @@
                         </select>
                     </div>
 
-                    <div class="col-md-4 form-group change_credit_detail" style="display:none">
+                    <div class="col-md-4 form-group change_credit_detail">
                         <label for="">เงื่อนไข</label>
-                        <select name="crf_condition_credit" id="crf_condition_credit" class="form-control">
+                        <select name="edit_crf_condition_credit" id="edit_crf_condition_credit" class="form-control">
                             <option value="{get_condition_credit}">{get_condition_credit}</option>
                             <option value="เพิ่ม">เพิ่ม</option>
                             <option value="ลด">ลด</option>
                         </select>
-                        <div id="alert_crf_condition_credit"></div>
+                        <div id="alert_edit_crf_condition_credit"></div>
                     </div>
 
-                    <div class="col-md-4 form-group change_credit_detail" style="display:none">
-                        <label for="">โปรดเลือกรายการ</label>
-                        <div id="showNewCredit"></div>
-                        <select name="showcredit2" id="showcredit2" class="form-control showcredit2">
+                    <div class="col-md-4 form-group change_credit_detail">
+                        <label for="">รายการใหม่</label>
+                        <div id="edit_showNewCredit"></div>
+                        <select name="showcredit2" id="edit_showcredit2" class="form-control showcredit2">
                             <option value="{get_creditterm2code}">{get_creditterm2name}</option>
                         </select>
-                        <div id="alert_showcredit2"></div>
+                        <div id="alert_edit_showcredit2"></div>
                     </div>
                 </div>
                 <div id="alert_creditterm"></div>
 
             <!-- Customer Expected Date Payment Term -->
-            <div class="row form-group expected_payment_section" style="display:none">
+            <div class="row form-group expected_payment_section">
                 <div class="col-md-6">
                     <?php
-                        // เช็กว่าควร disabled หรือไม่ - เริ่มต้น disabled ถ้าไม่มีค่า
-                        $isDisabled = empty($crfcus_slc_arcustdueid) ? 'disabled' : '';
+                        // เช็กว่าควร disabled หรือไม่ - เริ่มต้น disabled ถ้าไม่ได้ติ๊ก checkbox
+                        $isDisabled = empty($crf_change_expected_date) ? 'disabled' : '';
                     ?>
                     <label for="crf_arcustdueid_edit">Customer Expected Date Payment Term</label>
                     <select name="crf_arcustdueid_edit" id="crf_arcustdueid_edit" class="form-control" <?php echo $isDisabled; ?>>
@@ -1138,27 +1147,33 @@
                 // Debug: Log condition values before submit
                 var selectedBilling = $('input:radio[name="crf_condition_bill"]:checked').val();
                 var selectedPayment = $('input:radio[name="edit_condition_money"]:checked').val();
+                var isBillingDisabled = $('input:radio[name="crf_condition_bill"]').first().prop('disabled');
+                var isPaymentDisabled = $('input:radio[name="edit_condition_money"]').first().prop('disabled');
                 
                 console.log('=== FORM SUBMIT DEBUG ===');
                 console.log('Form submit - Selected billing condition:', selectedBilling);
+                console.log('Form submit - Billing disabled:', isBillingDisabled);
                 console.log('Form submit - Selected payment condition:', selectedPayment);
+                console.log('Form submit - Payment disabled:', isPaymentDisabled);
                 console.log('Form submit - Finance Display:', financeDisplay, 'Finance Calc:', financeCalc);
-                console.log('Form submit - Form data:', $('#form1').serialize());
                 console.log('========================');
                 
-                // Check if billing condition is selected 
-                if (!selectedBilling) {
+                // Only validate billing/payment conditions if they are enabled
+                // (i.e., "แก้ไขข้อมูลลูกค้า" checkbox is selected)
+                if (!isBillingDisabled && !selectedBilling) {
                     alert('กรุณาเลือกเงื่อนไขการวางบิล');
                     e.preventDefault();
                     return false;
                 }
                 
-                // Check if payment condition is selected
-                if (!selectedPayment) {
+                if (!isPaymentDisabled && !selectedPayment) {
                     alert('กรุณาเลือกเงื่อนไขการรับชำระเงิน');
                     e.preventDefault();
                     return false;
                 }
+                
+                // Form is valid, allow submission
+                console.log('✓ Form validation passed, submitting...');
             });
         });
     </script>
