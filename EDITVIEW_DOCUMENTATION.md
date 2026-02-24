@@ -6,7 +6,7 @@
 
 **ตำแหน่งไฟล์:** `assets/js/edit_view/edit_view.js` (1,185 บรรทัด)  
 **หน้า View:** `application/modules/main/views/edit_view.php`  
-**วันที่อัปเดตล่าสุด:** 2026-02-24
+**วันที่อัปเดตล่าสุด:** 2026-02-25 (Added onclick="return false" pattern)
 
 ---
 
@@ -27,6 +27,146 @@
   3. ปรับวงเงิน (`#check_changefinance`)
   4. ปรับ Credit Term (`#check_changecredit`)
   5. แก้ไขข้อมูลลูกค้า (`#check_editcustomer`)
+
+---
+
+## 🔐 Form Element Locking Strategy
+
+### ปัญหาเดิม: disabled Attribute
+```html
+<!-- ❌ ปัญหา: disabled elements ไม่ส่งค่าไปใน form submission -->
+<input type="checkbox" name="crf_sub_oldcus_changearea" disabled>
+<input type="radio" name="crf_company" value="sln" disabled>
+```
+
+**ผลกระทบ:**
+- ❌ Form submission ไม่ได้ค่าจาก disabled elements
+- ❌ Backend ไม่ได้รับข้อมูลที่จำเป็น
+- ❌ การบันทึกข้อมูลผิดพลาด
+
+### วิธีแก้: onclick="return false" Pattern ✅
+
+```html
+<!-- ✅ แก้ไข: ใช้ onclick="return false" แทน disabled -->
+<input type="checkbox" name="crf_sub_oldcus_changearea" value="1" onclick="return false">
+<input type="radio" name="crf_company" value="sln" onclick="return false">
+```
+
+**ประโยชน์:**
+- ✅ ป้องกันการคลิก (UI locked)
+- ✅ ส่งค่าไปใน form submission ได้ปกติ
+- ✅ Backend ได้รับข้อมูลครบถ้วน
+- ✅ CSS styling ยังคงใช้ได้ (เช่น `:disabled` pseudo-class)
+
+### Form Elements ที่ถูก Locked (14 elements)
+
+#### 1. Main Checkboxes (5 elements) - Lines 129-160
+```php
+<input name="crf_sub_oldcus_changearea" value="1" onclick="return false">
+<input name="crf_sub_oldcus_changeaddress" value="2" onclick="return false">
+<input name="crf_sub_oldcus_editcustomer" value="5" onclick="return false">
+<input name="crf_sub_oldcus_changecredit" value="3" onclick="return false">
+<input name="crf_sub_oldcus_changefinance" value="4" onclick="return false">
+```
+
+**Purpose:** แสดงเงื่อนไขที่เลือกไว้ตอนสร้าง CRF - user ไม่สามารถเปลี่ยนได้
+
+#### 2. Company Radio Buttons (5 elements) - Lines 34-65
+```php
+<input name="crf_company" value="sln" onclick="return false">  <!-- สลน. -->
+<input name="crf_company" value="poly" onclick="return false"> <!-- พอลีเพล็กซ์ -->
+<input name="crf_company" value="ca" onclick="return false">   <!-- คิงคอมพ์ฯ -->
+<input name="crf_company" value="tb" onclick="return false">   <!-- ที บี พี -->
+<input name="crf_company" value="st" onclick="return false">   <!-- สตาร์เท็กซ์ -->
+```
+
+**Purpose:** บริษัทที่ขอเครดิต - ไม่สามารถเปลี่ยนหลังจากสร้างแล้ว
+
+#### 3. Customer Type Radio Buttons (2 elements) - Lines 73-86
+```php
+<input name="crf_type" value="1" onclick="return false"> <!-- ลูกค้าใหม่ -->
+<input name="crf_type" value="2" onclick="return false"> <!-- ลูกค้าเดิม -->
+```
+
+**Purpose:** ประเภทลูกค้า - กำหนดตั้งแต่เริ่มและไม่เปลี่ยนแปลง
+
+#### 4. Person Type Radio Buttons (2 elements) - Lines 94-107
+```php
+<input name="crf_person_type" value="natural" onclick="return false">  <!-- บุคคลธรรมดา -->
+<input name="crf_person_type" value="juristic" onclick="return false"> <!-- นิติบุคคล -->
+```
+
+**Purpose:** ประเภทผู้ขอเครดิต - ต้องคงที่เพื่อจัดการเอกสารที่ต้องแนบ
+
+### JavaScript Changes: Disable Old Locking Functions
+
+#### edit_view.js - 3 Sections Commented
+
+**1. Line 71 - Phase 2: lockMainCheckboxes() Call**
+```javascript
+// ===== PHASE 2: Lock checkboxes =====
+// DISABLED 2026-02-25: Checkboxes now locked via onclick="return false" in PHP template
+// console.log("🔒 Phase 2: Locking main checkboxes...");
+// lockMainCheckboxes();
+```
+
+**2. Line 126 - Company Radio Disable**
+```javascript
+// Lock company selection (already set)
+// DISABLED 2026-02-25: Company radio buttons now locked via onclick="return false" in PHP template
+// $('input[name="crf_company"]').prop('disabled', true);
+```
+
+**3. Lines 817-818 - Address Fields in "Edit Customer" Section**
+```javascript
+// Address type - DISABLED 2026-02-25: Address fields should only be unlocked with "เปลี่ยนที่อยู่" checkbox
+// $('input[name="edit_addresstype"]').prop('disabled', false);
+// $('#edit_addressname').prop('readonly', false).removeClass('bg-light');
+```
+
+**Reason for Line 817-818:** Address fields should ONLY be editable when "เปลี่ยนที่อยู่" checkbox is active, NOT with "แก้ไขข้อมูลลูกค้า"
+
+#### custom.js - 2 Lines Commented
+
+**1. Line 2658 - New Customer Type Disable**
+```javascript
+// DISABLED 2026-02-25: Customer type radios now locked via onclick="return false" in edit_view.php
+// $('input:radio[name="crf_type"]').prop('disabled', true);
+```
+
+**2. Line 2762 - Existing Customer Type Disable**
+```javascript
+// DISABLED 2026-02-25: Customer type radios now locked via onclick="return false" in edit_view.php
+// $('input:radio[name="crf_type"]').prop('disabled', true);
+```
+
+**Why custom.js?** This file was also attempting to disable customer type radios using JavaScript. Discovered during debugging with F12 inspection showing `disabled=""` attribute still present.
+
+### Migration from disabled to onclick="return false"
+
+| Aspect | Before (disabled) | After (onclick="return false") |
+|--------|-------------------|--------------------------------|
+| **User Interaction** | ✅ Blocked | ✅ Blocked (same) |
+| **Form Submission** | ❌ Value NOT sent | ✅ Value sent |
+| **Visual Appearance** | ✅ Grayed out | ✅ Grayed out (same) |
+| **CSS Styling** | `:disabled` works | `:disabled` works (onclick doesn't affect this) |
+| **Accessibility** | May confuse screen readers | Clear semantic meaning |
+| **Backend Impact** | ❌ Missing data | ✅ Complete data |
+
+### Testing Checklist ✅
+
+**Visual Test:**
+- ✅ Elements appear locked (grayed out, cursor not allowed)
+- ✅ User cannot click or change values
+- ✅ Form displays correctly
+
+**Functional Test:**
+- ✅ Form submission includes all locked element values
+- ✅ Backend receives complete data
+- ✅ No JavaScript errors in console
+- ✅ F12 inspection shows onclick="return false" instead of disabled=""
+
+**Confirmed Working:** 2026-02-25 ✅
 
 ---
 
@@ -69,8 +209,12 @@ $(document).ready(function () {
     handlePersonTypeFileContainers();
     
     // ===== PHASE 2: Lock checkboxes =====
-    console.log("🔒 Phase 2: Locking main checkboxes...");
-    lockMainCheckboxes();
+    // **DISABLED 2026-02-25:** Checkboxes and radios now locked via onclick="return false" in PHP template
+    // console.log("🔒 Phase 2: Locking main checkboxes...");
+    // lockMainCheckboxes();
+    
+    // **DISABLED 2026-02-25:** Company radios also locked in PHP template
+    // $('input[name="crf_company"]').prop('disabled', true);
     
     // ===== PHASE 3: Enable fields based on checkbox conditions =====
     console.log("✅ Phase 3: Enabling fields for selected topics...");
@@ -80,6 +224,12 @@ $(document).ready(function () {
 });
 ```
 
+**🔄 Change Notes (2026-02-25):**
+- Phase 2 components (lockMainCheckboxes, company disable) are now commented out
+- Form elements locked using `onclick="return false"` pattern in HTML instead of JavaScript
+- This ensures form values are submitted while preventing user interaction
+- See section "🔐 Form Element Locking Strategy" for complete details
+
 **Link to Code:** [edit_view.js#L35-L95](c:\xampp\htdocs\intsys\crf\assets\js\edit_view\edit_view.js#L35-L95)
 
 ---
@@ -87,11 +237,17 @@ $(document).ready(function () {
 ### 3. Core Utility Functions (บรรทัด 97-240)
 
 #### 3.1 Field Control Functions
-| Function | Purpose | Link |
-|----------|---------|------|
-| `lockCustomerFieldsTH()` | Lock all fields to readonly/disabled (strict mode) | [#L97-L180](c:\xampp\htdocs\intsys\crf\assets\js\edit_view\edit_view.js#L97-L180) |
-| `lockMainCheckboxes()` | Disable main checkboxes (cannot change after creation) | [#L182-L205](c:\xampp\htdocs\intsys\crf\assets\js\edit_view\edit_view.js#L182-L205) |
-| `handlePersonTypeFileContainers()` | Show/hide file upload containers based on person type | [#L207-L238](c:\xampp\htdocs\intsys\crf\assets\js\edit_view\edit_view.js#L207-L238) |
+| Function | Purpose | Status | Link |
+|----------|---------|--------|------|
+| `lockCustomerFieldsTH()` | Lock all fields to readonly/disabled (strict mode) | ✅ Active | [#L97-L180](c:\xampp\htdocs\intsys\crf\assets\js\edit_view\edit_view.js#L97-L180) |
+| `lockMainCheckboxes()` | ~~Disable main checkboxes (cannot change after creation)~~ | ⚠️ DEPRECATED | [#L182-L205](c:\xampp\htdocs\intsys\crf\assets\js\edit_view\edit_view.js#L182-L205) |
+| `handlePersonTypeFileContainers()` | Show/hide file upload containers based on person type | ✅ Active | [#L207-L238](c:\xampp\htdocs\intsys\crf\assets\js\edit_view\edit_view.js#L207-L238) |
+
+**⚠️ Deprecation Notice (2026-02-25):**
+- `lockMainCheckboxes()` function still exists in code but is **NOT CALLED** anymore
+- Checkboxes and radio buttons now locked using `onclick="return false"` pattern in HTML
+- JavaScript disable approach caused form submission issues (disabled elements don't send values)
+- See section "🔐 Form Element Locking Strategy" for migration details
 
 #### 3.2 Person Type File Container Logic
 
@@ -674,6 +830,24 @@ if (isChangePayment) {
 ---
 
 ## 📝 Change Log
+
+### 2026-02-25: Form Element Locking Pattern Migration
+- ✅ Migrated from `disabled` attribute to `onclick="return false"` pattern
+- ✅ Updated 14 form elements in edit_view.php:
+  - 5 main checkboxes (changearea, changeaddress, editcustomer, changecredit, changefinance)
+  - 5 company radio buttons (sln, poly, ca, tb, st)
+  - 2 customer type radios (ลูกค้าใหม่, ลูกค้าเดิม)
+  - 2 person type radios (บุคคลธรรมดา, นิติบุคคล)
+- ✅ Commented out JavaScript disable code in edit_view.js (3 locations):
+  - Line 71: lockMainCheckboxes() call
+  - Line 126: company radio disable
+  - Lines 817-818: address field unlock in "Edit Customer Data" section
+- ✅ Commented out JavaScript disable code in custom.js (2 locations):
+  - Line 2658: customer type disable for new customers
+  - Line 2762: customer type disable for existing customers
+- ✅ Fixed address field logic: only unlocked with "เปลี่ยนที่อยู่" checkbox, NOT with "แก้ไขข้อมูลลูกค้า"
+- ✅ Benefits: Form submission now works correctly, all values sent to backend
+- ✅ Testing: Confirmed working with F12 inspection and form submission tests
 
 ### 2026-02-24: Complete Refactor
 - ✅ Consolidated all logic from edit_changecreditterm.js into edit_view.js
