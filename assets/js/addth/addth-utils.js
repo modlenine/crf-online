@@ -19,9 +19,11 @@
 /**
  * Lock customer fields after selection
  * Disables specific fields based on old customer sub-type checkboxes
+ * NOTE: Customer code is NEVER locked to allow searching for different customers
  */
 const lockCustomerFieldsTH = () => {
-	$("#crf_customercode").prop("readonly", true).addClass("bg-light");
+	// ✅ Customer code remains unlocked to allow user to change customer anytime
+	// Do NOT lock crf_customercode - user needs to search/change customers
 	
 	// ตรวจสอบว่าได้ติ๊ก "เปลี่ยนที่อยู่" หรือไม่ ถ้าติ๊กอยู่ก็ไม่ล็อกฟิลด์ที่อยู่และข้อมูลติดต่อ
 	const isChangeAddress = $('input:checkbox[name="crf_sub_oldcus_changeaddress"]').prop("checked");
@@ -67,7 +69,7 @@ const lockCustomerFieldsTH = () => {
  * Re-enables all form fields for editing
  */
 const unlockCustomerFieldsTH = () => {
-	$("#crf_customercode").prop("readonly", false).removeClass("bg-light");
+	// ✅ Customer code is never locked, so no need to unlock it
 	$("#crf_customername").prop("readonly", false).removeClass("bg-light");
 	$("#crf_customertaxid").prop("readonly", false).removeClass("bg-light");
 	$("#crf_addressname").prop("readonly", false).removeClass("bg-light");

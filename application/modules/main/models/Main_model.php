@@ -473,10 +473,10 @@ class Main_model extends CI_Model
 
                     $arUpdateTemp = array(
                         "crfcus_salesreps" => $this->input->post("crf_salesreps"),
-                        "crfcus_conditionbill" => $this->input->post("crf_condition_bill"),
-                        "crfcus_conditionmoney" => $this->input->post("crf_condition_money"),
-                        "crfcus_memo2" => $this->input->post("crfcus_memo2"),
-                        "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli")
+                        // "crfcus_conditionbill" => $this->input->post("crf_condition_bill"),
+                        // "crfcus_conditionmoney" => $this->input->post("crf_condition_money"),
+                        "crfcus_memo2" => $this->input->post("crfcus_memo2")
+                        // "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli")
                     );
                     $this->db->where("crfcus_formno", $getFormNo);
                     $this->db->update("crf_customers_temp", $arUpdateTemp);
@@ -577,10 +577,10 @@ class Main_model extends CI_Model
                     // "crfcus_regiscapital" => conPrice($this->input->post("crf_regiscost")),
                     "crfcus_file1" => $resultFile1,
                     "crfcus_personal" => $resultFilePersonal,
-                    "crfcus_conditionbill" => $this->input->post("crf_condition_bill"),
-                    "crfcus_conditionmoney" => $this->input->post("crf_condition_money"),
-                    "crfcus_memo2" => $this->input->post("crfcus_memo2"),
-                    "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli")
+                    // "crfcus_conditionbill" => $this->input->post("crf_condition_bill"),
+                    // "crfcus_conditionmoney" => $this->input->post("crf_condition_money"),
+                    "crfcus_memo2" => $this->input->post("crfcus_memo2")
+                    // "crfcus_countmonthdeli" => $this->input->post("crfcus_countmonthdeli")
                 );
                 
                 $this->db->where("crfcus_formno", $getFormNo);

@@ -58,9 +58,11 @@ const ALERT_MESSAGES = {
 
 /**
  * Lock customer fields after selection
+ * NOTE: Customer code is NEVER locked to allow searching for different customers
  */
 const lockCustomerFieldsTH = () => {
-	$("#crf_customercode").prop("readonly", true).addClass("bg-light");
+	// ✅ Customer code remains unlocked to allow user to change customer anytime
+	// Do NOT lock crf_customercode - user needs to search/change customers
 	
 	// ตรวจสอบว่าได้ติ๊ก "เปลี่ยนที่อยู่" หรือไม่ ถ้าติ๊กอยู่ก็ไม่ล็อกฟิลด์ที่อยู่และข้อมูลติดต่อ
 	const isChangeAddress = $('input:checkbox[name="crf_sub_oldcus_changeaddress"]').prop("checked");
@@ -388,7 +390,8 @@ function updateFieldStatesBasedOnConditions() {
 	// ========================================================================
 	// Text/Readonly fields
 	$("#crf_salesreps").prop("readonly", true).addClass("bg-light");
-	$("#crf_customercode").prop("readonly", true).addClass("bg-light");
+	// ✅ Customer code remains unlocked - do NOT set readonly
+	// $("#crf_customercode").prop("readonly", true).addClass("bg-light");
 	$("#crf_customername").prop("readonly", true).addClass("bg-light");
 	$("#crf_cuscompanycreate").prop("readonly", true).addClass("bg-light");
 	$("#crf_customertaxid").prop("readonly", true).addClass("bg-light");
@@ -771,6 +774,11 @@ $(document).ready(function () {
 			// Handle OLD CUSTOMER (2)
 			if ($(this).val() == CUSTOMER_TYPE.OLD) {
 				disableAllFieldsForOldCustomer();
+				
+				// ✅ IMPORTANT: Enable customer code immediately for OLD customer search
+				// Customer code MUST be enabled to allow autocomplete/search functionality
+				// This is a REQUIRED field for selecting existing customers
+				$("#crf_customercode").prop("disabled", false);
 
 				///////////////////////////////////////////////
 				// Control Person Type (Natural/Juristic) for OLD customer
@@ -788,10 +796,8 @@ $(document).ready(function () {
 						$("#crf_file_person").prop("disabled", true);
 					}
 
-					// Enable customer code when person type is selected
-					if ($(this).val() != "") {
-						$("#crf_customercode").prop("disabled", false);
-					}
+					// ✅ Note: Customer code is already enabled when OLD customer is selected
+					// No need to enable it again here (it's enabled in initializeOldCustomerHandlers)
 					
 					// อัปเดต central function เมื่อเปลี่ยน person type
 					updateFieldStatesBasedOnConditions();
@@ -1187,7 +1193,7 @@ $(document).ready(function () {
 					}
 				});
 
-				// Check Sub old Customer ว่ามีการเลือกประเภทหรือไม่
+				// ✅ FIXED: Check Sub old Customer but DON'T disable customer code (it's a PRIMARY SEARCH FIELD)
 				$("#crf_customercode").focus(function () {
 					if ($("#checkCusType").val() == 2) {
 						var crf_sub_oldcus = $(
@@ -1199,18 +1205,19 @@ $(document).ready(function () {
 
 						if (crf_person_type.length < 1) {
 							$("#alert_crf_sub_oldcus").html(
-								'<div class="alert alert-danger" role="alert">กรุณาเลือกประเภทลูกค้าด้วยค่ะ</div>'
+								'<div class="alert alert-warning" role="alert">แนะนำ: เลือกประเภทลูกค้า (บุคคลธรรมดา/นิติบุคคล) ก่อนค้นหาลูกค้า</div>'
 							);
-							$("#crf_customercode").val("").prop("disabled", true);
+							// Customer code remains enabled for search
 							$("#autoCusCode").html("");
 						} else if (crf_sub_oldcus.length < 1) {
 							$("#alert_crf_sub_oldcus").html(
-								'<div class="alert alert-danger" role="alert">กรุณาเลือกประเภทการดำเนินการด้วยค่ะ</div>'
+								'<div class="alert alert-warning" role="alert">แนะนำ: เลือกประเภทการดำเนินการ (เปลี่ยนเขต/ที่อยู่/ฯลฯ) ก่อนค้นหาลูกค้า</div>'
 							);
-							$("#crf_customercode").val("").prop("disabled", true);
+							// Customer code remains enabled for search
 							$("#autoCusCode").html("");
 						} else {
-							$("#crf_customercode").prop("disabled", false);
+							// Clear warning when all conditions are met
+							$("#alert_crf_sub_oldcus").html("");
 						}
 					}
 				});

@@ -102,7 +102,7 @@ if (!checktax($('#crf_customertaxid').val())) {
 
 **Contains**:
 - **Field Control**:
-  - `lockCustomerFieldsTH()` - Lock fields after customer selection
+  - `lockCustomerFieldsTH()` - Lock fields after customer selection (**Note:** Does NOT lock customer code)
   - `unlockCustomerFieldsTH()` - Unlock fields for editing
   - `setFieldsDisabled(fields, disabled)` - Bulk enable/disable
   - `enableAllFieldsForNewCustomer()` - Enable all for new customer
@@ -132,8 +132,9 @@ if (!checktax($('#crf_customertaxid').val())) {
 
 **Example Usage**:
 ```javascript
-// Lock all customer fields after selection
+// Lock customer fields after selection (customer code remains unlocked)
 lockCustomerFieldsTH();
+// Note: Customer code is NEVER locked - users can always search/change customers
 
 // Format a number with commas
 const formatted = formatNumberWithComma('1000000'); // Returns: "1,000,000"

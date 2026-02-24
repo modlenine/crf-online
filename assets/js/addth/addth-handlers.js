@@ -320,24 +320,25 @@ function initializeOldCustomerValidationHandlers() {
 			var crf_sub_oldcus = $('input[type="checkbox"][id="crf_sub_oldcus"]:checked');
 			var crf_person_type = $('input[type="radio"][name="crf_person_type"]:checked');
 			
+			// ✅ FIXED: Don't disable customer code - it's a PRIMARY SEARCH FIELD for OLD customers
 			if (crf_person_type.length < 1) {
 				$("#alert_crf_sub_oldcus").html(
-					'<div class="alert alert-danger" role="alert">กรุณาเลือกประเภทลูกค้าด้วยค่ะ</div>'
+					'<div class="alert alert-warning" role="alert">แนะนำ: เลือกประเภทลูกค้า (บุคคลธรรมดา/นิติบุคคล) ก่อนค้นหาลูกค้า</div>'
 				);
-				$("#crf_customercode").val("").prop("disabled", true);
+				// Customer code remains enabled for search
 				$("#autoCusCode").html("");
 			} else if (crf_sub_oldcus.length < 1) {
 				$("#alert_crf_sub_oldcus").html(
-					'<div class="alert alert-danger" role="alert">กรุณาเลือกประเภทการดำเนินการด้วยค่ะ</div>'
+					'<div class="alert alert-warning" role="alert">แนะนำ: เลือกประเภทการดำเนินการ (เปลี่ยนเขต/ที่อยู่/ฯลฯ) ก่อนค้นหาลูกค้า</div>'
 				);
-				$("#crf_customercode").val("").prop("disabled", true);
+				// Customer code remains enabled for search
 				$("#autoCusCode").html("");
 			} else {
-				$("#crf_customercode").prop("disabled", false);
+				// Clear warning when all conditions are met
+				$("#alert_crf_sub_oldcus").html("");
 			}
 		}
 	});
-	
 	// Customer name validation
 	$("#crf_customername").focus(function () {
 		if ($("#checkCusType").val() == 2) {

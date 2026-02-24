@@ -405,6 +405,11 @@ $(document).ready(function () {
 function initializeOldCustomerHandlers() {
 	disableAllFieldsForOldCustomer();
 	
+	// ✅ IMPORTANT: Enable customer code immediately for OLD customer search
+	// Customer code MUST be enabled to allow autocomplete/search functionality
+	// This is a REQUIRED field for selecting existing customers
+	$("#crf_customercode").prop("disabled", false);
+	
 	// Person Type Handler for OLD customer
 	$('input:radio[name="crf_person_type"]').change(function () {
 		if ($(this).val() == PERSON_TYPE.NATURAL) {
@@ -419,10 +424,8 @@ function initializeOldCustomerHandlers() {
 			$("#crf_file_person").prop("disabled", true);
 		}
 		
-		// Enable customer code when person type is selected
-		if ($(this).val() != "") {
-			$("#crf_customercode").prop("disabled", false);
-		}
+		// Note: Customer code is already enabled in initializeOldCustomerHandlers()
+		// No need to enable it again here
 		
 		// อัปเดตสถานะ crf_file1 เมื่อเปลี่ยน person type
 		updateCrfFile1Status();

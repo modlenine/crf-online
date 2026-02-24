@@ -284,189 +284,33 @@ $(document).ready(function () {
 
 
     ///////////////////////////////////////////////////////////////////
-    /////////////////// Control View page
-    //////////////////////////////////////////////////////////////////
-    // Company Section Select
-    if ($('#forcrf_company_view').val() == "sln") {
-        $('input:radio[id="view_crf_company_sln"]').prop('checked', true);
-    } else if ($('#forcrf_company_view').val() == "poly") {
-        $('input:radio[id="view_crf_company_poly"]').prop('checked', true);
-    } else if ($('#forcrf_company_view').val() == "ca") {
-        $('input:radio[id="view_crf_company_ca"]').prop('checked', true);
-    }else if($('#forcrf_company_view').val() == "tb"){
-        $('input:radio[id="view_crf_company_tb"]').prop('checked', true);
-    }else if($('#forcrf_company_view').val() == "st"){
-        $('input:radio[id="view_crf_company_st"]').prop('checked', true);
-    }
-
-
-    // Customer Section Select
-    if ($('#forcrf_type_view').val() == 1) {
-        $('input:radio[id="crf_type1_view"]').prop('checked', true);
-        $('.accForcus2').css('display', '');
-    } else if ($('#forcrf_type_view').val() == 2) {
-        $('input:radio[id="crf_type2_view"]').prop('checked', true);
-        $('.cs_br').remove();
-        // $('.account_staff').remove();
-        $('.accForcus1').css('display', 'none');
-    }
-
-
-    /////////////////////////////////////////
-    // Check personal type 
-    /////////////////////////////////////////
-
-    if ($('#forcrf_personal_type_view').val() == "natural") {
-        $('input:radio[id="crf_person_type_natural"]').prop('checked', true);
-        $('#view_file_juristic').css('display', 'none');
-    } else if ($('#forcrf_personal_type_view').val() == "juristic") {
-        $('input:radio[id="crf_person_type_juristic"]').prop('checked', true);
-        $('#view_file_natural').css('display', 'none');
-    }else{
-        $('#view_file_natural').css('display', 'none');
-    }
-
-    /////////////////////////////////////////
-    // Check personal type 
-    /////////////////////////////////////////
-
-
-    // Customer Old Select Section
-    if ($('#forcrf_sub_oldcus_changearea_view').val() == 1) {
-        $('input:checkbox[id="crf_sub_oldcus_changearea_view"]').prop('checked', true);
-    }
-    if ($('#forcrf_sub_oldcus_changeaddress_view').val() == 2) {
-        $('input:checkbox[id="crf_sub_oldcus_changeaddress_view"]').prop('checked', true);
-    }
-    if ($('#forcrf_sub_oldcus_changecredit_view').val() == 3) {
-        $('input:checkbox[id="crf_sub_oldcus_changecredit_view"]').prop('checked', true);
-        $('.change_credit_detail , .change_credit').css('display', '');
-        // if($('#checkStatus').val() == "Completed"){
-        //     $('.change_credit_detail , .change_credit').css('display' , 'none');
-        // }
-    }
-    if ($('#forcrf_sub_oldcus_changefinance_view').val() == 4) {
-        $('input:checkbox[id="crf_sub_oldcus_changefinance_view"]').prop('checked', true);
-    }
-
-    if ($('#forcrf_sub_oldcus_editcustomer_view').val() == 5) {
-        $('input:checkbox[id="crf_sub_oldcus_editcustomer_view"]').prop('checked', true);
-    }
-
-
-    // Control ที่อยู่สำหรับการเปิดใบกำกับภาษี
-    if ($('#forcrf_addresstype_view').val() == "ตาม ภ.พ.20") {
-        $('input:radio[id="crf_addresstype1_view"]').prop('checked', true);
-    } else if ($('#forcrf_addresstype_view').val() == "อื่นๆ") {
-        $('input:radio[id="crf_addresstype2_view"]').prop('checked', true);
-    }
-
-
-    // Control ประเภทบริษัท
-    if ($('#forcrf_companytype_view').val() == 1) {
-        $('input:radio[id="crf_companytype1_view"]').prop('checked', true);
-    } else if ($('#forcrf_companytype_view').val() == 2) {
-        $('#companytype2_view').css('display', '');
-        $('input:radio[id="crf_companytype2_view"]').prop('checked', true);
-    } else if ($('#forcrf_companytype_view').val() == 3) {
-        $('#companytype3_view').css('display', '');
-        $('input:radio[id="crf_companytype3_view"]').prop('checked', true);
-    }
-
-
-
-    // Control ประเภทธุระกิจ
-    if ($('#forcrf_typeofbussi_view').val() == "ผู้ผลิต") {
-        $('input:radio[id="crf_typeofbussi1_view"]').prop('checked', true);
-    } else if ($('#forcrf_typeofbussi_view').val() == "ผู้ค้า") {
-        $('input:radio[id="crf_typeofbussi2_view"]').prop('checked', true);
-    }
-
-
-    // Check mapfile upload
-    if ($('#checkmapfile').val() == "") {
-        $('#viewmapfile').css('display', 'none');
-        $('#mapfilelink').attr('data-target', '');
-    }
-    if ($('#checkfilelink').val() == "") {
-        $('#viewmapurl').css('display', 'none');
-        $('#maplink').attr('href', 'javascript:voide(0)').removeAttr('target');
-    }
-
-
-    const ATTACH_BASE_URL = '/intsys/crf/upload/';
-    const previewAttachment = (triggerSelector, dataAttr, imgSelector, embedSelector) => {
-        $(triggerSelector).off('click.previewAttachment').on('click.previewAttachment', function () {
-            const fileName = $(this).attr(dataAttr);
-            if (!fileName) {
-                return;
-            }
-            const fileExt = fileName.split('.').pop().toLowerCase();
-            const isImage = ['jpg', 'jpeg', 'png'].indexOf(fileExt) !== -1;
-            const fullPath = ATTACH_BASE_URL + fileName;
-            const $img = $(imgSelector);
-            const $embed = $(embedSelector);
-            if (isImage) {
-                $img.attr('src', fullPath).show();
-                $embed.hide();
-            } else {
-                $embed.attr('src', fullPath).show();
-                $img.hide();
-            }
-        });
-    };
-
-    // Controle show file upload to modal
-    previewAttachment('#datafile1', 'data_file1', '#embedshowfile1Img', '#embedshowfile1');
-    previewAttachment('#datafile2', 'data_file2', '#embedshowfile2Img', '#embedshowfile2');
-    previewAttachment('#datafile3', 'data_file3', '#embedshowfile3Img', '#embedshowfile3');
-    previewAttachment('#datafile4', 'data_file4', '#embedshowfile4Img', '#embedshowfile4');
-    previewAttachment('#datafile5', 'data_file5', '#embedshowfile5Img', '#embedshowfile5');
-    previewAttachment('#datafile6', 'data_file6', '#embedshowfile6Img', '#embedshowfile6');
-
-
-    // Control Condition of bill เงื่อนไขการวางบิล
-    if ($('#forcrf_condition_bill_view').val() == 'ส่งของพร้อมวางบิล') {
-        $('input:radio[id="crf_condition_bill1_view"]').prop('checked', true);
-    } else if ($('#forcrf_condition_bill_view').val() == 'วางบิลตามตาราง') {
-        $('input:radio[id="crf_condition_bill2_view"]').prop('checked', true);
-        $('.crf_condition_bill2').css('display', '');
-    } else if ($('#forcrf_condition_bill_view').val() == 'วางบิลทุกวันที่') {
-        $('input:radio[id="crf_condition_bill3_view"]').prop('checked', true);
-        $('.crf_condition_bill3').css('display', '');
-    }
-
-    // Show file on modal
-    previewAttachment('#tablebill', 'data_tablebill', '#embedshowfile7Img', '#embedshowfile7');
-    previewAttachment('#mapbill', 'data_mapbill', '#embedshowfile8Img', '#embedshowfile8');
-    previewAttachment('#mapbill2', 'data_mapbill2', '#embedshowfile9Img', '#embedshowfile9');
-
-
-
-    // Control เงื่อนไขการรับชำระเงิน
-    if ($('#forcrf_condition_money_view').val() == "โอนเงิน") {
-        $('input:radio[id="crf_condition_money1_view"]').prop('checked', true);
-    } else if ($('#forcrf_condition_money_view').val() == "รับเช็ค") {
-        $('input:radio[id="crf_condition_money2_view"]').prop('checked', true);
-        $('.recive_cheuqe').css('display', '');
-    }
-    
-    // Customer Expected Date Payment Term is now handled by standard dropdown (no JS needed)
-    
-    previewAttachment('#recive_cheuqetable', 'data_recive_cheuqetable', '#embedshowfile10Img', '#embedshowfile10');
-
-
-
-
-    // Control หัวข้อของวงเงินการค้า
-    if ($('#forcrf_finance_view').val() == "ขอวงเงิน") {
-        $('input:radio[id="crf_finance1_view"]').prop('checked', true);
-        $('.finance_request_detail').css('display', '');
-        $('#crf_finance_old_view , .labelcrf_finance_old_view').css('display', 'none');
-    } else if ($('#forcrf_finance_view').val() == "ปรับวงเงิน") {
-        $('input:radio[id="crf_finance2_view"]').prop('checked', true);
-        $('.finance_change_detail').css('display', '');
-    }
+    /////////////////// Control View page - MIGRATED TO view.js
+    ///////////////////////////////////////////////////////////////////
+    // 
+    // ⚠️ NOTICE: All display logic for view_data.php has been moved to:
+    // assets/js/viewdata/view.js
+    // 
+    // This includes:
+    // - Company selection display
+    // - Customer type display
+    // - Person type and file sections
+    // - Old customer checkboxes
+    // - Address types
+    // - Company types
+    // - Business types
+    // - Map file display
+    // - File preview attachments (10 files)
+    // - Billing conditions (เงื่อนไขการวางบิล)
+    // - Payment conditions (เงื่อนไขการรับชำระเงิน)
+    // - Finance conditions (วงเงินการค้าและเงื่อนไขที่ขอเสนอ)
+    // 
+    // Migrated on: 2026-02-24
+    // Previous location: custom.js lines 287-475
+    // Current location: assets/js/viewdata/view.js
+    // 
+    // DO NOT add display logic here. Use view.js for view_data page display.
+    // 
+    ///////////////////////////////////////////////////////////////////
 
 
     // Master input Control Section

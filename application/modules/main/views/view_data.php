@@ -1195,3 +1195,7 @@
 
 
 </body>
+
+<!-- Load View Data Display Controller -->
+<!-- Phase-based display initialization: state, person type, conditions, modal handlers -->
+<script src="<?= base_url('assets/js/viewdata/view.js?v=') . filemtime('assets/js/viewdata/view.js') ?>"></script>

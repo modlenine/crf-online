@@ -8,6 +8,12 @@
 **หน้า View:** `application/modules/main/views/add_th.php`  
 **วันที่อัปเดตล่าสุด:** 2026-02-24
 
+**⚠️ การเปลี่ยนแปลงสำคัญ (2026-02-24):**
+- ✅ แก้ไข Customer Code behavior: Enable ทันทีสำหรับลูกค้าเก่า (ไม่ต้องรอ person type)
+- ✅ Customer Code ใช้สำหรับค้นหา/เลือกลูกค้า (autocomplete) - เป็น Primary Field
+- ✅ **Customer Code จะไม่ถูก lock (readonly) อีกต่อไป** - ผู้ใช้สามารถเปลี่ยนลูกค้าได้ตลอดเวลา
+- ✅ อัปเดตเอกสารทั้งหมดให้สอดคล้องกับการทำงานจริง
+
 ---
 
 ## 🏗️ โครงสร้างไฟล์
@@ -26,7 +32,7 @@ ALERT_MESSAGES = { REQUIRED_*, INVALID_* }
 ```
 
 ### 2. Utility Functions (บรรทัด 59-368)
-- **Lock/Unlock Fields:** `lockCustomerFieldsTH()`, `unlockCustomerFieldsTH()`
+- **Lock/Unlock Fields:** `lockCustomerFieldsTH()` (Does NOT lock customer code), `unlockCustomerFieldsTH()`
 - **Data Management:** `clearCustomerDataTH()`, `clearOldCustomerData()`, `clearNewCustomerData()`
 - **Field Control:** `setFieldsDisabled()`, `setRadiosDisabled()`, `enableAllFieldsForNewCustomer()`
 - **Validation:** `validateRequired()`, `validateRadioChecked()`, `validateCheckboxChecked()`
@@ -124,12 +130,62 @@ function updateFieldStatesBasedOnConditions() {
 
 ## 📦 5 Checkbox Conditions Reference
 
+### 0. ⭐ Customer Code (Primary Field for OLD Customer)
+
+**IMPORTANT:** Customer code is **NOT** controlled by checkboxes and is **NEVER locked**!
+
+**Enable Rule:**
+- ✅ Automatically **enabled immediately** when "ลูกค้าเก่า" (OLD customer) is selected
+- ✅ Does NOT require person type selection
+- ✅ Does NOT require any checkbox to be checked
+- ✅ **Remains enabled even after customer selection** (user can change customers anytime)
+
+**Purpose:**
+- Primary field for **searching/selecting existing customers**
+- Uses **autocomplete functionality** to find customers by code
+- Allows users to **switch between customers** without resetting the form
+
+**Implementation:**
+```javascript
+// addth-main.js line 407-411
+function initializeOldCustomerHandlers() {
+    disableAllFieldsForOldCustomer();
+    
+    // ✅ Enable customer code immediately for search functionality
+    $("#crf_customercode").prop("disabled", false);
+    // ...
+}
+
+// addth-utils.js - lockCustomerFieldsTH()
+const lockCustomerFieldsTH = () => {
+    // ✅ Customer code remains unlocked to allow user to change customer anytime
+    // Do NOT lock crf_customercode - user needs to search/change customers
+    
+    // Lock other fields based on checkbox states...
+};
+```
+
+**After Customer Selection:**
+- Customer data is loaded into form
+- `lockCustomerFieldsTH()` is called
+- **Customer code remains EDITABLE** (user can search for different customer)
+- Checkboxes control which OTHER fields can be edited
+
+**Common Misconception:** ❌
+<del>Customer code becomes readonly after selecting a customer</del>
+
+**Truth:** ✅
+Customer code is ALWAYS editable for OLD customers - users can freely search and switch between customers
+
+---
+
 ### 1. เปลี่ยนเขตการขาย (changearea)
 **Checkbox:** `crf_sub_oldcus_changearea`  
 **Enable Fields:**
 - `crf_salesreps` - Sales Representative
-- `crf_customercode` - รหัสลูกค้า
 - `crf_customername` - ชื่อลูกค้า
+
+**Note:** Customer code is already enabled by default (see Section 0). This checkbox only affects sales reps and customer name.
 
 ### 2. เปลี่ยนที่อยู่ (changeaddress)
 **Checkbox:** `crf_sub_oldcus_changeaddress`  
@@ -157,7 +213,7 @@ function updateFieldStatesBasedOnConditions() {
 ### 5. แก้ไขข้อมูลลูกค้า (editcustomer)
 **Checkbox:** `crf_sub_oldcus_editcustomer`  
 **Enable Fields:**
-- **Basic Info:** `crf_customercode`, `crf_customername`, `crf_cuscompanycreate`, `crf_customertaxid`, `crf_customerbranch`, `crf_textmemo`
+- **Basic Info:** `crf_customername`, `crf_cuscompanycreate`, `crf_customertaxid`, `crf_customerbranch`, `crf_textmemo`
 - **Contact:** `crf_namecontact`, `crf_telcontact`, `crf_faxcontact`, `crf_emailcontact`
 - **Other:** `crf_regiscost`, `crf_mapurl`, `crf_mapfile`
 - **Billing Conditions:** `crf_condition_bill`, `crf_condition_money`
@@ -165,8 +221,9 @@ function updateFieldStatesBasedOnConditions() {
 - **Files:** ทั้งหมด (file1-6 สำหรับนิติบุคคล, file_person สำหรับบุคคลธรรมดา)
 - **Edit Buttons:** แสดง edit buttons (map file, map url, primary manager)
 
-**⚠️ สำคัญ:** เงื่อนไขนี้**ไม่รวมที่อยู่ (address)**  
-ถ้าต้องการแก้ที่อยู่ ต้องติ๊ก "เปลี่ยนที่อยู่" (changeaddress) แยกต่างหาก
+**⚠️ สำคัญ:** 
+- เงื่อนไขนี้**ไม่รวมที่อยู่ (address)** - ถ้าต้องการแก้ที่อยู่ ต้องติ๊ก "เปลี่ยนที่อยู่" (changeaddress)
+- เงื่อนไขนี้**ไม่รวม Customer Code** - เพราะ code เป็น primary key ที่ใช้ระบุลูกค้า ไม่สามารถเปลี่ยนได้
 
 ---
 
@@ -187,10 +244,12 @@ function updateFieldStatesBasedOnConditions() {
 4. lockCustomerFieldsTH()
    - Lock fields based on current checkbox states
    - Check isEditCustomer, isChangeAddress, isChangeArea
+   - ✅ Customer code remains UNLOCKED (user can change customers anytime)
    ↓
 5. updateFieldStatesBasedOnConditions() ← ⭐ CRITICAL STEP
    - Re-apply field states based on checked conditions
    - Ensure Union logic overrides any hard-coded disables
+   - Customer code is always editable for searching/changing customers
 ```
 
 ### ⚠️ หากขาด Step 5 → ฟิลด์จะถูก lock ทั้งหมดแม้ว่าผู้ใช้ติ๊กเงื่อนไขไว้แล้ว
@@ -266,7 +325,7 @@ updateFieldStatesBasedOnConditions();  // ⭐ Re-apply field states
 Logic นี้อยู่ใน Step 4 ของ `updateFieldStatesBasedOnConditions()`
 
 ### 4. ฟิลด์ที่ต้องระวัง
-- `crf_customercode` - เปิดได้ทั้ง changearea และ editcustomer
+- `crf_customercode` - **เปิดอัตโนมัติ** เมื่อเลือก "ลูกค้าเก่า" (ไม่ถูกควบคุมโดย checkbox), **ไม่ถูก lock** - ผู้ใช้สามารถค้นหา/เปลี่ยนลูกค้าได้ตลอดเวลา
 - `crf_datebill`, `crf_mapbill2`, `crf_recive_cheuqetable`, `crf_recive_cheuqedetail` - เปิดได้เฉพาะ editcustomer
 - `crf_file1` - เปิดได้ทั้ง changeaddress (นิติบุคคล) และ editcustomer (นิติบุคคล)
 
