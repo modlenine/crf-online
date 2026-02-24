@@ -1869,7 +1869,8 @@ class Main_model extends CI_Model
                 }
             }
 
-            $output .= "<ul class='list-group'>";
+            // Build beautiful HTML output (similar to addcustomer.php)
+            $output .= "<ul class='list-group mb-1'>";
             $output .= "<a href='javascript:void(0)' class='selectCusCode' 
             data_crf_cusid = '$rs->crfcus_id'
             data_crf_customercode = '$rs->crfcus_code'
@@ -1927,8 +1928,49 @@ class Main_model extends CI_Model
             data_ax_paymtermid = '$axPaymtermid'
             data_ax_credittermid = '{$axCreditTermInfo['id']}'
             data_ax_credittermname = '{$axCreditTermInfo['name']}'
+            >";
             
-            ><li class='list-group-item'>" . $rs->crfcus_code . "&nbsp;" . $rs->crfcus_name . " (" . $rs->crfcus_area . ")" . "</li></a>";
+            // Build beautiful list item
+            $output .= "<li class='list-group-item d-flex justify-content-between align-items-start'>";
+            $output .= "<div class='me-3'>";
+            
+            // Main info (bold)
+            $output .= "<div class='fw-bold'>" . htmlspecialchars($rs->crfcus_code) . " " . htmlspecialchars($rs->crfcus_name) . " (" . htmlspecialchars($rs->crfcus_area) . ")</div>";
+            
+            // Address (small, muted)
+            if (!empty($rs->crfcus_address)) {
+                $output .= "<div class='small text-muted'>" . htmlspecialchars($rs->crfcus_address) . "</div>";
+            }
+            
+            // Contact info (small, secondary)
+            $contactParts = array();
+            if (!empty($rs->crfcus_phone)) {
+                $contactParts[] = "โทร. " . htmlspecialchars($rs->crfcus_phone);
+            }
+            if (!empty($rs->crfcus_fax)) {
+                $contactParts[] = "แฟกซ์ " . htmlspecialchars($rs->crfcus_fax);
+            }
+            if (!empty($rs->crfcus_email)) {
+                $contactParts[] = htmlspecialchars($rs->crfcus_email);
+            }
+            if (count($contactParts) > 0) {
+                $output .= "<div class='small text-secondary'>" . implode(" | ", $contactParts) . "</div>";
+            }
+            
+            // Credit term info from AX (small, secondary)
+            if (!empty($axCreditTermInfo['name'])) {
+                $output .= "<div class='small text-secondary'>เครดิต: " . htmlspecialchars($axCreditTermInfo['name']) . "</div>";
+            }
+            
+            $output .= "</div>";
+            
+            // Credit limit badge
+            if (!empty($axCreditMax)) {
+                $output .= "<span class='badge bg-light text-dark ms-3'>" . htmlspecialchars($axCreditMax) . "</span>";
+            }
+            
+            $output .= "</li>";
+            $output .= "</a>";
             $output .= "</ul>";
         }
 
@@ -2050,7 +2092,8 @@ class Main_model extends CI_Model
                 }
             }
 
-            $output .= "<ul class='list-group'>";
+            // Build beautiful HTML output (similar to addcustomer.php)
+            $output .= "<ul class='list-group mb-1'>";
             $output .= "<a href='javascript:void(0)' class='selectCusName' 
                 data_crf_cusid = '$rs->crfcus_id'
                 data_crf_customercode = '$rs->crfcus_code'
@@ -2106,8 +2149,49 @@ class Main_model extends CI_Model
                 data_ax_paymtermid = '$axPaymtermid'
                 data_ax_credittermid = '{$axCreditTermInfo['id']}'
                 data_ax_credittermname = '{$axCreditTermInfo['name']}'
-                
-                ><li class='list-group-item'>" . $rs->crfcus_name . "&nbsp;" . $rs->crfcus_code . " (" . $rs->crfcus_area . ")" . "</li></a>";
+                >";
+            
+            // Build beautiful list item
+            $output .= "<li class='list-group-item d-flex justify-content-between align-items-start'>";
+            $output .= "<div class='me-3'>";
+            
+            // Main info (bold) - Note: Name first, then code
+            $output .= "<div class='fw-bold'>" . htmlspecialchars($rs->crfcus_name) . " " . htmlspecialchars($rs->crfcus_code) . " (" . htmlspecialchars($rs->crfcus_area) . ")</div>";
+            
+            // Address (small, muted)
+            if (!empty($rs->crfcus_address)) {
+                $output .= "<div class='small text-muted'>" . htmlspecialchars($rs->crfcus_address) . "</div>";
+            }
+            
+            // Contact info (small, secondary)
+            $contactParts = array();
+            if (!empty($rs->crfcus_phone)) {
+                $contactParts[] = "โทร. " . htmlspecialchars($rs->crfcus_phone);
+            }
+            if (!empty($rs->crfcus_fax)) {
+                $contactParts[] = "แฟกซ์ " . htmlspecialchars($rs->crfcus_fax);
+            }
+            if (!empty($rs->crfcus_email)) {
+                $contactParts[] = htmlspecialchars($rs->crfcus_email);
+            }
+            if (count($contactParts) > 0) {
+                $output .= "<div class='small text-secondary'>" . implode(" | ", $contactParts) . "</div>";
+            }
+            
+            // Credit term info from AX (small, secondary)
+            if (!empty($axCreditTermInfo['name'])) {
+                $output .= "<div class='small text-secondary'>เครดิต: " . htmlspecialchars($axCreditTermInfo['name']) . "</div>";
+            }
+            
+            $output .= "</div>";
+            
+            // Credit limit badge
+            if (!empty($axCreditMax)) {
+                $output .= "<span class='badge bg-light text-dark ms-3'>" . htmlspecialchars($axCreditMax) . "</span>";
+            }
+            
+            $output .= "</li>";
+            $output .= "</a>";
             $output .= "</ul>";
         }
 
