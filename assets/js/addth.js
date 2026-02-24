@@ -359,22 +359,328 @@ function clearNewCustomerData() {
 	$("input:checkbox").prop("checked", false);
 }
 
+// ============================================================================
+// Central Function - Field State Management (Union Logic)
+// ============================================================================
+
 /**
- * ฟังก์ชันตรวจสอบและควบคุมสถานะของฟิลด์ crf_file1
+ * ฟังก์ชัน Central สำหรับจัดการสถานะฟิลด์ทั้งหมดตามเงื่อนไขที่เลือก
+ * ใช้ระบบ Union: เมื่อติ๊กหลายเงื่อนไข ฟิลด์ที่เปิดจะเป็นการรวมกัน (ไม่ตีกัน)
  */
-function updateCrfFile1Status() {
+function updateFieldStatesBasedOnConditions() {
+	// ========================================================================
+	// Step 1: ตรวจสอบว่าติ๊ก checkbox อะไรบ้าง
+	// ========================================================================
+	const isChangeArea = $('input:checkbox[name="crf_sub_oldcus_changearea"]').prop("checked");
 	const isChangeAddress = $('input:checkbox[name="crf_sub_oldcus_changeaddress"]').prop("checked");
+	const isChangeFinance = $('input:checkbox[name="crf_sub_oldcus_changefinance"]').prop("checked");
+	const isChangeCredit = $('input:checkbox[name="crf_sub_oldcus_changecredit"]').prop("checked");
 	const isEditCustomer = $('input:checkbox[name="crf_sub_oldcus_editcustomer"]').prop("checked");
 	const isJuristicPerson = $('input:radio[name="crf_person_type"]:checked').val() === "juristic";
 	
-	// เปิดใช้งาน crf_file1 หาก:
-	// 1. เลือก "เปลี่ยนที่อยู่" และเป็น juristic person
-	// 2. เลือก "แก้ไขข้อมูลลูกค้า" และเป็น juristic person
-	if ((isChangeAddress || isEditCustomer) && isJuristicPerson) {
-		$("#crf_file1").prop("disabled", false);
-	} else {
-		$("#crf_file1").prop("disabled", true);
+	// ถ้าไม่มีเงื่อนไขใดๆ เลือก ไม่ต้องทำอะไร
+	if (!isChangeArea && !isChangeAddress && !isChangeFinance && !isChangeCredit && !isEditCustomer) {
+		return;
 	}
+	
+	// ========================================================================
+	// Step 2: Reset ทุกฟิลด์เป็น disabled ก่อน 
+	// ========================================================================
+	// Text/Readonly fields
+	$("#crf_salesreps").prop("readonly", true).addClass("bg-light");
+	$("#crf_customercode").prop("readonly", true).addClass("bg-light");
+	$("#crf_customername").prop("readonly", true).addClass("bg-light");
+	$("#crf_cuscompanycreate").prop("readonly", true).addClass("bg-light");
+	$("#crf_customertaxid").prop("readonly", true).addClass("bg-light");
+	$("#crf_customerbranch").prop("readonly", true).addClass("bg-light");
+	$("#crf_addressname").prop("readonly", true).addClass("bg-light");
+	$("#crf_namecontact").prop("readonly", true).addClass("bg-light");
+	$("#crf_telcontact").prop("readonly", true).addClass("bg-light");
+	$("#crf_faxcontact").prop("readonly", true).addClass("bg-light");
+	$("#crf_emailcontact").prop("readonly", true).addClass("bg-light");
+	$("#crf_etax_emailcontact").prop("readonly", true).addClass("bg-light");
+	$("#crf_regiscost").prop("readonly", true).addClass("bg-light");
+	$("#crf_mapurl").prop("readonly", true).addClass("bg-light");
+	$("#crf_textmemo").prop("readonly", true);
+	$("#crf_customer_product").prop("readonly", true).addClass("bg-light");
+	$("#crf_forecast").prop("readonly", true).addClass("bg-light");
+	$("#crf_creditterm").prop("readonly", true).addClass("bg-light");
+	$("#crf_finance_req_number").prop("readonly", true).addClass("bg-light");
+	
+	// File inputs
+	$("#crf_file1").prop("disabled", true);
+	$("#crf_file2").prop("disabled", true);
+	$("#crf_file3").prop("disabled", true);
+	$("#crf_file4").prop("disabled", true);
+	$("#crf_file5").prop("disabled", true);
+	$("#crf_file6").prop("disabled", true);
+	$("#crf_mapfile").prop("disabled", true);
+	$("#crf_file_person").prop("disabled", true);
+	
+	// Other inputs
+	$("#crf_datebill").prop("disabled", true);
+	$("#crf_mapbill2").prop("disabled", true);
+	$("#crf_recive_cheuqetable").prop("disabled", true);
+	$("#crf_recive_cheuqedetail").prop("readonly", true).addClass("bg-light");
+	
+	// Radio buttons
+	$('input:radio[name="crf_addresstype"]').prop("disabled", true);
+	$('input:radio[name="crf_companytype"]').prop("disabled", true);
+	$('input:radio[name="crf_typeofbussi"]').prop("disabled", true);
+	$('input:radio[name="crf_condition_bill"]').prop("disabled", true);
+	$('input:radio[name="crf_condition_money"]').prop("disabled", true);
+	$('input:radio[name="crf_finance"]').prop("disabled", true);
+	
+	// Credit term fields
+	$("#crf_condition_credit").prop("disabled", true);
+	$("#showcredit2").prop("disabled", true);
+	$("#crf_creditterm2").prop("disabled", true);
+	$("#crf_arcustdueid").prop("disabled", true);
+	
+	// Finance change fields
+	$("#crf_finance_change_status").prop("disabled", true);
+	$("#crf_finance_change_number").prop("readonly", true).addClass("bg-light");
+	$("#crf_finance_change_total").prop("readonly", true).addClass("bg-light");
+	
+	// ========================================================================
+	// Step 3: เปิดฟิลด์ตามเงื่อนไขที่ติ๊ก (UNION)
+	// ========================================================================
+	
+	// --- เงื่อนไข 1: เปลี่ยนเขตการขาย ---
+	if (isChangeArea) {
+		$("#crf_salesreps").prop("readonly", false).removeClass("bg-light");
+		$("#crf_customercode").prop("readonly", false).removeClass("bg-light");
+		$("#crf_customername").prop("readonly", false).removeClass("bg-light");
+	}
+	
+	// --- เงื่อนไข 2: เปลี่ยนที่อยู่ ---
+	if (isChangeAddress) {
+		$("#crf_addressname").prop("readonly", false).removeClass("bg-light");
+		$('input:radio[name="crf_addresstype"]').prop("disabled", false);
+		// crf_file1 handled below with person type
+	}
+	
+	// --- เงื่อนไข 3: ปรับวงเงิน ---
+	if (isChangeFinance) {
+		$('input:radio[name="crf_finance"]').prop("disabled", false);
+		$("#crf_finance_change_status").prop("disabled", false);
+		$("#crf_finance_change_number").prop("readonly", false).removeClass("bg-light");
+		$("#crf_finance_change_total").prop("readonly", false).removeClass("bg-light");
+	}
+	
+	// --- เงื่อนไข 4: ปรับ Credit Term ---
+	if (isChangeCredit) {
+		// Keep crf_creditterm disabled (from DB, read-only)
+		$("#crf_condition_credit").prop("disabled", false);
+		$("#showcredit2").prop("disabled", false);
+		$("#crf_creditterm2").prop("disabled", false);
+		// Expected date payment field controlled by checkbox in credit term section
+	}
+	
+	// --- เงื่อนไข 5: แก้ไขข้อมูลลูกค้า ---
+	if (isEditCustomer) {
+		// Customer code (เปิดให้แก้ไขได้)
+		$("#crf_customercode").prop("readonly", false).removeClass("bg-light");
+		
+		// Basic info
+		$("#crf_customername").prop("readonly", false).removeClass("bg-light");
+		$("#crf_cuscompanycreate").prop("readonly", false).removeClass("bg-light");
+		$("#crf_customertaxid").prop("readonly", false).removeClass("bg-light");
+		$("#crf_customerbranch").prop("readonly", false).removeClass("bg-light");
+		$("#crf_textmemo").prop("readonly", false);
+		
+		// Contact info
+		$("#crf_namecontact").prop("readonly", false).removeClass("bg-light");
+		$("#crf_telcontact").prop("readonly", false).removeClass("bg-light");
+		$("#crf_faxcontact").prop("readonly", false).removeClass("bg-light");
+		$("#crf_emailcontact").prop("readonly", false).removeClass("bg-light");
+		$("#crf_regiscost").prop("readonly", false).removeClass("bg-light");
+		$("#crf_mapurl").prop("readonly", false).removeClass("bg-light");
+		$("#crf_mapfile").prop("disabled", false);
+		
+		// Billing conditions
+		$('input:radio[name="crf_condition_bill"]').prop("disabled", false);
+		$('input:radio[name="crf_condition_money"]').prop("disabled", false);
+		
+		// Billing detail fields
+		$("#crf_datebill").prop("disabled", false);
+		$("#crf_mapbill2").prop("disabled", false);
+		$("#crf_recive_cheuqetable").prop("disabled", false);
+		$("#crf_recive_cheuqedetail").prop("readonly", false).removeClass("bg-light");
+		
+		// Files based on person type handled below
+	}
+	
+	// ========================================================================
+	// Step 4: จัดการ Special Cases
+	// ========================================================================
+	
+	// File handling ตามประเภทบุคคล
+	if (isJuristicPerson) {
+		// นิติบุคคล
+		if (isChangeAddress) {
+			$("#crf_file1").prop("disabled", false); // ภพ20
+		}
+		
+		if (isEditCustomer) {
+			// เปิดไฟล์เอกสารนิติบุคคลทั้งหมด
+			$("#crf_file1").prop("disabled", false);
+			$("#crf_file2").prop("disabled", false);
+			$("#crf_file3").prop("disabled", false);
+			$("#crf_file4").prop("disabled", false);
+			$("#crf_file5").prop("disabled", false);
+			$("#crf_file6").prop("disabled", false);
+		}
+	} else {
+		// บุคคลธรรมดา
+		if (isEditCustomer) {
+			$("#crf_file_person").prop("disabled", false); // สำเนาบัตรประชาชน
+		}
+	}
+	
+	// ซ่อน/แสดง edit buttons ถ้าเลือก "แก้ไขข้อมูลลูกค้า"
+	if (isEditCustomer) {
+		$("#editMapFile_addpage, #editMapUrl_addpage, #editPrimanage_addpage").css("display", "");
+	} else {
+		$("#editMapFile_addpage, #editMapUrl_addpage, #editPrimanage_addpage").css("display", "none");
+	}
+}
+
+// ============================================================================
+// Credit Term Management Functions
+// ============================================================================
+
+/**
+ * Helper function: Check if user_submit button should be enabled for credit term changes
+ * Enable button if ANY of these conditions are met:
+ * 1. crf_change_creditterm is checked AND condition is selected
+ * 2. crf_change_expected_date is checked
+ */
+function checkAndUpdateSubmitButtonCredit() {
+	var creditTermChecked = $('input[name=crf_change_creditterm]').is(':checked');
+	var expectedDateChecked = $('input[name=crf_change_expected_date]').is(':checked');
+	var hasCreditCondition = $("#crf_condition_credit").val() != "";
+	
+	// Enable if: (credit term checked AND has condition) OR (expected date checked)
+	var shouldEnable = (creditTermChecked && hasCreditCondition) || expectedDateChecked;
+	
+	$("#user_submit").prop("disabled", !shouldEnable);
+}
+
+// ============================================================================
+// Edit Customer Data Functions
+// ============================================================================
+
+/**
+ * ฟังก์ชันสำหรับเปิด/ปิดการแก้ไขฟิลด์ข้อมูลพื้นฐาน
+ */
+function toggleBasicInfoFields(enabled) {
+	const fieldAction = enabled ? 'removeClass' : 'addClass';
+	
+	$("#crf_customername, #crf_cuscompanycreate, #crf_customertaxid, #crf_customerbranch")
+		.prop("readonly", !enabled)
+		[fieldAction]("bg-light");
+	
+	$("#crf_textmemo").prop("readonly", !enabled);
+}
+
+/**
+ * ฟังก์ชันสำหรับเปิด/ปิดการแก้ไขข้อมูลติดต่อ
+ */
+function toggleContactFields(enabled) {
+	const fields = "#crf_namecontact, #crf_telcontact, #crf_faxcontact, #crf_emailcontact, #crf_regiscost, #crf_mapurl";
+	
+	if (enabled) {
+		$(fields).prop("readonly", false);
+		$("#crf_mapfile").prop("disabled", false);
+	} else {
+		$(fields + ", #crf_mapfile").prop("disabled", true);
+	}
+}
+
+/**
+ * ฟังก์ชันสำหรับเปิด/ปิดปุ่มแก้ไข
+ */
+function toggleEditButtons(visible) {
+	const display = visible ? "" : "none";
+	$("#editMapFile_addpage, #editMapUrl_addpage, #editPrimanage_addpage").css("display", display);
+}
+
+/**
+ * ฟังก์ชันสำหรับเปิด/ปิดเงื่อนไขการวางบิลและการรับชำระเงิน
+ */
+function toggleBillingConditions(enabled) {
+	$('input:radio[name="crf_condition_bill"]').prop("disabled", !enabled);
+	$('input:radio[name="crf_condition_money"]').prop("disabled", !enabled);
+}
+
+/**
+ * ฟังก์ชันสำหรับจัดการไฟล์ตามประเภทบุคคล
+ */
+function handlePersonTypeFiles() {
+	const personType = $('input:radio[name="crf_person_type"]:checked').val();
+	
+	if (personType === "natural") {
+		// บุคคลธรรมดา
+		$("#for_natural").show();
+		$("#for_juristic").hide();
+		$("#crf_file_person").prop("disabled", false);
+	} else if (personType === "juristic") {
+		// นิติบุคคล
+		$("#for_natural").hide();
+		$("#for_juristic").show();
+		$("#crf_file_person").prop("disabled", true);
+		
+		// เปิดให้อัปโหลดไฟล์เอกสารนิติบุคคล
+		$("#crf_file1, #crf_file2, #crf_file3, #crf_file4, #crf_file5, #crf_file6")
+			.prop("disabled", false);
+	}
+}
+
+/**
+ * Setup Edit Buttons Event Handlers
+ */
+function setupEditButtonHandlers() {
+	// ลบ event handlers เก่าก่อนเพื่อป้องกัน duplicate
+	$("#editMapUrl_addpage").off("click").on("click", function () {
+		$("#foredit1").toggle();
+	});
+
+	$("#editMapFile_addpage").off("click").on("click", function () {
+		$("#foredit2").toggle();
+	});
+
+	$("#editPrimanage_addpage").off("click").on("click", function () {
+		$(".newPrimanage").show();
+		$("#showPrimanage").html("");
+		$("#checkprimanagenull").val("1");
+	});
+}
+
+/**
+ * Setup Field Change Handlers - เมื่อมีการเปลี่ยนแปลงข้อมูล จะเปิดปุ่ม Submit
+ */
+function setupFieldChangeHandlers() {
+	const watchedFields = [
+		"#crf_namecontact",
+		"#crf_customername",
+		"#crf_telcontact",
+		"#crf_faxcontact",
+		"#crf_emailcontact",
+		"#crf_regiscost",
+		"#crf_mapurl",
+		"#crf_mapfile",
+		"#crf_file1",
+		"#crf_file2",
+		"#crf_file3",
+		"#crf_file4",
+		"#crf_file5",
+		"#crf_file6"
+	].join(", ");
+
+	$(watchedFields).off("change.editCustomer").on("change.editCustomer", function () {
+		$("#user_submit").prop("disabled", false);
+	});
 }
 
 // ============================================================================
@@ -487,8 +793,8 @@ $(document).ready(function () {
 						$("#crf_customercode").prop("disabled", false);
 					}
 					
-					// อัปเดตสถานะ crf_file1 เมื่อเปลี่ยน person type
-					updateCrfFile1Status();
+					// อัปเดต central function เมื่อเปลี่ยน person type
+					updateFieldStatesBasedOnConditions();
 				});
 
 				// Variable ที่ไม่ได้ใช้งานถูกลบออก
@@ -555,31 +861,22 @@ $(document).ready(function () {
 						if ($(this).val() == PERSON_TYPE.NATURAL) {
 							$("#for_natural").css("display", "");
 							$("#for_juristic").css("display", "none");
-							// ไฟล์1
 							$("#crf_file_person").prop("disabled", false);
 						} else if ($(this).val() == PERSON_TYPE.JURISTIC) {
 							$("#for_natural").css("display", "none");
 							$("#for_juristic").css("display", "");
-							// ไฟล์1
 							$("#crf_file_person").prop("disabled", true);
-							// ไฟล์1
+							// เปิดไฟล์เอกสารนิติบุคคล
 							$("#crf_file1").prop("disabled", false);
-
-							// ไฟล์1
 							$("#crf_file2").prop("disabled", false);
-
-							// ไฟล์1
 							$("#crf_file3").prop("disabled", false);
-
-							// ไฟล์1
 							$("#crf_file4").prop("disabled", false);
-
-							// ไฟล์1
 							$("#crf_file5").prop("disabled", false);
-
-							// ไฟล์1
 							$("#crf_file6").prop("disabled", false);
 						}
+						
+						// อัปเดต central function เมื่อเปลี่ยน person type
+						updateFieldStatesBasedOnConditions();
 					}
 				});
 
@@ -604,115 +901,68 @@ $(document).ready(function () {
 				$('input:checkbox[name="crf_sub_oldcus_changearea"]').change(
 					function () {
 						if ($(this).prop("checked") == true) {
-							// เปิดให้แก้ไขเฉพาะ crf_salesreps, crf_customercode, crf_customername
-							$("#crf_salesreps").prop("readonly", false).removeClass("bg-light");
-							$("#crf_customercode").prop("readonly", false).removeClass("bg-light");
-							$("#crf_customername").prop("readonly", false).removeClass("bg-light");
+							// เรียกใช้ฟังก์ชัน central เพื่อ update ฟิลด์ทั้งหมด
+							updateFieldStatesBasedOnConditions();
 							
+							// Setup validation handlers สำหรับ Sales Reps
 							$("#crf_salesreps").keyup(function () {
 								if ($(this).val() != "") {
 									$("#user_submit").prop("disabled", false);
 								}
 							});
 							
-							// ปิดฟิลด์อื่นๆ ทั้งหมด (disabled)
-							$("#crf_cusid").prop("readonly", true).addClass("bg-light");
-							$("#crf_customertaxid").prop("readonly", true).addClass("bg-light");
-							$("#crf_customerbranch").prop("readonly", true).addClass("bg-light");
-							$("#crf_cuscompanycreate").prop("readonly", true).addClass("bg-light");
-							$("#crf_addressname").prop("readonly", true).addClass("bg-light");
-							$("#crf_namecontact").prop("readonly", true).addClass("bg-light");
-							$("#crf_telcontact").prop("readonly", true).addClass("bg-light");
-							$("#crf_faxcontact").prop("readonly", true).addClass("bg-light");
-							$("#crf_emailcontact").prop("readonly", true).addClass("bg-light");
-							$("#crf_regiscost").prop("readonly", true).addClass("bg-light");
-							$("#crf_mapurl").prop("readonly", true).addClass("bg-light");
-							$("#crf_customer_product").prop("readonly", true).addClass("bg-light");
-							$("#crf_forecast").prop("readonly", true).addClass("bg-light");
-							$("#crf_creditterm").prop("readonly", true).addClass("bg-light");
-							$("#crf_finance_req_number").prop("readonly", true).addClass("bg-light");
-							$("#oldCreditTerm").prop("readonly", true).addClass("bg-light");
+							$("#crf_salesreps").blur(function () {
+								if ($(this).val() == "") {
+									$("#alert_salesreps").html(
+										'<div class="alert alert-danger" role="alert">กรุณาระบุข้อมูล Sales Reps ด้วยค่ะ</div>'
+									);
+									$("#crf_customername").val("");
+								} else {
+									if (minsalesreps($(this).val()) == false) {
+										$("#alert_salesreps").html(
+											'<div class="alert alert-danger" role="alert">กรุณาระบุข้อมูล Sales Reps ให้ถูกต้องด้วยค่ะ ต้องขึ้นต้นด้วย M หรือ D แล้วตามด้วยตัวเลข 4</div>'
+										);
+										$("#user_submit").prop("disabled", true);
+									} else {
+										$("#alert_salesreps").html("");
+										$("#user_submit").prop("disabled", false);
+									}
+								}
+							});
 							
-							// ปิด file inputs
-							$("#crf_file1").prop("disabled", true);
-							$("#crf_file2").prop("disabled", true);
-							$("#crf_file3").prop("disabled", true);
-							$("#crf_file4").prop("disabled", true);
-							$("#crf_file5").prop("disabled", true);
-							$("#crf_file6").prop("disabled", true);
-							$("#crf_mapfile").prop("disabled", true);
+							$("#crf_salesreps").focusout(function () {
+								if ($(this).val() == "") {
+									$("#alert_salesreps").html(
+										'<div class="alert alert-danger" role="alert">กรุณาระบุข้อมูล Sales Reps ด้วยค่ะ</div>'
+									);
+									$("#crf_customername").val("");
+								} else {
+									if (minsalesreps($(this).val()) == false) {
+										$("#alert_salesreps").html(
+											'<div class="alert alert-danger" role="alert">กรุณาระบุข้อมูล Sales Reps ให้ถูกต้องด้วยค่ะ ต้องขึ้นต้นด้วย M หรือ D แล้วตามด้วยตัวเลข 4</div>'
+										);
+										$("#user_submit").prop("disabled", true);
+									} else {
+										$("#alert_salesreps").html("");
+										$("#user_submit").prop("disabled", false);
+									}
+								}
+							});
 							
-							// ปิดฟิลด์อื่นๆ เพิ่มเติม
-							$("#crf_datebill").prop("disabled", true);
-							$("#crf_mapbill2").prop("disabled", true);
-							$("#crf_recive_cheuqetable").prop("disabled", true);
-							
-							// ปิด radio buttons
-							$('input:radio[name="crf_addresstype"]').prop("disabled", true);
-							$('input:radio[name="crf_companytype"]').prop("disabled", true);
-							$('input:radio[name="crf_typeofbussi"]').prop("disabled", true);
-							$('input:radio[name="crf_condition_bill"]').prop("disabled", true);
-							$('input:radio[name="crf_condition_money"]').prop("disabled", true);
-							$('input:radio[name="crf_finance"]').prop("disabled", true);
+							$("#crf_salesreps").keyup(function () {
+								if ($(this).val() == "") {
+									$("#alert_salesreps").html(
+										'<div class="alert alert-danger" role="alert">กรุณาระบุข้อมูล Sales Reps ด้วยค่ะ</div>'
+									);
+									$("#crf_customername").val("");
+								} else {
+									$("#alert_salesreps").html("");
+								}
+							});
 						} else {
-							$("#crf_salesreps").prop("readonly", true).addClass("bg-light");
-							
-							// เปิดฟิลด์กลับตามสถานะเดิม (อาจจะต้อง enable ตามเงื่อนไขอื่นๆ)
-							// ไม่ enable ทั้งหมดทันที เพราะอาจมีเงื่อนไขอื่นที่ควบคุมว่าฟิลด์ไหนควร disable
+							// เรียกใช้ฟังก์ชัน central เมื่อยกเลิกการเลือก
+							updateFieldStatesBasedOnConditions();
 						}
-
-						// เช็คความถูกต้องของการกรอกข้อมูล
-						$("#crf_salesreps").blur(function () {
-							if ($(this).val() == "") {
-								$("#alert_salesreps").html(
-									'<div class="alert alert-danger" role="alert">กรุณาระบุข้อมูล Sales Reps ด้วยค่ะ</div>'
-								);
-								$("#crf_customername").val("");
-							} else {
-								// เช็คความถูกต้องของการกรอก sales reps
-								if (minsalesreps($(this).val()) == false) {
-									$("#alert_salesreps").html(
-										'<div class="alert alert-danger" role="alert">กรุณาระบุข้อมูล Sales Reps ให้ถูกต้องด้วยค่ะ ต้องขึ้นต้นด้วย M หรือ D แล้วตามด้วยตัวเลข 4</div>'
-									);
-									// $(this).val('');
-									$("#user_submit").prop("disabled", true);
-								} else {
-									$("#alert_salesreps").html("");
-									$("#user_submit").prop("disabled", false);
-								}
-							}
-						});
-						$("#crf_salesreps").focusout(function () {
-							if ($(this).val() == "") {
-								$("#alert_salesreps").html(
-									'<div class="alert alert-danger" role="alert">กรุณาระบุข้อมูล Sales Reps ด้วยค่ะ</div>'
-								);
-								$("#crf_customername").val("");
-							} else {
-								// เช็คความถูกต้องของการกรอก sales reps
-								if (minsalesreps($(this).val()) == false) {
-									$("#alert_salesreps").html(
-										'<div class="alert alert-danger" role="alert">กรุณาระบุข้อมูล Sales Reps ให้ถูกต้องด้วยค่ะ ต้องขึ้นต้นด้วย M หรือ D แล้วตามด้วยตัวเลข 4</div>'
-									);
-									// $(this).val('');
-									$("#user_submit").prop("disabled", true);
-								} else {
-									$("#alert_salesreps").html("");
-									$("#user_submit").prop("disabled", false);
-								}
-							}
-						});
-						$("#crf_salesreps").keyup(function () {
-							if ($(this).val() == "") {
-								$("#alert_salesreps").html(
-									'<div class="alert alert-danger" role="alert">กรุณาระบุข้อมูล Sales Reps ด้วยค่ะ</div>'
-								);
-								$("#crf_customername").val("");
-							} else {
-								$("#alert_salesreps").html("");
-							}
-						});
-						// Check ข้อมูลช่อง Sale Rep ว่ามีการกรอกข้อมูลหรือไม่
 					}
 				);
 
@@ -720,39 +970,15 @@ $(document).ready(function () {
 				$('input:checkbox[name="crf_sub_oldcus_changeaddress"]').change(
 					function () {
 						if ($(this).prop("checked") == true) {
-							$("#crf_addressname").prop("readonly", false);
-							$("#crf_file1").prop("disabled", false);
-							$("#crf_file1").attr("required", "");
-							$('input:radio[name="crf_addresstype"]').prop("disabled", false);
+							// เรียกใช้ฟังก์ชัน central เพื่อ update ฟิลด์ทั้งหมด
+							updateFieldStatesBasedOnConditions();
 							
-							// ปิดฟิลด์ข้อมูลติดต่อ
-							$("#crf_namecontact").prop("readonly", true).addClass("bg-light");
-							$("#crf_telcontact").prop("readonly", true).addClass("bg-light");
-							$("#crf_faxcontact").prop("readonly", true).addClass("bg-light");
-							$("#crf_emailcontact").prop("readonly", true).addClass("bg-light");
-							$("#crf_etax_emailcontact").prop("readonly", true).addClass("bg-light");
-							
-							// ปิดไฟล์อื่นๆ ที่ไม่เกี่ยวข้อง
-							$("#crf_file2").prop("disabled", true);
-							$("#crf_file3").prop("disabled", true);
-							$("#crf_file4").prop("disabled", true);
-							$("#crf_file5").prop("disabled", true);
-							$("#crf_file6").prop("disabled", true);
-							
-							// ปิดช่องอื่นๆ ที่ไม่เกี่ยวข้อง
-							$("#crf_datebill").prop("disabled", true);
-							$("#crf_mapbill2").prop("disabled", true);
-							$("#crf_recive_cheuqetable").prop("disabled", true);
-							
-							// เรียกใช้ฟังก์ชันอัปเดตสถานะ crf_file1
-							updateCrfFile1Status();
-
+							// Setup validation handlers
 							$("#crf_addressname").blur(function () {
 								if ($(this).val() == "") {
-									$("#crf_file1").prop("disabled", true);
 									$("#user_submit").prop("disabled", true);
 								} else {
-									updateCrfFile1Status();
+									$("#user_submit").prop("disabled", false);
 								}
 							});
 
@@ -781,29 +1007,119 @@ $(document).ready(function () {
 								});
 							}
 						} else {
-							$("#crf_addressname").prop("readonly", true);
-							$("#crf_namecontact").prop("readonly", true);
-							$("#crf_telcontact").prop("readonly", true);
-							$("#crf_faxcontact").prop("readonly", true);
-							$("#crf_emailcontact").prop("readonly", true);
-							$('input:radio[name="crf_addresstype"]').prop("disabled", true);
-							
-							// เรียกใช้ฟังก์ชันอัปเดตสถานะ crf_file1
-							updateCrfFile1Status();
+							// เรียกใช้ฟังก์ชัน central เมื่อยกเลิกการเลือก
+							updateFieldStatesBasedOnConditions();
 						}
 					}
 				);
 
 				// ============================================
 				// Control กรณีแก้ไขข้อมูลลูกค้า
-				// โค้ดส่วนนี้ถูกย้ายไปที่: assets/js/addth/oldcus_editcusdata.js
-				// เพื่อให้จัดการและดูแลรักษาง่ายขึ้น (Refactored on 2026-02-19)
 				// ============================================
+				$('input:checkbox[name="crf_sub_oldcus_editcustomer"]').change(function () {
+					if ($(this).prop("checked")) {
+						// เรียกใช้ฟังก์ชัน central
+						updateFieldStatesBasedOnConditions();
+						
+						// Setup edit button handlers
+						setupEditButtonHandlers();
+						
+						// Setup field change handlers
+						setupFieldChangeHandlers();
+					} else {
+						// เรียกใช้ฟังก์ชัน central
+						updateFieldStatesBasedOnConditions();
+					}
+				});
 
+				// ============================================
 				// Control กรณีเลือกปรับ Credit term
-				// >>> MOVED TO: assets/js/addth/oldcus_changecreditterm.js <<<
+				// ============================================
+				
+				// Disable credit term fields initially
+				$('#crf_creditterm').prop('disabled', true);
+				$('#crf_condition_credit').prop('disabled', true);
+				$('#showcredit2').prop('disabled', true);
+				$('#crf_creditterm2').prop('disabled', true);
+				$('#crf_arcustdueid').prop('disabled', true);
+				
+				// Toggle handlers for credit term detail checkboxes
+				$(document).on('click', 'input[name=crf_change_creditterm]', function () {
+					if ($(this).is(':checked')) {
+						// Keep crf_creditterm disabled (ข้อมูลจาก DB ไม่ต้องการให้แก้ไข)
+						// Enable condition fields only
+						$('#crf_condition_credit').prop('disabled', false);
+						$('#showcredit2').prop('disabled', false);
+						$('#crf_creditterm2').prop('disabled', false);
+					} else {
+						// Disable all credit term fields
+						$('#crf_creditterm').prop('disabled', true);
+						$('#crf_condition_credit').prop('disabled', true);
+						$('#showcredit2').prop('disabled', true);
+						$('#crf_creditterm2').prop('disabled', true);
+						// Clear values
+						$('#crf_condition_credit').val('');
+						$('#showcredit2').val('');
+					}
+					checkAndUpdateSubmitButtonCredit();
+				});
 
+				$(document).on('click', 'input[name=crf_change_expected_date]', function () {
+					if ($(this).is(':checked')) {
+						$('#crf_arcustdueid').prop('disabled', false);
+					} else {
+						$('#crf_arcustdueid').prop('disabled', true);
+					}
+					checkAndUpdateSubmitButtonCredit();
+				});
+				
+				// Monitor credit term condition dropdown
+				$(document).on('change', '#crf_condition_credit', function () {
+					$(".showcredit2").remove();
+					var creditMethod = $(this).val();
+					var oldCredit = $("#oldCreditTerm").val();
+					
+					// Call filterCreditTerm (defined in addth-api.js)
+					filterCreditTerm(oldCredit, creditMethod);
+					
+					setTimeout(function() {
+						var isChecked = $('input[name=crf_change_creditterm]').is(':checked');
+						$('#crf_creditterm2').prop('disabled', !isChecked);
+						checkAndUpdateSubmitButtonCredit();
+					}, 100);
+				});
+				
+				$(document).on('change', '#showcredit2, #crf_creditterm2', function () {
+					checkAndUpdateSubmitButtonCredit();
+				});
+				
+				// Main checkbox handler for credit term change
+				$('input:checkbox[name="crf_sub_oldcus_changecredit"]').change(function () {
+					if ($(this).prop("checked") == true) {
+						// Show credit term sections
+						$(".change_credit").css("display", "");
+						$("input[name=crf_change_creditterm]").prop("checked", true);
+						$(".change_credit_detail").css("display", "");
+						$("#crf_condition_credit").attr("required", "");
+						
+						checkAndUpdateSubmitButtonCredit();
+						
+						// เรียกใช้ฟังก์ชัน central เพื่อ update ฟิลด์ทั้งหมด
+						updateFieldStatesBasedOnConditions();
+					} else {
+						// Hide credit term sections
+						$(".change_credit").css("display", "none");
+						$("input[name=crf_change_creditterm]").prop("checked", false);
+						$(".change_credit_detail").css("display", "none");
+						
+						// เรียกใช้ฟังก์ชัน central เพื่อ update ฟิลด์ทั้งหมด
+						updateFieldStatesBasedOnConditions();
+					}
+				});
+
+				// ============================================
 				// Control กรณีเลือกปรับ ปรับวงเงิน
+				// ============================================
 				$('input:checkbox[name="crf_sub_oldcus_changefinance"]').change(
 					function () {
 						if ($(this).prop("checked") == true) {
@@ -816,18 +1132,8 @@ $(document).ready(function () {
 
 							$("#value_crf_finance").val("ปรับวงเงิน");
 
-							// ปิดการอัพโหลดไฟล์ทั้งหมด (เพราะเรื่องวงเงินไม่ยุ่งเรื่องไฟล์)
-							$("#crf_file1").prop("disabled", true);
-							$("#crf_file2").prop("disabled", true);
-							$("#crf_file3").prop("disabled", true);
-							$("#crf_file4").prop("disabled", true);
-							$("#crf_file5").prop("disabled", true);
-							$("#crf_file6").prop("disabled", true);
-							
-							// ปิดช่องอื่นๆ ที่ไม่เกี่ยวข้องกับวงเงิน
-							$("#crf_datebill").prop("disabled", true);
-							$("#crf_mapbill2").prop("disabled", true);
-							$("#crf_recive_cheuqetable").prop("disabled", true);
+							// เรียกใช้ฟังก์ชัน central เพื่อ update ฟิลด์ทั้งหมด
+							updateFieldStatesBasedOnConditions();
 
 						$("#crf_finance_change_number").keyup(function (event) {
 							// Skip for arrow keys
@@ -865,6 +1171,9 @@ $(document).ready(function () {
 			} else {
 							$(".finance_change_detail").css("display", "none");
 							$("input[name=crf_finance]").prop("checked", false);
+							
+							// เรียกใช้ฟังก์ชัน central เมื่อยกเลิกการเลือก
+							updateFieldStatesBasedOnConditions();
 						}
 					}
 				);
@@ -2850,7 +3159,7 @@ $(document).ready(function () {
             }
             
             $('#crf_recive_cheuqedetail').val(data_crf_recive_cheuqedetail);
-            $('#crf_recive_cheuqedetail').prop('readonly', true);
+            // Note: Field state (readonly/enabled) will be controlled by updateFieldStatesBasedOnConditions()
         }
 
         // Check radio button for crfcus_countmonthdeli - เช็คว่ามีข้อมูลก่อนถึงจะติ๊ก
@@ -2897,6 +3206,10 @@ $(document).ready(function () {
         
         // Lock customer fields after successful selection
         lockCustomerFieldsTH();
+        
+        // Re-apply field states based on current checkbox conditions
+        // This ensures any enabled fields from conditions are not overridden by the data loading
+        updateFieldStatesBasedOnConditions();
     }
 
 });

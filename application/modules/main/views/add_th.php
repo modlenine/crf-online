@@ -911,12 +911,7 @@ $(document).on('keyup' , '#crf_cuscompanycreate' , function(){
 <script src="<?= base_url('assets/js/addth/addth-api.js?v=') . filemtime('assets/js/addth/addth-api.js') ?>"></script>
 
 <!-- Load addth.js with versioning to prevent caching -->
+<!-- All old customer logic (editcusdata, changecreditterm) has been consolidated into addth.js -->
 <script src="<?= base_url('assets/js/addth.js?v=') . filemtime('assets/js/addth.js') ?>"></script>
-
-<!-- Load oldcus_editcusdata.js - Refactored customer edit module -->
-<script src="<?= base_url('assets/js/addth/oldcus_editcusdata.js?v=') . filemtime('assets/js/addth/oldcus_editcusdata.js') ?>"></script>
-
-<!-- Load oldcus_changecreditterm.js - Credit term change handler -->
-<script src="<?= base_url('assets/js/addth/oldcus_changecreditterm.js?v=') . filemtime('assets/js/addth/oldcus_changecreditterm.js') ?>"></script>
 
 </html>
