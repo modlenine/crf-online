@@ -63,7 +63,7 @@ class Main extends MX_Controller
         if (isset($_POST["user_submit"])) {
             if ($this->main->savedata() == 1) {
                 echo "Insert Data Success<br>";
-                // header("refresh:0; url=" . base_url('main/showlist'));
+                header("refresh:0; url=" . base_url('main/showlist'));
                 die();
             } else {
                 echo "Insert Data Not Success";

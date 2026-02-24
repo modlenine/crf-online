@@ -2655,7 +2655,8 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
     if ($('#check_editcustype').val() == 1) {
         $('.suboldcustomer').remove();
         $('#edit_custype1').prop('checked', true);
-        $('input:radio[name="crf_type"]').prop('disabled', true);
+        // DISABLED: Customer type radios now locked via onclick="return false" in edit_view.php
+        // $('input:radio[name="crf_type"]').prop('disabled', true);
         // Check ที่อยู่สำหรับการเปิดใบกำกับภาษี
         if ($('#check_addtype').val() == "ตาม ภ.พ.20") {
             $('#edit_addresstype1').prop('checked', true);
@@ -2759,7 +2760,8 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
     } else if ($('#check_editcustype').val() == 2) {
         $('#edit_custype2').prop('checked', true);
         $('.suboldcustomer').css('display', '');
-        $('input:radio[name="crf_type"]').prop('disabled', true);
+        // DISABLED: Customer type radios now locked via onclick="return false" in edit_view.php
+        // $('input:radio[name="crf_type"]').prop('disabled', true);
 
         // Check ที่อยู่สำหรับการเปิดใบกำกับภาษี
         if ($('#check_addtype').val() == "ตาม ภ.พ.20") {
@@ -2826,15 +2828,14 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
         //
         // Load order:
         // 1. custom.js (this file) - runs first, sets view page initial state
-        // 2. edit_view.js - locks all fields, enables selected sections
-        // 3. edit_changecreditterm.js - handles credit term specific logic
+        // 2. edit_view.js - locks all fields, enables selected sections, handles credit term logic
         //
         // ========================================================================
 
         // OLD CODE - FULLY DISABLED - All functionality moved to edit_view.js
         /*
         $('.edit_salesrepsCur').remove();
-        $('#crf_customername , #crf_cuscompanycreate , #crf_addressname , #crf_namecontact , #crf_telcontact , #crf_faxcontact , #crf_emailcontact  ,  #crf_forecast , #crf_recive_cheuqedetail , #crf_finance_req_number , #crf_salesreps').prop('readonly', true);
+        $('#crf_customername , #crf_cuscompanycreate , #crf_addressname , #crf_namecontact , #crf_telcontact , #crf_faxcontact , #crf_emailcontact  ,  #crf_forecast , #crf_recive_cheuqedetail , #crf_finance_req_number , #crf_salesreps').prop('readonly', true).addClass('bg-light');
         $('#crf_file1 , #crf_file2 , #crf_file3 , #crf_file4 , #crf_file5 , #crf_file6 , #crf_file7 , #crf_file8 , #crf_file9 , #crf_recive_cheuqetable').css('display', 'none');
         $('#crf_creditterm').hide();
         $('#showCreditname').css('display', '');
@@ -2843,18 +2844,18 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
         // Control subold customer method
         if ($('#check_changearea').val() == 1) {
             $('input[name="crf_sub_oldcus_changearea"]').prop('checked', true);
-            $('#crf_salesreps').prop('readonly', false);
+            $('#crf_salesreps').prop('readonly', false).removeClass('bg-light');
         } else {
-            $('#crf_salesreps').prop('readonly', true);
+            $('#crf_salesreps').prop('readonly', true).addClass('bg-light');
         }
 
         if ($('#check_changeaddress').val() == 2) {
             $('input[name="crf_sub_oldcus_changeaddress"]').prop('checked', true);
-            $('#crf_addressname , #crf_namecontact , #crf_telcontact , #crf_faxcontact , #crf_emailcontact').prop('readonly', false);
+            $('#crf_addressname , #crf_namecontact , #crf_telcontact , #crf_faxcontact , #crf_emailcontact').prop('readonly', false).removeClass('bg-light');
             $('#crf_file1').css('display', '');
             $('input:radio[name="crf_addresstype"]').attr('onclick', '');
         } else {
-            $('#crf_addressname , #crf_namecontact , #crf_telcontact , #crf_faxcontact , #crf_emailcontact').prop('readonly', true);
+            $('#crf_addressname , #crf_namecontact , #crf_telcontact , #crf_faxcontact , #crf_emailcontact').prop('readonly', true).addClass('bg-light');
             $('#crf_file1').css('display', 'none');
             $('input:radio[name="crf_addresstype"]').attr('onclick', 'return false');
         }
@@ -2887,16 +2888,15 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
         // for better control and strict mode editing (edit only selected sections)
         // ========================================================================
         
-        // The following handlers are now handled by assets/js/edit_view/edit_view.js
-        // and assets/js/edit_view/edit_changecreditterm.js:
+        // The following handlers are now handled by assets/js/edit_view/edit_view.js:
         // - crf_sub_oldcus_changearea
         // - crf_sub_oldcus_changeaddress
-        // - crf_sub_oldcus_changecredit
+        // - crf_sub_oldcus_changecredit (including credit term specific logic)
         // - crf_sub_oldcus_changefinance
         // - crf_sub_oldcus_editcustomer
         
         // Custom.js now only sets initial state on page load.
-        // Module edit_view.js and edit_changecreditterm.js handle dynamic enable/disable based on user actions.
+        // Module edit_view.js handles dynamic enable/disable based on user actions.
 
         // ALL OLD EVENT HANDLERS DISABLED - Functionality moved to edit_view.js
         /*
@@ -2972,25 +2972,9 @@ $('.author_manager').css('display', showAuthorManager ? '' : 'none');
 
 
     /////////////////////////////////////////////////////////
-    //////////// edit page (กรณีเลือกประเภทลูกค้า)
-    ////////////////////////////////////////////////////////
-
-    if ($('#edit_checkCusType').val() == "natural") {
-
-        $('#edit_crf_person_type_natural').prop('checked', true);
-        $('#edit_file_juristic').css('display', 'none');
-        $('#crf_file_person').prop('disabled' , true);
-
-    } else if ($('#edit_checkCusType').val() == "juristic") {
-
-        $('#edit_crf_person_type_juristic').prop('checked', true);
-        $('#edit_file_natural').css('display', 'none');
-
-    }
-
-
-    /////////////////////////////////////////////////////////
-    //////////// edit page (กรณีเลือกประเภทลูกค้า)
+    //////////// edit page - Person type logic 
+    //////////// REMOVED: Now handled by Union Logic in edit_view.js
+    //////////// (updateFieldStatesBasedOnConditions function)
     ////////////////////////////////////////////////////////
 
 

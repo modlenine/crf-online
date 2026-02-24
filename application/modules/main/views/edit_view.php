@@ -34,31 +34,31 @@
                 <div class="row form-group mt-3 p-2">
                     <div class="col-md-4 form-group">
                         <div class="custom-radio custom-control">
-                            <input id="edit_company_sln" class="custom-control-input" type="radio" name="crf_company" value="sln">
+                            <input id="edit_company_sln" class="custom-control-input" type="radio" name="crf_company" value="sln" onclick="return false">
                             <label for="edit_company_sln" class="custom-control-label">Salee Colour Public Company Limited.</label>
                         </div>
                     </div>
                     <div class="col-md-4 form-group">
                         <div class="custom-radio custom-control">
-                            <input id="edit_company_poly" class="custom-control-input" type="radio" name="crf_company" value="poly">
+                            <input id="edit_company_poly" class="custom-control-input" type="radio" name="crf_company" value="poly" onclick="return false">
                             <label for="edit_company_poly" class="custom-control-label">Poly Meritasia Co.,Ltd.</label>
                         </div>
                     </div>
                     <div class="col-md-4 form-group">
                         <div class="custom-radio custom-control">
-                            <input id="edit_company_ca" class="custom-control-input" type="radio" name="crf_company" value="ca">
+                            <input id="edit_company_ca" class="custom-control-input" type="radio" name="crf_company" value="ca" onclick="return false">
                             <label for="edit_company_ca" class="custom-control-label">Composite Asia Co.,Ltd</label>
                         </div>
                     </div>
                     <div class="col-md-4 form-group">
                         <div class="custom-radio custom-control">
-                            <input id="edit_company_tb" class="custom-control-input" type="radio" name="crf_company" value="tb">
+                            <input id="edit_company_tb" class="custom-control-input" type="radio" name="crf_company" value="tb" onclick="return false">
                             <label for="edit_company_tb" class="custom-control-label">The Bubbles Co.,Ltd.</label>
                         </div>
                     </div>
                     <div class="col-md-4 form-group">
                         <div class="custom-radio custom-control">
-                            <input id="edit_company_st" class="custom-control-input" type="radio" name="crf_company" value="st">
+                            <input id="edit_company_st" class="custom-control-input" type="radio" name="crf_company" value="st" onclick="return false">
                             <label for="edit_company_st" class="custom-control-label">Subterra Co.,Ltd.</label>
                         </div>
                     </div>
@@ -73,13 +73,13 @@
                 <div class="row form-group p-2">
                     <div class="col-md-3 form-group">
                         <div class="custom-radio custom-control">
-                            <input class="custom-control-input" type="radio" name="crf_type" id="edit_custype1" value="1">
+                            <input class="custom-control-input" type="radio" name="crf_type" id="edit_custype1" value="1" onclick="return false">
                             <label for="my-input" class="custom-control-label">ลูกค้าใหม่</label>
                         </div>
                     </div>
                     <div class="col-md-3 form-group">
                         <div class="custom-radio custom-control">
-                            <input class="custom-control-input" type="radio" name="crf_type" id="edit_custype2" value="2">
+                            <input class="custom-control-input" type="radio" name="crf_type" id="edit_custype2" value="2" onclick="return false">
                             <label for="my-input" class="custom-control-label">ลูกค้าเดิม</label>
                         </div>
                     </div>
@@ -90,17 +90,17 @@
 
 
                 <div id="alert_custype"></div>
-                <input hidden type="text" name="edit_checkCusType" id="edit_checkCusType" value="{edit_personal_type}">
+                <input hidden type="text" name="edit_checkCusType" id="edit_checkCusType" value="<?=$edit_personal_type?>">
                 <div class="row form-group p-2">
                     <div class="col-md-3 form-group">
                         <div class="custom-radio custom-control">
-                            <input class="custom-control-input" type="radio" name="crf_person_type" id="edit_crf_person_type_natural" value="natural" disabled>
+                            <input class="custom-control-input" type="radio" name="crf_person_type" id="edit_crf_person_type_natural" value="natural" <?=($edit_personal_type == 'natural') ? 'checked' : ''?> onclick="return false">
                             <label for="my-input" class="custom-control-label">บุคคลธรรมดา</label>
                         </div>
                     </div>
                     <div class="col-md-3 form-group">
                         <div class="custom-radio custom-control">
-                            <input class="custom-control-input" type="radio" name="crf_person_type" id="edit_crf_person_type_juristic" value="juristic" disabled>
+                            <input class="custom-control-input" type="radio" name="crf_person_type" id="edit_crf_person_type_juristic" value="juristic" <?=($edit_personal_type == 'juristic') ? 'checked' : ''?> onclick="return false">
                             <label for="my-input" class="custom-control-label">นิติบุคคล</label>
                         </div>
                     </div>
@@ -129,31 +129,31 @@
                 <div class="row form-group p-2 suboldcustomer">
                     <div class="col-md-3 form-group">
                         <div class="form-check">
-                            <input class="form-check-input " type="checkbox" name="crf_sub_oldcus_changearea" id="crf_sub_oldcus" value="1" <?= ($get_changearea == '1') ? 'checked' : '' ?>>
+                            <input class="form-check-input " type="checkbox" name="crf_sub_oldcus_changearea" id="crf_sub_oldcus" value="1" <?= ($get_changearea == '1') ? 'checked' : '' ?> onclick="return false">
                             <label for="my-input" class="form-check-label">เปลี่ยนเขตการขาย</label>
                         </div>
                     </div>
                     <div class="col-md-3 form-group">
                         <div class="form-check">
-                            <input class="form-check-input " type="checkbox" name="crf_sub_oldcus_changeaddress" id="crf_sub_oldcus" value="2" <?= ($get_changeaddress == '2') ? 'checked' : '' ?>>
+                            <input class="form-check-input " type="checkbox" name="crf_sub_oldcus_changeaddress" id="crf_sub_oldcus" value="2" <?= ($get_changeaddress == '2') ? 'checked' : '' ?> onclick="return false">
                             <label for="my-input" class="form-check-label">เปลี่ยนที่อยู่</label>
                         </div>
                     </div>
                     <div class="col-md-3 form-group">
                         <div class="form-check">
-                            <input class="form-check-input " type="checkbox" name="crf_sub_oldcus_editcustomer" id="crf_sub_oldcus" value="5" <?= ($crf_sub_oldcus_editcustomer == '5') ? 'checked' : '' ?>>
+                            <input class="form-check-input " type="checkbox" name="crf_sub_oldcus_editcustomer" id="crf_sub_oldcus" value="5" <?= ($crf_sub_oldcus_editcustomer == '5') ? 'checked' : '' ?> onclick="return false">
                             <label for="my-input" class="form-check-label">แก้ไขข้อมูลลูกค้า</label>
                         </div>
                     </div>
                     <div class="col-md-3 form-group">
                         <div class="form-check">
-                            <input class="form-check-input " type="checkbox" name="crf_sub_oldcus_changecredit" id="crf_sub_oldcus" value="3" <?= ($get_changecredit == '3') ? 'checked' : '' ?>>
+                            <input class="form-check-input " type="checkbox" name="crf_sub_oldcus_changecredit" id="crf_sub_oldcus" value="3" <?= ($get_changecredit == '3') ? 'checked' : '' ?> onclick="return false">
                             <label for="my-input" class="form-check-label">ปรับ Credit term. เพิ่ม / ลด</label>
                         </div>
                     </div>
                     <div class="col-md-3 form-group">
                         <div class="form-check">
-                            <input class="form-check-input " type="checkbox" name="crf_sub_oldcus_changefinance" id="crf_sub_oldcus" value="4" <?= ($get_changefinance == '4') ? 'checked' : '' ?>>
+                            <input class="form-check-input " type="checkbox" name="crf_sub_oldcus_changefinance" id="crf_sub_oldcus" value="4" <?= ($get_changefinance == '4') ? 'checked' : '' ?> onclick="return false">
                             <label for="my-input" class="form-check-label">ปรับวงเงิน เพิ่ม / ลด</label>
                         </div>
                     </div>
@@ -480,8 +480,8 @@
                 </label>
 
 
-                <div class="row form-group" id="edit_file_natural">
-                    <div class="col-md-4 form-group crf_file1">
+                <div class="row form-group" id="for_natural" style="display:none;">
+                    <div class="col-md-4 form-group crf_file_person">
                         <label for="">สำเนาบัตรประชาชน</label><br>
                         <!-- แก้ไขการแสดงผล -->
                         <input hidden type="text" name="editcusoldpersonal" id="editcusoldpersonal" value="{get_personal}">
@@ -506,7 +506,7 @@
                 </div>
 
 
-                <div class="row form-group" id="edit_file_juristic">
+                <div class="row form-group" id="for_juristic">
                     <div class="col-md-4 form-group crf_file1">
                         <label for="">ภพ.20 / ภธ.09</label><br>
                         <input hidden type="text" name="get_crf_file1" id="get_crf_file1" value="{get_file1}">
@@ -1178,9 +1178,6 @@
         });
     </script>
 
-    <!-- Load Edit View Control Modules -->
-    <!-- IMPORTANT: Load order matters! -->
-    <!-- 1. Main controller locks everything and enables sections -->
+    <!-- Load Edit View Control Module -->
+    <!-- Main controller: locks fields, enables sections, handles credit term logic -->
     <script src="<?= base_url('assets/js/edit_view/edit_view.js?v=') . filemtime('assets/js/edit_view/edit_view.js') ?>"></script>
-    <!-- 2. Specialized modules handle section-specific logic -->
-    <script src="<?= base_url('assets/js/edit_view/edit_changecreditterm.js?v=') . filemtime('assets/js/edit_view/edit_changecreditterm.js') ?>"></script>
